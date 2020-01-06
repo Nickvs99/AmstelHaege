@@ -2,6 +2,7 @@
     
 """
 
+import csv
 from area import area
 
 def main():

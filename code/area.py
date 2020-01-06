@@ -8,8 +8,8 @@ class area():
 
     def __init__(self):
 
-        self.height = 160
-        self.width = 180
+        self.height = 8
+        self.width = 5
 
         self.area = self.createArea()
 

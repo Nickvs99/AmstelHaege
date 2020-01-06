@@ -2,10 +2,13 @@
     
 """
 
-import area
+from area import area
 
 def main():
-    pass
+    
+    new_area = area()
+
+    print(new_area.area)
 
 if __name__ == "__main__":
     main()

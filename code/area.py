@@ -4,17 +4,27 @@
 
 """
 
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+
 class area():
 
     def __init__(self):
 
-        self.height = 160
-        self.width = 180
+        self.height = 10
+        self.width = 5
 
-        self.area = self.createArea()
+        # self.area = self.createArea()
+
+        self.area = [[ 0 for i in range(self.width)] for j in range(self.height)]
+
 
     def createArea(self):
 
-        row = [0] * self.width
+        area = [[ 0 for i in range(self.width)] for j in range(self.height)]
+        return area
 
-        return [row] * self.height
+    def ShowArea(self):
+        plt.imshow(self.area, cmap=plt.cm.Accent)
+        plt.show()

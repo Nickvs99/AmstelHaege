@@ -5,6 +5,9 @@
 """
 
 import random
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
 
 class area():
 
@@ -13,13 +16,20 @@ class area():
         self.height = 160
         self.width = 180
 
-        self.area = self.createArea()
+        # self.area = self.createArea()
+
+        self.area = [[ 0 for i in range(self.width)] for j in range(self.height)]
+
 
     def createArea(self):
 
-        row = [0] * self.width
+        area = [[ 0 for i in range(self.width)] for j in range(self.height)]
+        return area
 
-        return [row] * self.height
+    def ShowArea(self):
+        plt.imshow(self.area, cmap=plt.cm.Accent)
+        plt.show()
+
 
     def place_houses(self, houses_count):
         """ Places the houses randomly. """
@@ -56,15 +66,24 @@ class area():
         while_count = 0
         while not house_placed and while_count < 1000:
 
-            x = int(random.random() * self.width)
-            y = int(random.random() * self.height)
-
+            x = int(random.random() * (self.width - house.width - 1))
+            y = int(random.random() * (self.height - house.height - 1))
+            
             house.x = x
             house.y = y
 
             house_placed = True
-
+            
             while_count += 1
+
+        for i in range(house.width):
+            for j in range(house.height):
+
+                try:
+                    self.area[house.x + i][house.y + j] = house.state
+                except:
+                    print(house.x, house.y)
+                    print(i,j)
 
 
 class House():
@@ -78,12 +97,15 @@ class House():
         if type_house == "bungalow":
             self.width = 11
             self.height = 7
+            self.state = 3
         elif type_house == "maison":
             self.width = 12
             self.height = 10
+            self.state = 4
         elif type_house == "one_person_home":
             self.width = 8
             self.height = 8
+            self.state = 2
         else:
             print("Invalid type_house")
     

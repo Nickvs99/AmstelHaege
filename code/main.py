@@ -9,10 +9,10 @@ def main():
 
     new_area = area()
 
+    new_area.loadwater()
+
     new_area.place_houses(20)
 
-    new_area.ShowArea()
-    new_area.loadwater()
     new_area.ShowArea()
     
     

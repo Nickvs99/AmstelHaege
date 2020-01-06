@@ -66,24 +66,30 @@ class area():
         while_count = 0
         while not house_placed and while_count < 1000:
 
-            x = int(random.random() * (self.width - house.width - 1))
-            y = int(random.random() * (self.height - house.height - 1))
+            x = int(random.random() * (self.width - house.width))
+            y = int(random.random() * (self.height - house.height))
             
-            house.x = x
-            house.y = y
-
-            house_placed = True
+            
+            if self.check_valid(house, x, y):
+                house.x = x
+                house.y = y
+                house_placed = True
             
             while_count += 1
 
         for i in range(house.width):
             for j in range(house.height):
 
-                try:
-                    self.area[house.x + i][house.y + j] = house.state
-                except:
-                    print(house.x, house.y)
-                    print(i,j)
+                self.area[house.y + j][house.x + i] = house.state
+
+    def check_valid(self, house, x, y):
+        
+        for i in range(house.width):
+            for j in range(house.height):
+                if self.area[y + j][x + i] != 0:
+                    return False
+
+        return True
 
 
 class House():

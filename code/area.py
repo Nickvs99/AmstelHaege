@@ -41,6 +41,7 @@ class area():
                     for j in range(int(left),int(right)):
                         self.area[i][j] = 1
 
+
     def ShowArea(self):
         plt.imshow(self.area, cmap=plt.cm.Accent)
         plt.show()

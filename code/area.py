@@ -36,7 +36,7 @@ class area():
             for row in csv_reader:
                 bottom,left = row['bottom_left_xy'].split(",")
                 top,right  = row['top_right_xy'].split(",")
-                print(f"{bottom} , {left} - {top} , {right}")
+                # print(f"{bottom} , {left} - {top} , {right}")
 
                 for i in range(int(bottom),int(top)):
                     for j in range(int(left),int(right)):

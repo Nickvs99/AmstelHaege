@@ -184,7 +184,7 @@ class area():
         path = os.path.join(my_path, "../csv-output/output.csv")
 
         with open(path, 'w', newline='') as myfile:
-            wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+            wr = csv.writer(myfile)
             for house in house_list:
                 wr.writerow(house)
 

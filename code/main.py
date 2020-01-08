@@ -30,5 +30,6 @@ def set_random_seed(r = random.random()):
 
     print(f"Seed: {r}")
     
+    
 if __name__ == "__main__":
     main()

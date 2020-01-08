@@ -149,20 +149,25 @@ class area():
     def make_csv(self):
         """ Function which commands to update the output """
 
+        # Store values house_list
         house_list = self.make_house_list()
-        print(house_list)
 
+        # Use house_list to make the csv-output
         self.csv_output(house_list)
     
     def make_house_list(self):
         """ Stores house-coordinates in a nested list """
 
+        # Startvalue housenumber
         one_person_count = 1
         bungalow_count = 1
         maison_count = 1
+
         house_list = [['structure','bottom_left_xy','top_right_xy','type']]
 
         for house in self.houses:
+
+            # Make structure of each house and update housenumber
             type_house = house.type_house
             if type_house == 'one_person_home':
                 structure = type_house + '_' + str(one_person_count)
@@ -174,12 +179,14 @@ class area():
                 structure = type_house + '_' + str(maison_count)
                 maison_count += 1
 
+            # Make string representation of the coordinates
             bottom_left_xy = str(house.x) + ',' + str(house.y)
             top_right_x = house.x + house.width - 1
             top_right_y = house.y + house.height - 1
             top_right_xy = str(top_right_x) + ',' + str(top_right_y)
             type_house = house.type_house.upper()
             
+            # Append values to the house_list
             house_list.append([structure,bottom_left_xy,top_right_xy,type_house])
 
         return house_list
@@ -187,10 +194,15 @@ class area():
     def csv_output(self, house_list):
         """ (Over)writes the houselist into the ouput.csv """
 
+        # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))
         path = os.path.join(my_path, "../csv-output/output.csv")
+
+        # Open the current output.csv
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
+
+            # (Over)write each line of house_list into the csv-file
             for house in house_list:
                 wr.writerow(house)
 

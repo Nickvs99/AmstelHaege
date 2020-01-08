@@ -8,13 +8,15 @@ import random
 
 def main():
 
-    set_random_seed()
+    set_random_seed(0.16573758344036393)
 
     new_area = area()
 
     new_area.loadwater()
 
     new_area.place_houses(20)
+
+    print(new_area.calc_worth_area())
 
     new_area.ShowArea()
     

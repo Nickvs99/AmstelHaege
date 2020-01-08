@@ -51,13 +51,13 @@ class area():
         """ Places the houses randomly. """
 
         # Calculate the number of houses per type
-        # one_person_house_count = int(0.6 * houses_count)
-        # bungalow_count = int(0.25 * houses_count)
-        # maison_count = int(0.15 * houses_count)
+        one_person_house_count = int(0.6 * houses_count)
+        bungalow_count = int(0.25 * houses_count)
+        maison_count = int(0.15 * houses_count)
 
-        one_person_house_count = 2
-        bungalow_count = 0
-        maison_count = 0
+        # one_person_house_count = 2
+        # bungalow_count = 0
+        # maison_count = 0
 
         self.houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
 
@@ -160,6 +160,8 @@ class area():
         bottom_left_cor = [house.x, house.y]
         top_right_cor = [house.x + house.width - 1, house.y + house.height - 1]
 
+        # print(bottom_left_cor, top_right_cor)
+
         while_count = 0
         while True:
 
@@ -167,10 +169,16 @@ class area():
             bottom_left_cor[1] -= 1
             top_right_cor[0] += 1
             top_right_cor[1] += 1
-            
+
+            # print()
+            # print(bottom_left_cor, top_right_cor)
+
             elements = self.getBorder(bottom_left_cor, top_right_cor)
             
+            # print(while_count)
+            # input()
             # print()
+
             # print(while_count)
             # print(elements)
 
@@ -187,8 +195,13 @@ class area():
                 print("Whoops, something went wrong")
                 break
 
+        # print(while_count)
 
-        value = house.value + house.value * house.extra_value * (while_count - house.mandatory_free_space)
+        base_value = house.value
+        extra_value = house.value * house.extra_value * (while_count - house.mandatory_free_space)
+        value = base_value + extra_value
+
+        # print(base_value, extra_value, value)
 
         return value
 
@@ -202,8 +215,8 @@ class area():
 
         elements = []
 
-        width = top_right_cor[0] - bottom_left_cor[0] + 1
-        height = top_right_cor[1] - bottom_left_cor[1] + 1
+        width = abs(top_right_cor[0] - bottom_left_cor[0]) +  1
+        height = abs(top_right_cor[1] - bottom_left_cor[1])
 
         # Get the bottom and top border
         for i in range(width):
@@ -213,13 +226,19 @@ class area():
             y = bottom_left_cor[1]
             if not self.check_in_bound(x, y):
                 continue
+
+            # print(x, y)
             elements.append(self.area[y][x])
+        for i in range(width):
 
             # Top
             x = bottom_left_cor[0] + i
             y = top_right_cor[1]
             if not self.check_in_bound(x, y):
                 continue
+
+            # print(x, y)
+
             elements.append(self.area[y][x])
         
         # Get the left and right border, excluding corners
@@ -230,15 +249,19 @@ class area():
             y = bottom_left_cor[1] + i
             if not self.check_in_bound(x, y):
                 continue
-            
+
+            # print(x, y)
+
             elements.append(self.area[y][x])
+        for i in range(1, height):
 
             # Right
             x = top_right_cor[0]
             y = bottom_left_cor[1] + i
             if not self.check_in_bound(x, y):
-                continue           
- 
+                continue      
+
+            # print(x, y)
             elements.append(self.area[y][x])
 
         return elements
@@ -275,7 +298,7 @@ class House():
             self.state = 4
             self.mandatory_free_space = 6
             self.value = 610000
-            self.extra_value = 0.03
+            self.extra_value = 0.06
 
         elif type_house == "one_person_home":
             self.width = 8
@@ -283,7 +306,7 @@ class House():
             self.state = 2
             self.mandatory_free_space = 2
             self.value = 285000
-            self.extra_value = 0.06
+            self.extra_value = 0.03
 
         else:
             print("Invalid type_house")

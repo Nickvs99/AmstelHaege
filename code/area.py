@@ -58,10 +58,11 @@ class area():
         maison_count = int(0.15 * houses_count)
 
         self.houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
-
+        areagreedy = area()
         for house in self.houses:
-            self.place_house(house)
-            
+            greedyalgorithm = greedy()
+            greedyalgorithm.greedy(house, areagreedy)
+
     def create_houses(self, one_person_house_count, bungalow_count, maison_count):
         """ Creates a list with houses. """
 
@@ -77,7 +78,7 @@ class area():
 
         return houses
 
-    def place_house(self, house):
+    def place_house(self, house, x, y):
         """
         Place a house.
         It picks a random x and y coordinate and then checks if there is room for the new house.
@@ -89,8 +90,8 @@ class area():
         while not house_placed and while_count < 1000:
 
             # Get random x and y coordinate
-            x = int(random.random() * (self.width - house.width))
-            y = int(random.random() * (self.height - house.height))
+            #x = int(random.random() * (self.width - house.width))
+            #y = int(random.random() * (self.height - house.height))
 
             if self.check_valid(house, x, y):
                 house.x = x
@@ -143,7 +144,7 @@ class area():
         print(values)
 
         self.csv_output(values)
-    
+
     def retrieve_values(self, houses):
 
         one_person_count = 1
@@ -176,7 +177,7 @@ class area():
             top_right_y = house.y + house.height - 1
             top_right_xy = str(top_right_x) + ',' + str(top_right_y)
             type_house = house.type_house.upper()
-            
+
             house_list.append([structure,bottom_left_xy,top_right_xy,type_house])
 
         return house_list
@@ -224,3 +225,20 @@ class House():
     def __repr__(self):
 
         return self.__str__()
+
+class greedy():
+
+    def __init__(self):
+        self.worth = 0
+
+    def greedy(self, house, area):
+        for x in range(area.width):
+            for y in range(area.height):
+                new_area = area
+                if new_area.check_valid(house, x, y):
+                    worth = new_area.calc_worth_area()
+                    if worth > self. worth:
+                        self.worth = worth
+                        best_x = x
+                        best_y = y
+        area.place_house(house, best_x, best_y)

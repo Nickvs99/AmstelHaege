@@ -36,7 +36,6 @@ class area():
             for row in csv_reader:
                 bottom,left = row['bottom_left_xy'].split(",")
                 top,right  = row['top_right_xy'].split(",")
-                # print(f"{bottom} , {left} - {top} , {right}")
 
                 for i in range(int(bottom),int(top)):
                     for j in range(int(left),int(right)):
@@ -56,12 +55,12 @@ class area():
         bungalow_count = int(0.25 * houses_count)
         maison_count = int(0.15 * houses_count)
 
-        houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
+        self.houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
 
-        for house in houses:
+        for house in self.houses:
             self.place_house(house)
 
-        print(houses)
+        # print(self.houses)
             
     def create_houses(self, one_person_house_count, bungalow_count, maison_count):
         
@@ -107,6 +106,57 @@ class area():
                     return False
 
         return True
+
+    def make_csv(self):
+
+        values = self.retrieve_values(self.houses)
+        print(values)
+
+        self.csv_output(values)
+    
+    def retrieve_values(self, houses):
+
+        one_person_count = 1
+        bungalow_count = 1
+        maison_count = 1
+        house_list = []
+
+        for house in self.houses:
+            if house.type_house == 'one_person_home':
+                structure = house.type_house + '_' + str(one_person_count)
+                for i in house_list:
+                    if structure in i:
+                        one_person_count += 1
+                        structure = house.type_house + '_' + str(one_person_count)
+            if house.type_house == 'bungalow':
+                structure = house.type_house + '_' + str(bungalow_count)
+                for i in house_list:
+                    if structure in i:
+                        bungalow_count += 1
+                        structure = house.type_house + '_' + str(bungalow_count)
+            if house.type_house == 'maison':
+                structure = house.type_house + '_' + str(maison_count)
+                for i in house_list:
+                    if structure in i:
+                        maison_count += 1
+                        structure = house.type_house + '_' + str(maison_count)
+
+            bottom_left_xy = str(house.x) + ',' + str(house.y)
+            top_right_x = house.x + house.width - 1
+            top_right_y = house.y + house.height - 1
+            top_right_xy = str(top_right_x) + ',' + str(top_right_y)
+            type_house = house.type_house.upper()
+            
+            house_list.append([structure,bottom_left_xy,top_right_xy,type_house])
+
+        return house_list
+
+    def csv_output(self, house_list):
+
+        # make csv-file
+
+        pass
+
 
 
 class House():

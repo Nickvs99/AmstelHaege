@@ -28,7 +28,7 @@ class area():
         return area
 
     def loadwater(self):
-        
+
         my_path = os.path.abspath(os.path.dirname(__file__))
         path = os.path.join(my_path, "../wijken/wijk2.csv")
         with open(path) as csv_file:
@@ -43,7 +43,9 @@ class area():
                         self.area[i][j] = 1
 
     def ShowArea(self):
-        plt.imshow(self.area, cmap=plt.cm.Accent)
+        colorscheme = matplotlib.colors.ListedColormap(['#73b504', '#88AAFF', '#ee4035', '#ffb455', '#b266b2'])
+        plt.imshow(self.area, cmap = colorscheme)
+        plt.gca().invert_yaxis()
         plt.show()
 
 
@@ -61,7 +63,7 @@ class area():
             self.place_house(house)
 
         print(houses)
-            
+
     def create_houses(self, one_person_house_count, bungalow_count, maison_count):
         """ Creates a list with houses. """
 
@@ -71,16 +73,16 @@ class area():
 
         for i in range(bungalow_count):
             houses.append(House("bungalow"))
-        
+
         for i in range(maison_count):
             houses.append(House("maison"))
 
         return houses
 
     def place_house(self, house):
-        """ 
-        Place a house. 
-        It picks a random x and y coordinate and then checks if there is room for the new house. 
+        """
+        Place a house.
+        It picks a random x and y coordinate and then checks if there is room for the new house.
         If it does not succeed, try new coordinates.
         """
 
@@ -91,12 +93,12 @@ class area():
             # Get random x and y coordinate
             x = int(random.random() * (self.width - house.width))
             y = int(random.random() * (self.height - house.height))
-            
+
             if self.check_valid(house, x, y):
                 house.x = x
                 house.y = y
                 house_placed = True
-            
+
             while_count += 1
 
         # Place the house in the area
@@ -107,13 +109,13 @@ class area():
 
     def check_valid(self, house, x, y):
         """ Returns True when there is enough room for a house. """
-        
+
         # Check if the house overlaps with anything but land
         for i in range(house.width):
             for j in range(house.height):
                 if self.area[y + j][x + i] != 0:
                     return False
-        
+
         # Get the bottomleft coordinate of the mandatory free space
         xCor = x - house.mandatory_free_space
         yCor = y - house.mandatory_free_space
@@ -123,7 +125,7 @@ class area():
         # around the house
         for i in range(house.width + 2 * house.mandatory_free_space):
             for j in range(house.height + 2 * house.mandatory_free_space):
-                
+
                 x_temp = xCor + i
                 y_temp = yCor + j
 
@@ -165,7 +167,7 @@ class House():
             self.mandatory_free_space = 2
         else:
             print("Invalid type_house")
-    
+
     def __str__(self):
 
         return f"{self.type_house}: {self.x}, {self.y}"
@@ -173,4 +175,3 @@ class House():
     def __repr__(self):
 
         return self.__str__()
-

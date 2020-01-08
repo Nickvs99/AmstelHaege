@@ -139,12 +139,12 @@ class area():
 
     def make_csv(self):
 
-        values = self.retrieve_values(self.houses)
+        values = self.make_house_list()
         print(values)
 
         self.csv_output(values)
     
-    def retrieve_values(self, houses):
+    def make_house_list(self):
 
         one_person_count = 1
         bungalow_count = 1
@@ -153,23 +153,20 @@ class area():
 
         for house in self.houses:
             if house.type_house == 'one_person_home':
-                structure = house.type_house + '_' + str(one_person_count)
                 for i in house_list:
                     if structure in i:
                         one_person_count += 1
-                        structure = house.type_house + '_' + str(one_person_count)
+                structure = house.type_house + '_' + str(one_person_count)
             if house.type_house == 'bungalow':
-                structure = house.type_house + '_' + str(bungalow_count)
                 for i in house_list:
                     if structure in i:
                         bungalow_count += 1
-                        structure = house.type_house + '_' + str(bungalow_count)
+                structure = house.type_house + '_' + str(bungalow_count)
             if house.type_house == 'maison':
-                structure = house.type_house + '_' + str(maison_count)
                 for i in house_list:
                     if structure in i:
                         maison_count += 1
-                        structure = house.type_house + '_' + str(maison_count)
+                structure = house.type_house + '_' + str(maison_count)
 
             bottom_left_xy = str(house.x) + ',' + str(house.y)
             top_right_x = house.x + house.width - 1
@@ -183,10 +180,13 @@ class area():
 
     def csv_output(self, house_list):
 
-        # make csv-file
+        my_path = os.path.abspath(os.path.dirname(__file__))
+        path = os.path.join(my_path, "../csv-output/output.csv")
 
-        pass
-
+        with open(path, 'w', newline='') as myfile:
+            wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+            for house in house_list:
+                wr.writerow(house)
 
 
 class House():

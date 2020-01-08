@@ -19,7 +19,11 @@ def main():
     print(new_area.calc_worth_area())
 
     new_area.ShowArea()
+    
+    new_area.make_csv()
 
+    
+ 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging. 
     Use the same seed to get the same results. By default it uses a random seed."""
@@ -27,7 +31,6 @@ def set_random_seed(r = random.random()):
     random.seed(r)
 
     print(f"Seed: {r}")
-
-
+    
 if __name__ == "__main__":
     main()

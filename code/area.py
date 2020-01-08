@@ -28,7 +28,7 @@ class area():
         return area
 
     def loadwater(self):
-        
+
         my_path = os.path.abspath(os.path.dirname(__file__))
         path = os.path.join(my_path, "../wijken/wijk2.csv")
         with open(path) as csv_file:
@@ -36,14 +36,15 @@ class area():
             for row in csv_reader:
                 bottom,left = row['bottom_left_xy'].split(",")
                 top,right  = row['top_right_xy'].split(",")
-                # print(f"{bottom} , {left} - {top} , {right}")
-
                 for i in range(int(bottom),int(top)):
                     for j in range(int(left),int(right)):
                         self.area[i][j] = 1
 
+
     def ShowArea(self):
-        plt.imshow(self.area, cmap=plt.cm.Accent)
+        colorscheme = matplotlib.colors.ListedColormap(['#73b504', '#88AAFF', '#ee4035', '#ffb455', '#b266b2'])
+        plt.imshow(self.area, cmap = colorscheme)
+        plt.gca().invert_yaxis()
         plt.show()
 
 
@@ -69,16 +70,16 @@ class area():
 
         for i in range(bungalow_count):
             houses.append(House("bungalow"))
-        
+
         for i in range(maison_count):
             houses.append(House("maison"))
 
         return houses
 
     def place_house(self, house):
-        """ 
-        Place a house. 
-        It picks a random x and y coordinate and then checks if there is room for the new house. 
+        """
+        Place a house.
+        It picks a random x and y coordinate and then checks if there is room for the new house.
         If it does not succeed, try new coordinates.
         """
 
@@ -91,12 +92,12 @@ class area():
             # Get random x and y coordinate
             x = int(random.random() * (self.width - house.width))
             y = int(random.random() * (self.height - house.height))
-            
+
             if self.check_valid(house, x, y):
                 house.x = x
                 house.y = y
                 house_placed = True
-            
+
             while_count += 1
 
         # Place the house in the area
@@ -107,13 +108,13 @@ class area():
 
     def check_valid(self, house, x, y):
         """ Returns True when there is enough room for a house. """
-        
+
         # Check if the house overlaps with anything but land
         for i in range(house.width):
             for j in range(house.height):
                 if self.area[y + j][x + i] != 0:
                     return False
-        
+
         # Get the bottomleft coordinate of the mandatory free space
         xCor = x - house.mandatory_free_space
         yCor = y - house.mandatory_free_space
@@ -123,7 +124,7 @@ class area():
         # around the house
         for i in range(house.width + 2 * house.mandatory_free_space):
             for j in range(house.height + 2 * house.mandatory_free_space):
-                
+
                 x_temp = xCor + i
                 y_temp = yCor + j
 
@@ -136,6 +137,7 @@ class area():
                     return False
 
         return True
+
 
     def calc_worth_area(self):
         """ Calculates the worth of the area. """
@@ -238,6 +240,58 @@ class area():
         
         return True
 
+    def make_csv(self):
+
+        values = self.retrieve_values(self.houses)
+        print(values)
+
+        self.csv_output(values)
+    
+    def retrieve_values(self, houses):
+
+        one_person_count = 1
+        bungalow_count = 1
+        maison_count = 1
+        house_list = []
+
+        for house in self.houses:
+            if house.type_house == 'one_person_home':
+                structure = house.type_house + '_' + str(one_person_count)
+                for i in house_list:
+                    if structure in i:
+                        one_person_count += 1
+                        structure = house.type_house + '_' + str(one_person_count)
+            if house.type_house == 'bungalow':
+                structure = house.type_house + '_' + str(bungalow_count)
+                for i in house_list:
+                    if structure in i:
+                        bungalow_count += 1
+                        structure = house.type_house + '_' + str(bungalow_count)
+            if house.type_house == 'maison':
+                structure = house.type_house + '_' + str(maison_count)
+                for i in house_list:
+                    if structure in i:
+                        maison_count += 1
+                        structure = house.type_house + '_' + str(maison_count)
+
+            bottom_left_xy = str(house.x) + ',' + str(house.y)
+            top_right_x = house.x + house.width - 1
+            top_right_y = house.y + house.height - 1
+            top_right_xy = str(top_right_x) + ',' + str(top_right_y)
+            type_house = house.type_house.upper()
+            
+            house_list.append([structure,bottom_left_xy,top_right_xy,type_house])
+
+        return house_list
+
+    def csv_output(self, house_list):
+
+        # make csv-file
+
+        pass
+
+
+
 class House():
 
     def __init__(self, type_house):
@@ -274,7 +328,7 @@ class House():
 
         else:
             print("Invalid type_house")
-    
+
     def __str__(self):
 
         return f"{self.type_house}: {self.x}, {self.y}"
@@ -282,4 +336,3 @@ class House():
     def __repr__(self):
 
         return self.__str__()
-

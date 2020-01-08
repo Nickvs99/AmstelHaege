@@ -8,7 +8,7 @@ import random
 
 def main():
 
-    set_random_seed(0.16573758344036393)
+    set_random_seed()
 
     new_area = area()
 

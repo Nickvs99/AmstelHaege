@@ -55,10 +55,6 @@ class area():
         bungalow_count = int(0.25 * houses_count)
         maison_count = int(0.15 * houses_count)
 
-        # one_person_house_count = 2
-        # bungalow_count = 0
-        # maison_count = 0
-
         self.houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
 
         for house in self.houses:
@@ -148,60 +144,40 @@ class area():
         for  house in self.houses:
             total_worth += self.calc_worth_house(house)
 
-        # total_worth += self.calc_worth_house(self.houses[1])
-
         return total_worth
 
     def calc_worth_house(self, house):
         """ Calculates the worth of a house. """
 
-        # Get the free space surrounding the house
         # TODO store these in the house object
         bottom_left_cor = [house.x, house.y]
         top_right_cor = [house.x + house.width - 1, house.y + house.height - 1]
 
-        # print(bottom_left_cor, top_right_cor)
-
-        while_count = 0
+        # Get the free space surrounding a house. This is achieved by expanding a rectangle around
+        # the house until it hits another house.
+        space_count = 0
         while True:
-
+            
             bottom_left_cor[0] -= 1
             bottom_left_cor[1] -= 1
             top_right_cor[0] += 1
-            top_right_cor[1] += 1
-
-            # print()
-            # print(bottom_left_cor, top_right_cor)
+            top_right_cor[1] += 1 
 
             elements = self.getBorder(bottom_left_cor, top_right_cor)
-            
-            # print(while_count)
-            # input()
-            # print()
-
-            # print(while_count)
-            # print(elements)
-
-            # if while_count > 53 and while_count < 56:
-            #     input()
 
             # If a house is in the border break
             if 2 in elements or 3 in elements or 4 in elements:
                 break
 
-            while_count += 1
+            space_count += 1
 
             if elements == []:
                 print("Whoops, something went wrong")
                 break
 
-        # print(while_count)
-
         base_value = house.value
-        extra_value = house.value * house.extra_value * (while_count - house.mandatory_free_space)
+        extra_value = house.value * house.extra_value * (space_count - house.mandatory_free_space)
         value = base_value + extra_value
-
-        # print(base_value, extra_value, value)
 
         return value
 
@@ -211,60 +187,48 @@ class area():
         the bottom_left_cor to the top_right_cor.
         """
 
-        # TODO refactor
-
         elements = []
 
         width = abs(top_right_cor[0] - bottom_left_cor[0]) +  1
-        height = abs(top_right_cor[1] - bottom_left_cor[1])
+        height = abs(top_right_cor[1] - bottom_left_cor[1]) + 1
 
-        # Get the bottom and top border
+        # Get the bottom border
         for i in range(width):
             
-            # Bottom 
             x = bottom_left_cor[0] + i
             y = bottom_left_cor[1]
-            if not self.check_in_bound(x, y):
-                continue
+            self.appendElement(elements, x, y)
 
-            # print(x, y)
-            elements.append(self.area[y][x])
+        # Get the top border
         for i in range(width):
 
-            # Top
             x = bottom_left_cor[0] + i
             y = top_right_cor[1]
-            if not self.check_in_bound(x, y):
-                continue
+            self.appendElement(elements, x, y)
+ 
+        # Get the left border, excluding corners
+        for i in range(1, height - 1):
 
-            # print(x, y)
-
-            elements.append(self.area[y][x])
-        
-        # Get the left and right border, excluding corners
-        for i in range(1, height):
-
-            # Left
             x = bottom_left_cor[0]
             y = bottom_left_cor[1] + i
-            if not self.check_in_bound(x, y):
-                continue
+            self.appendElement(elements, x, y)
 
-            # print(x, y)
+        # Get the right border, excluding corners
+        for i in range(1, height - 1):
 
-            elements.append(self.area[y][x])
-        for i in range(1, height):
-
-            # Right
             x = top_right_cor[0]
             y = bottom_left_cor[1] + i
-            if not self.check_in_bound(x, y):
-                continue      
-
-            # print(x, y)
-            elements.append(self.area[y][x])
+            self.appendElement(elements, x, y)
 
         return elements
+
+    def appendElement(self, elements, x, y):
+        """ Appends an element to the listif it isn't out of bounds."""
+
+        if not self.check_in_bound(x, y):
+            return
+
+        elements.append(self.area[y][x])
 
     def check_in_bound(self, x, y):
         """ Checks if a given x and y coordinates fall within the bounds. """

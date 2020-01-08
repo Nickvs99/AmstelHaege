@@ -139,34 +139,38 @@ class area():
 
     def make_csv(self):
 
-        values = self.make_house_list()
-        print(values)
+        house_list = self.make_house_list()
+        print(house_list)
 
-        self.csv_output(values)
+        self.csv_output(house_list)
     
     def make_house_list(self):
 
         one_person_count = 1
         bungalow_count = 1
         maison_count = 1
-        house_list = []
+        house_list = [['structure','bottom_left_xy','top_right_xy','type']]
 
         for house in self.houses:
-            if house.type_house == 'one_person_home':
+            type_house = house.type_house
+            if type_house == 'one_person_home':
+                structure = type_house + '_' + str(one_person_count)
                 for i in house_list:
                     if structure in i:
                         one_person_count += 1
-                structure = house.type_house + '_' + str(one_person_count)
-            if house.type_house == 'bungalow':
+                structure = type_house + '_' + str(one_person_count)
+            elif type_house == 'bungalow':
+                structure = type_house + '_' + str(bungalow_count)
                 for i in house_list:
                     if structure in i:
                         bungalow_count += 1
-                structure = house.type_house + '_' + str(bungalow_count)
-            if house.type_house == 'maison':
+                structure = type_house + '_' + str(bungalow_count)
+            elif type_house == 'maison':
+                structure = type_house + '_' + str(maison_count)
                 for i in house_list:
                     if structure in i:
                         maison_count += 1
-                structure = house.type_house + '_' + str(maison_count)
+                structure = type_house + '_' + str(maison_count)
 
             bottom_left_xy = str(house.x) + ',' + str(house.y)
             top_right_x = house.x + house.width - 1

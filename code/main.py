@@ -8,15 +8,26 @@ import random
 
 def main():
 
-    set_random_seed()
+    seed = set_random_seed()
 
-    new_area = area()
+    a = []
 
-    new_area.loadwater('wijk2')
+    for i in range(2):
 
-    new_area.place_houses(20)
+        new_area = area()
 
-    print(new_area.calc_worth_area())
+        new_area.loadwater('wijk2')
+
+        new_area.place_houses(20)
+
+        # a.append(new_area.calc_worth_area)
+        b = new_area.calc_worth_area
+
+    # end loop, pick the greatest value, keep the seed of this format
+
+    print(f"list = {b}")
+
+    print(f"seed = {seed}")
 
     new_area.ShowArea()
     
@@ -30,7 +41,9 @@ def set_random_seed(r = random.random()):
 
     random.seed(r)
 
-    print(f"Seed: {r}")
+    # print(f"Seed: {r}")
+
+    return r
     
 
 if __name__ == "__main__":

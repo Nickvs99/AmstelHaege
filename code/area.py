@@ -17,9 +17,9 @@ class area():
         self.height = 160
         self.width = 180
 
-        # self.area = self.createArea()
+        self.area = self.createArea()
 
-        self.area = [[ 0 for i in range(self.width)] for j in range(self.height)]
+        # self.area = [[ 0 for i in range(self.width)] for j in range(self.height)]
 
 
     def createArea(self):
@@ -156,7 +156,7 @@ class area():
         for  house in self.houses:
             total_worth += self.calc_worth_house(house)
 
-        return total_worth
+        return f"{total_worth}"
 
     def calc_worth_house(self, house):
         """ Calculates the worth of a house. """
@@ -355,3 +355,5 @@ class House():
     def __repr__(self):
 
         return self.__str__()
+
+

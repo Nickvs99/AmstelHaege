@@ -12,7 +12,7 @@ def main():
 
     new_area = area()
 
-    new_area.loadwater()
+    new_area.loadwater('wijk2')
 
     new_area.place_houses(20)
 
@@ -32,5 +32,6 @@ def set_random_seed(r = random.random()):
 
     print(f"Seed: {r}")
     
+
 if __name__ == "__main__":
     main()

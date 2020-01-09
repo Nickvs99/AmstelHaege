@@ -27,15 +27,25 @@ class area():
         area = [[ 0 for i in range(self.width)] for j in range(self.height)]
         return area
 
-    def loadwater(self):
+    def loadwater(self, filename):
+        """ Reads the given csv-file and uses the coordinates to fill in the water """
 
+        # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))
-        path = os.path.join(my_path, "../wijken/wijk2.csv")
+        location = "../wijken/" + filename + ".csv"
+        path = os.path.join(my_path, location)
+
+        # Open the csv-file as a dictionary
         with open(path) as csv_file:
             csv_reader = csv.DictReader(csv_file)
+
+            # Retrieve the coordinates of the bottom-left and top-right of the water(s)
             for row in csv_reader:
                 bottom,left = row['bottom_left_xy'].split(",")
                 top,right  = row['top_right_xy'].split(",")
+
+                # Replace each position in the nested list of area 
+                # with 1, to indicate water
                 for i in range(int(bottom),int(top)):
                     for j in range(int(left),int(right)):
                         self.area[i][j] = 1
@@ -241,55 +251,64 @@ class area():
         return True
 
     def make_csv(self):
+        """ Function which commands to update the output """
 
-        values = self.retrieve_values(self.houses)
-        print(values)
+        # Store values house_list
+        house_list = self.make_house_list()
 
-        self.csv_output(values)
+        # Use house_list to make the csv-output
+        self.csv_output(house_list)
     
-    def retrieve_values(self, houses):
+    def make_house_list(self):
+        """ Stores house-coordinates in a nested list """
 
+        # Startvalue housenumber
         one_person_count = 1
         bungalow_count = 1
         maison_count = 1
-        house_list = []
+
+        house_list = [['structure','bottom_left_xy','top_right_xy','type']]
 
         for house in self.houses:
-            if house.type_house == 'one_person_home':
-                structure = house.type_house + '_' + str(one_person_count)
-                for i in house_list:
-                    if structure in i:
-                        one_person_count += 1
-                        structure = house.type_house + '_' + str(one_person_count)
-            if house.type_house == 'bungalow':
-                structure = house.type_house + '_' + str(bungalow_count)
-                for i in house_list:
-                    if structure in i:
-                        bungalow_count += 1
-                        structure = house.type_house + '_' + str(bungalow_count)
-            if house.type_house == 'maison':
-                structure = house.type_house + '_' + str(maison_count)
-                for i in house_list:
-                    if structure in i:
-                        maison_count += 1
-                        structure = house.type_house + '_' + str(maison_count)
 
+            # Make structure of each house and update housenumber
+            type_house = house.type_house
+            if type_house == 'one_person_home':
+                structure = type_house + '_' + str(one_person_count)
+                one_person_count += 1
+            elif type_house == 'bungalow':
+                structure = type_house + '_' + str(bungalow_count)
+                bungalow_count += 1
+            elif type_house == 'maison':
+                structure = type_house + '_' + str(maison_count)
+                maison_count += 1
+
+            # Make string representation of the coordinates
             bottom_left_xy = str(house.x) + ',' + str(house.y)
             top_right_x = house.x + house.width - 1
             top_right_y = house.y + house.height - 1
             top_right_xy = str(top_right_x) + ',' + str(top_right_y)
             type_house = house.type_house.upper()
             
+            # Append values to the house_list
             house_list.append([structure,bottom_left_xy,top_right_xy,type_house])
 
         return house_list
 
     def csv_output(self, house_list):
+        """ (Over)writes the houselist into the ouput.csv """
 
-        # make csv-file
+        # Specify the path of the csv-file
+        my_path = os.path.abspath(os.path.dirname(__file__))
+        path = os.path.join(my_path, "../csv-output/output.csv")
 
-        pass
+        # Open the current output.csv
+        with open(path, 'w', newline='') as myfile:
+            wr = csv.writer(myfile)
 
+            # (Over)write each line of house_list into the csv-file
+            for house in house_list:
+                wr.writerow(house)
 
 
 class House():

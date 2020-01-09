@@ -8,7 +8,7 @@ import random
 
 def main():
 
-    set_random_seed()
+    set_random_seed(0.9984716029331245)
 
     new_area = area()
 
@@ -19,7 +19,7 @@ def main():
 
     # print(new_area.structures)
 
-    # print(new_area.calc_worth_area())
+    print(new_area.calc_worth_area())
 
     new_area.ShowArea()
     

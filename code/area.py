@@ -125,8 +125,6 @@ class area():
 
                 self.structures["House"].append(house)
 
-                # self.ShowArea()
-                # print(house.corners)
                 house_placed = True
 
             while_count += 1
@@ -191,14 +189,14 @@ class area():
 
         min_dist = math.inf
         for h in self.structures["House"]:
-            
+            if h == house:
+                    continue
             for h_corner in h.corners:
-
-                for house_corner in house.corner():
+                
+                for house_corner in house.corners:
 
                     x_dist = abs(h_corner[0] - house_corner[0])
                     y_dist = abs(h_corner[1] - house_corner[1])
-
                     dist = max(x_dist, y_dist)
 
                     if dist < min_dist:

@@ -60,7 +60,7 @@ class area():
 
         for house in self.houses:
             self.place_house(house)
-            
+
     def create_houses(self, one_person_house_count, bungalow_count, maison_count):
         """ Creates a list with houses. """
 
@@ -141,7 +141,7 @@ class area():
 
     def calc_worth_area(self):
         """ Calculates the worth of the area. """
-        
+
         total_worth = 0
         for  house in self.houses:
             total_worth += self.calc_worth_house(house)
@@ -159,11 +159,11 @@ class area():
         # the house until it hits another house.
         space_count = 0
         while True:
-            
+
             bottom_left_cor[0] -= 1
             bottom_left_cor[1] -= 1
             top_right_cor[0] += 1
-            top_right_cor[1] += 1 
+            top_right_cor[1] += 1
 
             elements = self.getBorder(bottom_left_cor, top_right_cor)
 
@@ -184,7 +184,7 @@ class area():
         return value
 
     def getBorder(self, bottom_left_cor, top_right_cor):
-        """ 
+        """
         Returns all elements on the border from a rectangle spanned from
         the bottom_left_cor to the top_right_cor.
         """
@@ -196,7 +196,7 @@ class area():
 
         # Get the bottom border
         for i in range(width):
-            
+
             x = bottom_left_cor[0] + i
             y = bottom_left_cor[1]
             self.appendElement(elements, x, y)
@@ -207,7 +207,7 @@ class area():
             x = bottom_left_cor[0] + i
             y = top_right_cor[1]
             self.appendElement(elements, x, y)
- 
+
         # Get the left border, excluding corners
         for i in range(1, height - 1):
 
@@ -237,7 +237,7 @@ class area():
 
         if x < 0 or y < 0 or x >= self.width or y >= self.height:
             return False
-        
+
         return True
 
     def make_csv(self):
@@ -246,7 +246,7 @@ class area():
         print(values)
 
         self.csv_output(values)
-    
+
     def retrieve_values(self, houses):
 
         one_person_count = 1
@@ -279,7 +279,7 @@ class area():
             top_right_y = house.y + house.height - 1
             top_right_xy = str(top_right_x) + ',' + str(top_right_y)
             type_house = house.type_house.upper()
-            
+
             house_list.append([structure,bottom_left_xy,top_right_xy,type_house])
 
         return house_list
@@ -300,7 +300,7 @@ class House():
         self.x = 0
         self.y = 0
 
-        # TODO presets or something, code doesnt look clean. Maybe three seperate object, 
+        # TODO presets or something, code doesnt look clean. Maybe three seperate object,
         # which inherit from this.
         if type_house == "bungalow":
             self.width = 11
@@ -336,3 +336,20 @@ class House():
     def __repr__(self):
 
         return self.__str__()
+
+class greedy():
+
+    def __init__(self):
+        self.worth = 0
+
+    def greedy(self, house, area):
+        for x in range(area.width):
+            for y in range(area.height):
+                new_area = copy.deepcopy(area)
+                if new_area.check_valid(house, x, y):
+                    worth = new_area.calc_worth_area()
+                    if worth > self.worth:
+                        self.worth = worth
+                        best_x = x
+                        best_y = y
+        area.place_house(house, best_x, best_y)

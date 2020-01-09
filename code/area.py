@@ -156,7 +156,7 @@ class area():
         for  house in self.houses:
             total_worth += self.calc_worth_house(house)
 
-        return f"{total_worth}"
+        return f"{int(total_worth)}"
 
     def calc_worth_house(self, house):
         """ Calculates the worth of a house. """

@@ -1,33 +1,18 @@
-"""
-
-"""
-
 import csv
 from area import area
 import random
 
 def main():
 
-    seed = set_random_seed()
+    set_random_seed()
 
-    a = []
+    new_area = area()
 
-    for i in range(2):
+    new_area.loadwater('wijk2')
 
-        new_area = area()
+    new_area.place_houses(20)
 
-        new_area.loadwater('wijk2')
-
-        new_area.place_houses(20)
-
-        # a.append(new_area.calc_worth_area)
-        b = new_area.calc_worth_area
-
-    # end loop, pick the greatest value, keep the seed of this format
-
-    print(f"list = {b}")
-
-    print(f"seed = {seed}")
+    print(new_area.calc_worth_area())
 
     new_area.ShowArea()
     
@@ -41,9 +26,7 @@ def set_random_seed(r = random.random()):
 
     random.seed(r)
 
-    # print(f"Seed: {r}")
-
-    return r
+    print(f"Seed: {r}")
     
 
 if __name__ == "__main__":

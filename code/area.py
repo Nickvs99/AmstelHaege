@@ -9,6 +9,7 @@ import random
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import copy
 
 class area():
 
@@ -56,10 +57,13 @@ class area():
         bungalow_count = int(0.25 * houses_count)
         maison_count = int(0.15 * houses_count)
 
-        self.houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
+        self.houses = []
+        houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
 
-        for house in self.houses:
-            self.place_house(house)
+        for house in houses:
+            self.houses.append(house)
+            greedyalgorithm = greedy()
+            greedyalgorithm.greedy(house, self)
 
     def create_houses(self, one_person_house_count, bungalow_count, maison_count):
         """ Creates a list with houses. """
@@ -76,7 +80,7 @@ class area():
 
         return houses
 
-    def place_house(self, house):
+    def place_house(self, house, x, y):
         """
         Place a house.
         It picks a random x and y coordinate and then checks if there is room for the new house.
@@ -89,9 +93,6 @@ class area():
         while_count = 0
         while not house_placed and while_count < 1000:
 
-            # Get random x and y coordinate
-            x = int(random.random() * (self.width - house.width))
-            y = int(random.random() * (self.height - house.height))
 
             if self.check_valid(house, x, y):
                 house.x = x
@@ -343,12 +344,20 @@ class greedy():
         self.worth = 0
 
     def greedy(self, house, area):
-        for x in range(area.width):
-            for y in range(area.height):
+        best_x = 0
+        best_y = 0
+        new_area = copy.deepcopy(area)
+        new_area.place_house(house, best_x, best_y)
+        new_area.ShowArea()
+        for y in range(area.height - house.height - house.mandatory_free_space):
+            print(y)
+            for x in range(area.width - house. height - house.mandatory_free_space):
                 new_area = copy.deepcopy(area)
-                if new_area.check_valid(house, x, y):
+                if area.check_valid(house, x, y):
+                    new_area.place_house(house, x, y)
                     worth = new_area.calc_worth_area()
                     if worth > self.worth:
+                        print(worth)
                         self.worth = worth
                         best_x = x
                         best_y = y

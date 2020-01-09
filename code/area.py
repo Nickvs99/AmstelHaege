@@ -139,6 +139,111 @@ class area():
 
         return True
 
+<<<<<<< HEAD
+=======
+
+    def calc_worth_area(self):
+        """ Calculates the worth of the area. """
+        
+        total_worth = 0
+        for  house in self.houses:
+            total_worth += self.calc_worth_house(house)
+
+        return total_worth
+
+    def calc_worth_house(self, house):
+        """ Calculates the worth of a house. """
+
+        # TODO store these in the house object
+        bottom_left_cor = [house.x, house.y]
+        top_right_cor = [house.x + house.width - 1, house.y + house.height - 1]
+
+        # Get the free space surrounding a house. This is achieved by expanding a rectangle around
+        # the house until it hits another house.
+        space_count = 0
+        while True:
+            
+            bottom_left_cor[0] -= 1
+            bottom_left_cor[1] -= 1
+            top_right_cor[0] += 1
+            top_right_cor[1] += 1 
+
+            elements = self.getBorder(bottom_left_cor, top_right_cor)
+
+            # If a house is in the border break
+            if 2 in elements or 3 in elements or 4 in elements:
+                break
+
+            space_count += 1
+
+            if elements == []:
+                print("Whoops, something went wrong")
+                break
+
+        base_value = house.value
+        extra_value = house.value * house.extra_value * (space_count - house.mandatory_free_space)
+        value = base_value + extra_value
+
+        return value
+
+    def getBorder(self, bottom_left_cor, top_right_cor):
+        """ 
+        Returns all elements on the border from a rectangle spanned from
+        the bottom_left_cor to the top_right_cor.
+        """
+
+        elements = []
+
+        width = abs(top_right_cor[0] - bottom_left_cor[0]) +  1
+        height = abs(top_right_cor[1] - bottom_left_cor[1]) + 1
+
+        # Get the bottom border
+        for i in range(width):
+            
+            x = bottom_left_cor[0] + i
+            y = bottom_left_cor[1]
+            self.appendElement(elements, x, y)
+
+        # Get the top border
+        for i in range(width):
+
+            x = bottom_left_cor[0] + i
+            y = top_right_cor[1]
+            self.appendElement(elements, x, y)
+ 
+        # Get the left border, excluding corners
+        for i in range(1, height - 1):
+
+            x = bottom_left_cor[0]
+            y = bottom_left_cor[1] + i
+            self.appendElement(elements, x, y)
+
+        # Get the right border, excluding corners
+        for i in range(1, height - 1):
+
+            x = top_right_cor[0]
+            y = bottom_left_cor[1] + i
+            self.appendElement(elements, x, y)
+
+        return elements
+
+    def appendElement(self, elements, x, y):
+        """ Appends an element to the listif it isn't out of bounds."""
+
+        if not self.check_in_bound(x, y):
+            return
+
+        elements.append(self.area[y][x])
+
+    def check_in_bound(self, x, y):
+        """ Checks if a given x and y coordinates fall within the bounds. """
+
+        if x < 0 or y < 0 or x >= self.width or y >= self.height:
+            return False
+        
+        return True
+
+>>>>>>> master
     def make_csv(self):
 
         values = self.retrieve_values(self.houses)

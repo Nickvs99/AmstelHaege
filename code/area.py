@@ -436,3 +436,25 @@ class House(Structure):
     def __repr__(self):
 
         return self.__str__()
+
+class greedy():
+
+    def __init__(self):
+        self.worth = 0
+
+    def greedy(self, house, area):
+        best_x = 0
+        best_y = 0
+        new_area.place_house(house, best_x, best_y)
+        new_area.ShowArea()
+        for y in range(area.height - house.height - house.mandatory_free_space):
+            for x in range(area.width - house. height - house.mandatory_free_space):
+                if area.check_valid(house, x, y):
+                    new_area.place_house(house, x, y)
+                    worth = new_area.calc_worth_area()
+                    if worth > self.worth:
+                        print(worth)
+                        self.worth = worth
+                        best_x = x
+                        best_y = y
+        area.place_house(house, best_x, best_y)

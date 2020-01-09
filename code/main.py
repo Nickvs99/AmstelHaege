@@ -14,13 +14,16 @@ def main():
 
     new_area.loadwater()
 
+
     new_area.place_houses(20)
 
-    print(new_area.calc_worth_area())
+    # print(new_area.structures)
+
+    # print(new_area.calc_worth_area())
 
     new_area.ShowArea()
     
-    new_area.make_csv()
+    # new_area.make_csv()
 
     
  
@@ -32,5 +35,6 @@ def set_random_seed(r = random.random()):
 
     print(f"Seed: {r}")
     
+
 if __name__ == "__main__":
     main()

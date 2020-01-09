@@ -9,18 +9,16 @@ import random
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import math
 
 class area():
 
     def __init__(self):
 
-        self.height = 160
-        self.width = 180
+        self.height = 180
+        self.width = 160
 
-        # self.area = self.createArea()
-
-        self.area = [[ 0 for i in range(self.width)] for j in range(self.height)]
-
+        self.structures = {"Water": [], "House":[]}
 
     def createArea(self):
 
@@ -36,17 +34,42 @@ class area():
             for row in csv_reader:
                 bottom,left = row['bottom_left_xy'].split(",")
                 top,right  = row['top_right_xy'].split(",")
-                for i in range(int(bottom),int(top)):
-                    for j in range(int(left),int(right)):
-                        self.area[i][j] = 1
 
+                bottom, left, top, right = int(bottom), int(left), int(top), int(right)
+
+                water = Structure("Water")
+
+                water.bottom_left_cor = [bottom, left]
+                water.top_right_cor = [top, right]
+
+                water.set_corners(water.bottom_left_cor, water.top_right_cor)
+
+                self.structures["Water"].append(water)
+
+    def fill_area(self):
+        self.area = self.createArea()
+
+        for water in self.structures["Water"]:
+            # print(water.bottom_left_cor, water.top_right_cor)
+            for y in range(water.bottom_left_cor[1], water.top_right_cor[1]):
+                for x in range(water.bottom_left_cor[0], water.top_right_cor[0]):
+                    self.area[y][x] = 1
+
+        for house in self.structures["House"]:
+            for y in range(house.bottom_left_cor[1], house.top_right_cor[1]):
+                for x in range(house.bottom_left_cor[0], house.top_right_cor[0]):
+                    try:
+                        self.area[y][x] = house.state
+                    except: 
+                        print(x, y)
 
     def ShowArea(self):
+        
+        self.fill_area()
         colorscheme = matplotlib.colors.ListedColormap(['#73b504', '#88AAFF', '#ee4035', '#ffb455', '#b266b2'])
         plt.imshow(self.area, cmap = colorscheme)
         plt.gca().invert_yaxis()
         plt.show()
-
 
     def place_houses(self, houses_count):
         """ Places the houses randomly. """
@@ -56,23 +79,23 @@ class area():
         bungalow_count = int(0.25 * houses_count)
         maison_count = int(0.15 * houses_count)
 
-        self.houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
+        houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
 
-        for house in self.houses:
+        for house in houses:
             self.place_house(house)
             
     def create_houses(self, one_person_house_count, bungalow_count, maison_count):
         """ Creates a list with houses. """
 
         houses = []
-        for i in range(one_person_house_count):
-            houses.append(House("one_person_home"))
+        for i in range(maison_count):
+            houses.append(House("maison"))
 
         for i in range(bungalow_count):
             houses.append(House("bungalow"))
 
-        for i in range(maison_count):
-            houses.append(House("maison"))
+        for i in range(one_person_house_count):
+            houses.append(House("one_person_home"))
 
         return houses
 
@@ -89,61 +112,76 @@ class area():
         while_count = 0
         while not house_placed and while_count < 1000:
 
-            # Get random x and y coordinate
+            # Get random bottom_left x and y coordinate
             x = int(random.random() * (self.width - house.width))
             y = int(random.random() * (self.height - house.height))
 
             if self.check_valid(house, x, y):
-                house.x = x
-                house.y = y
+
+                house.bottom_left_cor = [x, y]
+                house.top_right_cor = [x + house.width, y + house.height]
+
+                house.set_corners(house.bottom_left_cor, house.top_right_cor)
+
+                self.structures["House"].append(house)
+
+                # self.ShowArea()
+                # print(house.corners)
                 house_placed = True
 
             while_count += 1
 
-        # Place the house in the area
-        for i in range(house.width):
-            for j in range(house.height):
+        if while_count == 1000:
+            raise Exception("Something went wrong when placing a house") 
 
-                self.area[house.y + j][house.x + i] = house.state
 
-    def check_valid(self, house, x, y):
+    def check_valid(self, test_house, x, y):
         """ Returns True when there is enough room for a house. """
 
-        # Check if the house overlaps with anything but land
-        for i in range(house.width):
-            for j in range(house.height):
-                if self.area[y + j][x + i] != 0:
+        test_bottom_left = [x, y]
+        test_top_right = [x + test_house.width, y + test_house.height]
+        test_top_left = [x, y + test_house.height]
+        test_bottom_right = [x + test_house.width, y]
+
+        # print("TESTHOUSE", test_bottom_left, test_top_right)
+        if not self.check_in_bound(test_bottom_left, test_top_right):
+            return False
+
+        test_corners = [test_bottom_left, test_bottom_right, test_top_left, test_top_right]
+
+        # Checks if any of the corners of the test_house are in a house
+        for house in self.structures["House"]:
+            # print(house.corners)
+            for test_corner in test_corners:
+                corner_bottom_left = [house.corners[0][0] - house.mandatory_free_space, house.corners[0][1] - house.mandatory_free_space]
+                corner_top_right = [house.corners[3][0] + house.mandatory_free_space, house.corners[3][1] + house.mandatory_free_space]
+                if self.check_within_custom_bounds(test_corner[0], test_corner[1], corner_bottom_left, corner_top_right):
                     return False
 
-        # Get the bottomleft coordinate of the mandatory free space
-        xCor = x - house.mandatory_free_space
-        yCor = y - house.mandatory_free_space
-
-        # Check if the mandatory free space is actually free
-        # TODO now the loop loops over a rectangle of spaces, but it only has to loop over the border
-        # around the house
-        for i in range(house.width + 2 * house.mandatory_free_space):
-            for j in range(house.height + 2 * house.mandatory_free_space):
-
-                x_temp = xCor + i
-                y_temp = yCor + j
-
-                # If the mandatory free space falls outside of the grid, continue
-                if not self.check_in_bound(x_temp, y_temp):
-                    continue
-
-                # Check if the mandatory free space overlaps with a building
-                if self.area[y_temp][x_temp] in [2,3,4]:
+        # Checks if any of the corners of the test_house are in water
+        for water in self.structures["Water"]:
+            
+            for test_corner in test_corners:
+                if self.check_within_custom_bounds(test_corner[0], test_corner[1], water.corners[0], water.corners[3]):
                     return False
+
 
         return True
 
+    def check_within_custom_bounds(self, x, y, bottom_left_cor, top_right_cor):
+        """ Returns True when a given x and y coordinate fall within a rectangle spanned
+        from bottom_left_cor to top_right_cor. """
+
+        if x > bottom_left_cor[0] and x < top_right_cor[0] and y > bottom_left_cor[1] and y < top_right_cor[1]:
+            return True
+
+        return False
 
     def calc_worth_area(self):
         """ Calculates the worth of the area. """
         
         total_worth = 0
-        for  house in self.houses:
+        for  house in self.structures["House"]:
             total_worth += self.calc_worth_house(house)
 
         return total_worth
@@ -151,34 +189,23 @@ class area():
     def calc_worth_house(self, house):
         """ Calculates the worth of a house. """
 
-        # TODO store these in the house object
-        bottom_left_cor = [house.x, house.y]
-        top_right_cor = [house.x + house.width - 1, house.y + house.height - 1]
-
-        # Get the free space surrounding a house. This is achieved by expanding a rectangle around
-        # the house until it hits another house.
-        space_count = 0
-        while True:
+        min_dist = math.inf
+        for h in self.structures["House"]:
             
-            bottom_left_cor[0] -= 1
-            bottom_left_cor[1] -= 1
-            top_right_cor[0] += 1
-            top_right_cor[1] += 1 
+            for h_corner in h.corners:
 
-            elements = self.getBorder(bottom_left_cor, top_right_cor)
+                for house_corner in house.corner():
 
-            # If a house is in the border break
-            if 2 in elements or 3 in elements or 4 in elements:
-                break
+                    x_dist = abs(h_corner[0] - house_corner[0])
+                    y_dist = abs(h_corner[1] - house_corner[1])
 
-            space_count += 1
+                    dist = max(x_dist, y_dist)
 
-            if elements == []:
-                print("Whoops, something went wrong")
-                break
+                    if dist < min_dist:
+                        min_dist = dist
 
         base_value = house.value
-        extra_value = house.value * house.extra_value * (space_count - house.mandatory_free_space)
+        extra_value = house.value * house.extra_value * (min_dist - house.mandatory_free_space)
         value = base_value + extra_value
 
         return value
@@ -232,10 +259,10 @@ class area():
 
         elements.append(self.area[y][x])
 
-    def check_in_bound(self, x, y):
+    def check_in_bound(self, bottom_left_cor, top_right_cor):
         """ Checks if a given x and y coordinates fall within the bounds. """
 
-        if x < 0 or y < 0 or x >= self.width or y >= self.height:
+        if bottom_left_cor[0] < 0 or bottom_left_cor[1] < 0 or top_right_cor[0] >= self.width or top_right_cor[1] >= self.height:
             return False
         
         return True
@@ -290,11 +317,40 @@ class area():
 
         pass
 
+class Structure():
 
+    def __init__(self, structur_type):
+        self.structur_type = structur_type
+        self.bottom_left_cor = [None, None]
+        self.top_right_cor = [None, None]
+        self.structure_name = None
 
-class House():
+    def get_corners(self, bottom_left_cor, top_right_cor):
+
+        bottom_right_cor = [top_left_cor[0], bottom_left_cor[1]]
+        top_left_cor = [bottom_left_cor[0], top_right_cor[1]]
+
+        return [bottom_left_cor, bottom_right_cor, top_left_cor, top_right_cor]
+
+    def set_corners(self, bottom_left_cor, top_right_cor):
+        """ Sets the bottom_right_cor and top_left_cor"""
+
+        self.bottom_right_cor = [top_right_cor[0], bottom_left_cor[1]]
+        self.top_left_cor = [bottom_left_cor[0], top_right_cor[1]]
+
+        self.corners = [self.bottom_left_cor, self.bottom_right_cor, self.top_left_cor, self.top_right_cor]
+
+    def __str__(self):
+
+        return f"[{self.structure_name}, {self.bottom_left_cor}, {self.top_right_cor}, {self.structur_type}]"
+
+    def __repr__(self):
+        return self.__str__()
+
+class House(Structure):
 
     def __init__(self, type_house):
+        super().__init__("House")
 
         self.type_house = type_house
         self.x = 0
@@ -309,6 +365,7 @@ class House():
             self.state = 3
             self.value = 399000
             self.extra_value = 0.04
+            self.horizontal = True
 
         elif type_house == "maison":
             self.width = 12
@@ -317,6 +374,7 @@ class House():
             self.mandatory_free_space = 6
             self.value = 610000
             self.extra_value = 0.06
+            self.horizontal = True
 
         elif type_house == "one_person_home":
             self.width = 8
@@ -325,13 +383,14 @@ class House():
             self.mandatory_free_space = 2
             self.value = 285000
             self.extra_value = 0.03
+            self.horizontal = True
 
         else:
             print("Invalid type_house")
 
     def __str__(self):
 
-        return f"{self.type_house}: {self.x}, {self.y}"
+        return f"{self.type_house}: {self.bottom_left_cor}, {self.top_right_cor}"
 
     def __repr__(self):
 

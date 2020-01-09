@@ -60,16 +60,59 @@ class area():
                 for x in range(house.bottom_left_cor[0], house.top_right_cor[0]):
                     try:
                         self.area[y][x] = house.state
-                    except: 
+                    except:
                         print(x, y)
 
     def ShowArea(self):
-        
+
         self.fill_area()
         colorscheme = matplotlib.colors.ListedColormap(['#73b504', '#88AAFF', '#ee4035', '#ffb455', '#b266b2'])
         plt.imshow(self.area, cmap = colorscheme)
         plt.gca().invert_yaxis()
         plt.show()
+
+    def place_housesgreedy(self, houses_count):
+        """ Places the houses randomly. """
+
+        # Calculate the number of houses per type
+        one_person_house_count = int(0.6 * houses_count)
+        bungalow_count = int(0.25 * houses_count)
+        maison_count = int(0.15 * houses_count)
+
+        houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
+
+        for house in houses:
+            self.place_house(house)
+
+    def place_housegreedy(self, house, x, y):
+        """
+        Place a house.
+        It picks a random x and y coordinate and then checks if there is room for the new house.
+        If it does not succeed, try new coordinates.
+        """
+
+        # TODO not sure if this works when large houses gets placed first and then the smaller
+
+        house_placed = False
+        while_count = 0
+        while not house_placed and while_count < 1000:
+
+
+            if self.check_valid(house, x, y):
+
+                house.bottom_left_cor = [x, y]
+                house.top_right_cor = [x + house.width, y + house.height]
+
+                house.set_corners(house.bottom_left_cor, house.top_right_cor)
+
+                self.structures["House"].append(house)
+
+                house_placed = True
+
+            while_count += 1
+
+        if while_count == 1000:
+            raise Exception("Something went wrong when placing a house")
 
     def place_houses(self, houses_count):
         """ Places the houses randomly. """
@@ -83,7 +126,7 @@ class area():
 
         for house in houses:
             self.place_house(house)
-            
+
     def create_houses(self, one_person_house_count, bungalow_count, maison_count):
         """ Creates a list with houses. """
 
@@ -130,7 +173,7 @@ class area():
             while_count += 1
 
         if while_count == 1000:
-            raise Exception("Something went wrong when placing a house") 
+            raise Exception("Something went wrong when placing a house")
 
 
     def check_valid(self, test_house, x, y):
@@ -158,7 +201,7 @@ class area():
 
         # Checks if any of the corners of the test_house are in water
         for water in self.structures["Water"]:
-            
+
             for test_corner in test_corners:
                 if self.check_within_custom_bounds(test_corner[0], test_corner[1], water.corners[0], water.corners[3]):
                     return False
@@ -177,7 +220,7 @@ class area():
 
     def calc_worth_area(self):
         """ Calculates the worth of the area. """
-        
+
         total_worth = 0
         for  house in self.structures["House"]:
             total_worth += self.calc_worth_house(house)
@@ -192,7 +235,7 @@ class area():
             if h == house:
                     continue
             for h_corner in h.corners:
-                
+
                 for house_corner in house.corners:
 
                     x_dist = abs(h_corner[0] - house_corner[0])
@@ -209,7 +252,7 @@ class area():
         return value
 
     def getBorder(self, bottom_left_cor, top_right_cor):
-        """ 
+        """
         Returns all elements on the border from a rectangle spanned from
         the bottom_left_cor to the top_right_cor.
         """
@@ -221,7 +264,7 @@ class area():
 
         # Get the bottom border
         for i in range(width):
-            
+
             x = bottom_left_cor[0] + i
             y = bottom_left_cor[1]
             self.appendElement(elements, x, y)
@@ -232,7 +275,7 @@ class area():
             x = bottom_left_cor[0] + i
             y = top_right_cor[1]
             self.appendElement(elements, x, y)
- 
+
         # Get the left border, excluding corners
         for i in range(1, height - 1):
 
@@ -262,7 +305,7 @@ class area():
 
         if bottom_left_cor[0] < 0 or bottom_left_cor[1] < 0 or top_right_cor[0] >= self.width or top_right_cor[1] >= self.height:
             return False
-        
+
         return True
 
     def make_csv(self):
@@ -271,7 +314,7 @@ class area():
         print(values)
 
         self.csv_output(values)
-    
+
     def retrieve_values(self, houses):
 
         one_person_count = 1
@@ -304,7 +347,7 @@ class area():
             top_right_y = house.y + house.height - 1
             top_right_xy = str(top_right_x) + ',' + str(top_right_y)
             type_house = house.type_house.upper()
-            
+
             house_list.append([structure,bottom_left_xy,top_right_xy,type_house])
 
         return house_list
@@ -354,7 +397,7 @@ class House(Structure):
         self.x = 0
         self.y = 0
 
-        # TODO presets or something, code doesnt look clean. Maybe three seperate object, 
+        # TODO presets or something, code doesnt look clean. Maybe three seperate object,
         # which inherit from this.
         if type_house == "bungalow":
             self.width = 11

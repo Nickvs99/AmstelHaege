@@ -16,6 +16,8 @@ def main():
 
     new_area.place_houses(20)
 
+    print(new_area.calc_worth_area())
+
     new_area.ShowArea()
     
     new_area.make_csv()

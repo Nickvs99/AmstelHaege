@@ -18,36 +18,45 @@ class area():
         self.height = 180
         self.width = 160
 
+        # Stores all structures in their respective type
         self.structures = {"Water": [], "House":[]}
 
-    def createArea(self):
+    def create_area(self):
+        """ 
+        Creates an listed list with self.height x self.width dimensions. 
+        This list is filled with zeroes.
+        """
 
-        area = [[ 0 for i in range(self.width)] for j in range(self.height)]
-        return area
+        return [[ 0 for i in range(self.width)] for j in range(self.height)]
 
-    def loadwater(self):
+    def load_water(self):
+        """ Gets the water from the csv file and creates objects from them. """
 
         my_path = os.path.abspath(os.path.dirname(__file__))
         path = os.path.join(my_path, "../wijken/wijk2.csv")
         with open(path) as csv_file:
+
             csv_reader = csv.DictReader(csv_file)
+
             for row in csv_reader:
+                
+                # Get the bottom_left and top_right from the csv
                 bottom,left = row['bottom_left_xy'].split(",")
                 top,right  = row['top_right_xy'].split(",")
 
                 bottom, left, top, right = int(bottom), int(left), int(top), int(right)
 
+                # Create the water object
                 water = Structure("Water")
 
                 water.bottom_left_cor = [bottom, left]
                 water.top_right_cor = [top, right]
-
                 water.set_corners(water.bottom_left_cor, water.top_right_cor)
 
                 self.structures["Water"].append(water)
 
-    def fill_area(self):
-        self.area = self.createArea()
+    def fill_area(self, area):
+        """ Fill the area with the objects with the state of the structures"""
 
         for water in self.structures["Water"]:
             # print(water.bottom_left_cor, water.top_right_cor)
@@ -63,9 +72,14 @@ class area():
                     except: 
                         print(x, y)
 
-    def ShowArea(self):
+    def plot_area(self):
+        """
+        Plots the area.
+        """
         
-        self.fill_area()
+        area = self.create_area()
+        self.fill_area(area)
+
         colorscheme = matplotlib.colors.ListedColormap(['#73b504', '#88AAFF', '#ee4035', '#ffb455', '#b266b2'])
         plt.imshow(self.area, cmap = colorscheme)
         plt.gca().invert_yaxis()
@@ -106,8 +120,6 @@ class area():
         If it does not succeed, try new coordinates.
         """
 
-        # TODO not sure if this works when large houses gets placed first and then the smaller
-
         house_placed = False
         while_count = 0
         while not house_placed and while_count < 1000:
@@ -130,29 +142,37 @@ class area():
             while_count += 1
 
         if while_count == 1000:
-            raise Exception("Something went wrong when placing a house") 
-
+            raise Exception("Something went wrong when placing a house. There was probably to little room to fit an extra house.") 
 
     def check_valid(self, test_house, x, y):
-        """ Returns True when there is enough room for a house. """
+        """ 
+        Returns True when satisfies the constrains.
+        These constrains are:
+            - The house must be fully placed on the grid.
+            - The house is not allowed to overlap other houses.
+            - The house has a mandatory free space. 
+         """
 
         test_bottom_left = [x, y]
         test_top_right = [x + test_house.width, y + test_house.height]
         test_top_left = [x, y + test_house.height]
         test_bottom_right = [x + test_house.width, y]
 
-        # print("TESTHOUSE", test_bottom_left, test_top_right)
+        # Both the bottom_left coordinate as the top_right coordinate have to be in bounds
         if not self.check_in_bound(test_bottom_left, test_top_right):
             return False
 
         test_corners = [test_bottom_left, test_bottom_right, test_top_left, test_top_right]
 
-        # Checks if any of the corners of the test_house are in a house
+        # Checks if any of the corners of the test_house are in a house or their mandatory free space
         for house in self.structures["House"]:
-            # print(house.corners)
+
             for test_corner in test_corners:
+                
+                # Get the corners of the non allowed space. This includes the mandatory space.
                 corner_bottom_left = [house.corners[0][0] - house.mandatory_free_space, house.corners[0][1] - house.mandatory_free_space]
                 corner_top_right = [house.corners[3][0] + house.mandatory_free_space, house.corners[3][1] + house.mandatory_free_space]
+
                 if self.check_within_custom_bounds(test_corner[0], test_corner[1], corner_bottom_left, corner_top_right):
                     return False
 
@@ -167,8 +187,10 @@ class area():
         return True
 
     def check_within_custom_bounds(self, x, y, bottom_left_cor, top_right_cor):
-        """ Returns True when a given x and y coordinate fall within a rectangle spanned
-        from bottom_left_cor to top_right_cor. """
+        """ 
+        Returns True when a given x and y coordinate fall within a rectangle spanned
+        from bottom_left_cor to top_right_cor. Border is excluded.
+        """
 
         if x > bottom_left_cor[0] and x < top_right_cor[0] and y > bottom_left_cor[1] and y < top_right_cor[1]:
             return True
@@ -185,18 +207,28 @@ class area():
         return total_worth
 
     def calc_worth_house(self, house):
-        """ Calculates the worth of a house. """
+        """ 
+        Calculates the worth of a house. The worth is
+        worth = base_value + base_value * extra_value * (min_dist - mandatory_free_space)
+        """
 
+
+        # Get the minimum distance from one corner of the house to another corner of any house.
         min_dist = math.inf
         for h in self.structures["House"]:
+
+            # Dont check distances if the house is the same as h
             if h == house:
                     continue
+            
             for h_corner in h.corners:
                 
                 for house_corner in house.corners:
-
+                    
                     x_dist = abs(h_corner[0] - house_corner[0])
                     y_dist = abs(h_corner[1] - house_corner[1])
+
+                    # Use the maximum value, since the minimum value wouldnt reach the object
                     dist = max(x_dist, y_dist)
 
                     if dist < min_dist:
@@ -204,58 +236,10 @@ class area():
 
         base_value = house.value
         extra_value = house.value * house.extra_value * (min_dist - house.mandatory_free_space)
+
         value = base_value + extra_value
 
         return value
-
-    def getBorder(self, bottom_left_cor, top_right_cor):
-        """ 
-        Returns all elements on the border from a rectangle spanned from
-        the bottom_left_cor to the top_right_cor.
-        """
-
-        elements = []
-
-        width = abs(top_right_cor[0] - bottom_left_cor[0]) +  1
-        height = abs(top_right_cor[1] - bottom_left_cor[1]) + 1
-
-        # Get the bottom border
-        for i in range(width):
-            
-            x = bottom_left_cor[0] + i
-            y = bottom_left_cor[1]
-            self.appendElement(elements, x, y)
-
-        # Get the top border
-        for i in range(width):
-
-            x = bottom_left_cor[0] + i
-            y = top_right_cor[1]
-            self.appendElement(elements, x, y)
- 
-        # Get the left border, excluding corners
-        for i in range(1, height - 1):
-
-            x = bottom_left_cor[0]
-            y = bottom_left_cor[1] + i
-            self.appendElement(elements, x, y)
-
-        # Get the right border, excluding corners
-        for i in range(1, height - 1):
-
-            x = top_right_cor[0]
-            y = bottom_left_cor[1] + i
-            self.appendElement(elements, x, y)
-
-        return elements
-
-    def appendElement(self, elements, x, y):
-        """ Appends an element to the listif it isn't out of bounds."""
-
-        if not self.check_in_bound(x, y):
-            return
-
-        elements.append(self.area[y][x])
 
     def check_in_bound(self, bottom_left_cor, top_right_cor):
         """ Checks if a given x and y coordinates fall within the bounds. """
@@ -266,7 +250,7 @@ class area():
         return True
 
     def make_csv(self):
-
+        
         values = self.retrieve_values(self.houses)
         print(values)
 
@@ -316,19 +300,28 @@ class area():
         pass
 
 class Structure():
+    """
+    Structure object. This object stores:
+    - bottom_left_cor
+    - top_right_cor
+    - the type ('Water', 'House' etc.)
+    - the name, a unique id ('water1', 'water2')
+    """
 
     def __init__(self, structur_type):
+
         self.structur_type = structur_type
         self.bottom_left_cor = [None, None]
         self.top_right_cor = [None, None]
         self.structure_name = None
 
-    def get_corners(self, bottom_left_cor, top_right_cor):
+    def get_corners(self):
+        """ 
+        Returns all corners.
+        The order is bottom_left, bottom_right, top_left, top_right.
+        """
 
-        bottom_right_cor = [top_left_cor[0], bottom_left_cor[1]]
-        top_left_cor = [bottom_left_cor[0], top_right_cor[1]]
-
-        return [bottom_left_cor, bottom_right_cor, top_left_cor, top_right_cor]
+        return self.corners
 
     def set_corners(self, bottom_left_cor, top_right_cor):
         """ Sets the bottom_right_cor and top_left_cor"""
@@ -354,8 +347,7 @@ class House(Structure):
         self.x = 0
         self.y = 0
 
-        # TODO presets or something, code doesnt look clean. Maybe three seperate object, 
-        # which inherit from this.
+        # TODO changing horizontal should swap the width and height.
         if type_house == "bungalow":
             self.width = 11
             self.height = 7

@@ -62,13 +62,13 @@ class area():
             # print(water.bottom_left_cor, water.top_right_cor)
             for y in range(water.bottom_left_cor[1], water.top_right_cor[1]):
                 for x in range(water.bottom_left_cor[0], water.top_right_cor[0]):
-                    self.area[y][x] = 1
+                    area[y][x] = 1
 
         for house in self.structures["House"]:
             for y in range(house.bottom_left_cor[1], house.top_right_cor[1]):
                 for x in range(house.bottom_left_cor[0], house.top_right_cor[0]):
                     try:
-                        self.area[y][x] = house.state
+                        area[y][x] = house.state
                     except: 
                         print(x, y)
 
@@ -81,7 +81,7 @@ class area():
         self.fill_area(area)
 
         colorscheme = matplotlib.colors.ListedColormap(['#73b504', '#88AAFF', '#ee4035', '#ffb455', '#b266b2'])
-        plt.imshow(self.area, cmap = colorscheme)
+        plt.imshow(area, cmap = colorscheme)
         plt.gca().invert_yaxis()
         plt.show()
 

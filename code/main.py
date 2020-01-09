@@ -12,8 +12,7 @@ def main():
 
     new_area = area()
 
-    new_area.loadwater()
-
+    new_area.load_water()
 
     new_area.place_houses(20)
 
@@ -21,7 +20,7 @@ def main():
 
     print(new_area.calc_worth_area())
 
-    new_area.ShowArea()
+    new_area.plot_area()
     
     # new_area.make_csv()
 

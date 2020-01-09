@@ -1,3 +1,3 @@
 # AmstelHaege
 
-## Made by Nick van Santen, Hidde van Oije en Pranto Bishas
+## Made by Nick van Santen, Hidde van Oijen en Pranto Bishas

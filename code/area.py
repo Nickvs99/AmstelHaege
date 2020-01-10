@@ -78,10 +78,14 @@ class area():
         one_person_house_count = int(0.6 * houses_count)
         bungalow_count = int(0.25 * houses_count)
         maison_count = int(0.15 * houses_count)
+
+        # Makes houses
         houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
         counter = 0
         for house in houses:
             print(counter)
+
+            # Places the rest of the houses
             if counter >= 1:
                 house.bottom_left_cor = [0, 0]
                 house.top_right_cor = [0 + house.width, 0 + house.height]
@@ -90,6 +94,8 @@ class area():
                 greedyalgorithm = greedy()
                 greedyalgorithm.greedy(house, self)
                 print(self.calc_worth_area())
+
+            # Places house in first position
             else:
                 house.bottom_left_cor = [74, 85]
                 house.top_right_cor = [74 + house.width, 85 + house.height]
@@ -102,8 +108,6 @@ class area():
     def place_housegreedy(self, house, x, y):
         """
         Place a house.
-        It picks a random x and y coordinate and then checks if there is room for the new house.
-        If it does not succeed, try new coordinates.
         """
 
         house.bottom_left_cor = [x, y]
@@ -441,13 +445,19 @@ class greedy():
     def greedy(self, house, area):
         best_x = 0
         best_y = 0
+
+        # Checks place for house
         for y in range(area.height - house.height):
             for x in range(area.width - house.width):
                 if area.check_valid(house, x, y):
                     area.place_housegreedy(house, x, y)
                     worth = area.calc_worth_area()
+
+                    # Selects best place for house
                     if worth > self.worth:
                         self.worth = worth
                         best_x = x
                         best_y = y
+
+        # Places house in best place
         area.place_housegreedy(house, best_x, best_y)

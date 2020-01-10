@@ -12,7 +12,7 @@ def main():
 
     # new_area.place_houses(80)
 
-    new_area.place_housesgreedy(60)
+    new_area.place_housesgreedy(20)
 
     # print(new_area.structures)
 

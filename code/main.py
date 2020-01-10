@@ -1,29 +1,39 @@
-import csv
-from area import area
 import random
+from classes.area import Area
+from algorithms.random import random_placement
+from algorithms.greedy import place_housesgreedy
+
+ALGORITHM = "random"
+NEIGHBOURHOOD = "wijk2"
+HOUSES = 20
 
 def main():
 
     set_random_seed()
 
-    new_area = area()
+    area = Area(NEIGHBOURHOOD, HOUSES)
 
-    new_area.load_water('wijk2')
+    algorithm(area, ALGORITHM)
 
-    # new_area.place_houses(80)
-
-    new_area.place_housesgreedy(10)
-
-    # print(new_area.structures)
-
-    print(new_area.calc_worth_area())
-
-    print(new_area.structures)
-
-    # input()
-    new_area.plot_area()
+    area.plot_area()
     
-    # new_area.make_csv()
+    area.make_csv()
+
+def algorithm(area, algorithm_name):
+
+    # TODO switch case statement
+    if algorithm_name == "random":
+        random_placement(area)
+
+    elif algorithm_name == "greedy":
+        place_housesgreedy(area)
+
+    elif algorithm_name == "greedy_random":
+        greedy_random(area)
+
+    else:
+        raise Exception("Invalid algorithm name")
+
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

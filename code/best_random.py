@@ -20,7 +20,7 @@ def main():
     start = timeit.default_timer()
     
     # Find the seed with the highest worth and retrieve the grid
-    best_seed, Dict = best_random(10)
+    best_seed = best_random(10)
     set_random_seed(best_seed)
     new_area = area()
     new_area.loadwater('wijk2')
@@ -63,7 +63,7 @@ def best_random(n):
 
     # show_plot(Dict)
 
-    return seed_most_worth, Dict
+    return seed_most_worth
 
 def show_plot(Dict):
 

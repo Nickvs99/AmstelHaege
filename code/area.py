@@ -22,8 +22,8 @@ class area():
         self.structures = {"Water": [], "House":[]}
 
     def create_area(self):
-        """ 
-        Creates an listed list with self.height x self.width dimensions. 
+        """
+        Creates an listed list with self.height x self.width dimensions.
         This list is filled with zeroes.
         """
 
@@ -80,7 +80,7 @@ class area():
         """
         Plots the area.
         """
-        
+
         area = self.create_area()
         self.fill_area(area)
 
@@ -180,7 +180,7 @@ class area():
             y = int(random.random() * (self.height - house.height + 1))
 
             if self.check_valid(house, x, y):
-                
+
                 house.bottom_left_cor = [x, y]
                 house.top_right_cor = [x + house.width, y + house.height]
                 house.set_corners()
@@ -193,15 +193,15 @@ class area():
 
         if while_count == 1000:
 
-            raise Exception("Something went wrong when placing a house. There was probably to little room to fit an extra house.") 
+            raise Exception("Something went wrong when placing a house. There was probably to little room to fit an extra house.")
 
     def check_valid(self, test_house, x, y):
-        """ 
+        """
         Returns True when satisfies the constrains.
         These constrains are:
             - The house must be fully placed on the grid.
             - The house is not allowed to overlap other houses.
-            - The house has a mandatory free space. 
+            - The house has a mandatory free space.
          """
         test_bottom_left = [x, y]
         test_top_right = [x + test_house.width, y + test_house.height]
@@ -220,7 +220,7 @@ class area():
                 continue
 
             for test_corner in test_corners:
-                
+
                 # Get the corners of the non allowed space. This includes the mandatory space.
                 corner_bottom_left = [house.corners[0][0] - house.mandatory_free_space, house.corners[0][1] - house.mandatory_free_space]
                 corner_top_right = [house.corners[3][0] + house.mandatory_free_space, house.corners[3][1] + house.mandatory_free_space]
@@ -239,7 +239,7 @@ class area():
         return True
 
     def check_within_custom_bounds(self, x, y, bottom_left_cor, top_right_cor):
-        """ 
+        """
         Returns True when a given x and y coordinate fall within a rectangle spanned
         from bottom_left_cor to top_right_cor. Border is excluded.
         """
@@ -260,7 +260,7 @@ class area():
 
 
     def calc_worth_house(self, house):
-        """ 
+        """
         Calculates the worth of a house. The worth is
         worth = base_value + base_value * extra_value * (min_dist - mandatory_free_space)
         """
@@ -272,11 +272,11 @@ class area():
             # Dont check distances if the house is the same as h
             if h == house:
                     continue
-            
+
             for h_corner in h.corners:
 
                 for house_corner in house.corners:
-                    
+
                     x_dist = abs(h_corner[0] - house_corner[0])
                     y_dist = abs(h_corner[1] - house_corner[1])
 
@@ -308,7 +308,7 @@ class area():
 
         # Use house_list to make the csv-output
         self.csv_output(house_list)
-    
+
     def make_house_list(self):
         """ Stores house-coordinates in a nested list """
 
@@ -375,7 +375,7 @@ class Structure():
         self.structure_name = None
 
     def get_corners(self):
-        """ 
+        """
         Returns all corners.
         The order is bottom_left, bottom_right, top_left, top_right.
         """
@@ -455,7 +455,7 @@ class House(Structure):
             self.height = max(width, height)
 
         self.horizontal = horizontal
-        
+
 
     def __str__(self):
 
@@ -473,10 +473,22 @@ class greedy():
     def greedy(self, house, area):
         best_x = 0
         best_y = 0
+        best_orientation = True
 
         # Checks place for house
         for y in range(area.height - house.height + 1):
             for x in range(area.width - house.width + 1):
+                house.set_orientation(True)
+                if area.check_valid(house, x, y):
+                    area.place_housegreedy(house, x, y)
+                    worth = area.calc_worth_area()
+                    # Selects best place for house
+                    if worth > self.worth:
+                        self.worth = worth
+                        best_x = x
+                        best_y = y
+                        best_orientation = True
+                house.set_orientation(False)
                 if area.check_valid(house, x, y):
                     area.place_housegreedy(house, x, y)
                     worth = area.calc_worth_area()
@@ -486,7 +498,31 @@ class greedy():
                         self.worth = worth
                         best_x = x
                         best_y = y
+                        best_orientation = False
+
+        # Places house in best place
+        house.set_orientation(best_orientation)
+        area.place_housegreedy(house, best_x, best_y)
+
+class randomgreedy():
+    def greedy(self, house, area):
+        best_worth = 0
+        best_x = 0
+        best_y = 0
+
+        # Checks place for house
+        for i in range(100):
+            x = int(random.random() * (area.width - house.width + 1))
+            y = int(random.random() * (area.height - house.height + 1))
+            if area.check_valid(house, x, y):
+                area.place_housegreedy(house, x, y)
+                worth = area.calc_worth_area()
+
+                    # Selects best place for house
+                if worth > best_worth:
+                    best_worth = worth
+                    best_x = x
+                    best_y = y
 
         # Places house in best place
         area.place_housegreedy(house, best_x, best_y)
-

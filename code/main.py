@@ -12,7 +12,7 @@ def main():
 
     # new_area.place_houses(80)
 
-    new_area.place_housesgreedy(10)
+    new_area.place_housesgreedy(60)
 
     # print(new_area.structures)
 
@@ -22,7 +22,7 @@ def main():
 
     # input()
     new_area.plot_area()
-    
+
     # new_area.make_csv()
 
 def set_random_seed(r = random.random()):

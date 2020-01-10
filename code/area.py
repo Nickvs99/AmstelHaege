@@ -303,24 +303,38 @@ class area():
     def make_csv(self):
         """ Function which commands to update the output """
 
-        # Store values house_list
-        house_list = self.make_house_list()
+        # Store values csv_output_list
+        csv_output_list = self.make_csv_output_list()
+        # print(csv_output_list)
 
-        # Use house_list to make the csv-output
-        self.csv_output(house_list)
+        # Use csv_output_list to make the csv-output
+        self.csv_output(csv_output_list)
     
-    def make_house_list(self):
+    def make_csv_output_list(self):
         """ Stores house-coordinates in a nested list """
 
-        # Startvalue housenumber
+        water_count = 1
         one_person_count = 1
         bungalow_count = 1
         maison_count = 1
 
-        house_list = [['structure','bottom_left_xy','top_right_xy','type']]
+        csv_output_list = [['structure','bottom_left_xy','top_right_xy','type']]
 
+        # print(self.structures)
+
+        for water in self.structures["Water"]:
+            structure = 'water_' + str(water_count)
+            water_count += 1
+
+            # Make string representation of the coordinates
+            bottom_left_xy = str(water.bottom_left_cor[0]) + ',' + str(water.bottom_left_cor[1])
+            top_right_xy = str(water.top_right_cor[0]) + ',' + str(water.top_right_cor[1])
+            type_water = water.structur_type.upper()
+
+            # Append values to the csv_output_list
+            csv_output_list.append([structure,bottom_left_xy,top_right_xy,type_water])
+        
         for house in self.structures["House"]:
-            # print(f"{house.type_house} - {house.bottom_left_cor} - {house.top_right_cor}")
 
             # Make structure of each house and update housenumber
             if house.type_house == 'one_person_home':
@@ -338,12 +352,12 @@ class area():
             top_right_xy = str(house.top_right_cor[0]) + ',' + str(house.top_right_cor[1])
             type_house = house.type_house.upper()
 
-            # Append values to the house_list
-            house_list.append([structure,bottom_left_xy,top_right_xy,type_house])
+            # Append values to the csv_output_list
+            csv_output_list.append([structure,bottom_left_xy,top_right_xy,type_house])
 
-        return house_list
+        return csv_output_list
 
-    def csv_output(self, house_list):
+    def csv_output(self, csv_output_list):
         """ (Over)writes the houselist into the ouput.csv """
 
         # Specify the path of the csv-file
@@ -354,8 +368,8 @@ class area():
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
 
-            # (Over)write each line of house_list into the csv-file
-            for house in house_list:
+            # (Over)write each line of csv_output_list into the csv-file
+            for house in csv_output_list:
                 wr.writerow(house)
 
 class Structure():

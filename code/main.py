@@ -10,15 +10,17 @@ def main():
 
     new_area.load_water('wijk2')
 
-    # new_area.place_houses(80)
+    new_area.place_houses(20)
 
-    new_area.place_housesgreedy(10)
+    new_area.make_csv()
+
+    # new_area.place_housesgreedy(10)
 
     # print(new_area.structures)
 
-    print(new_area.calc_worth_area())
+    # print(new_area.calc_worth_area())
 
-    print(new_area.structures)
+    # print(new_area.structures)
 
     # input()
     new_area.plot_area()

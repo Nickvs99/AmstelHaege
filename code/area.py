@@ -72,8 +72,8 @@ class area():
             for y in range(house.bottom_left_cor[1], house.top_right_cor[1]):
                 for x in range(house.bottom_left_cor[0], house.top_right_cor[0]):
                     try:
-                        area[y][x] = house.state
-                    except: 
+                        self.area[y][x] = house.state
+                    except:
                         print(x, y)
 
     def plot_area(self):
@@ -89,6 +89,50 @@ class area():
         plt.gca().invert_yaxis()
         plt.show()
 
+    def place_housesgreedy(self, houses_count):
+        """ Places the houses randomly. """
+
+        # Calculate the number of houses per type
+        one_person_house_count = int(0.6 * houses_count)
+        bungalow_count = int(0.25 * houses_count)
+        maison_count = int(0.15 * houses_count)
+
+        # Makes houses
+        houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
+        counter = 0
+        for house in houses:
+            print(counter)
+
+            # Places the rest of the houses
+            if counter >= 1:
+                house.bottom_left_cor = [0, 0]
+                house.top_right_cor = [0 + house.width, 0 + house.height]
+                house.set_corners(house.bottom_left_cor, house.top_right_cor)
+                self.structures["House"].append(house)
+                greedyalgorithm = greedy()
+                greedyalgorithm.greedy(house, self)
+                print(self.calc_worth_area())
+
+            # Places house in first position
+            else:
+                house.bottom_left_cor = [74, 85]
+                house.top_right_cor = [74 + house.width, 85 + house.height]
+
+                house.set_corners(house.bottom_left_cor, house.top_right_cor)
+
+                self.structures["House"].append(house)
+            counter += 1
+
+    def place_housegreedy(self, house, x, y):
+        """
+        Place a house.
+        """
+
+        house.bottom_left_cor = [x, y]
+        house.top_right_cor = [x + house.width, y + house.height]
+        house.set_corners(house.bottom_left_cor, house.top_right_cor)
+
+
     def place_houses(self, houses_count):
         """ Places the houses randomly. """
 
@@ -101,7 +145,7 @@ class area():
 
         for house in houses:
             self.place_house(house)
-            
+
     def create_houses(self, one_person_house_count, bungalow_count, maison_count):
         """ Creates a list with houses. """
 
@@ -147,6 +191,7 @@ class area():
             while_count += 1
 
         if while_count == 1000:
+
             raise Exception("Something went wrong when placing a house. There was probably to little room to fit an extra house.") 
 
     def check_valid(self, test_house, x, y):
@@ -184,7 +229,7 @@ class area():
 
         # Checks if any of the corners of the test_house are in water
         for water in self.structures["Water"]:
-            
+
             for test_corner in test_corners:
                 if self.check_within_custom_bounds(test_corner[0], test_corner[1], water.corners[0], water.corners[3]):
                     return False
@@ -205,12 +250,13 @@ class area():
 
     def calc_worth_area(self):
         """ Calculates the worth of the area. """
-        
+
         total_worth = 0
         for  house in self.structures["House"]:
             total_worth += self.calc_worth_house(house)
 
-        return f"{int(total_worth)}"
+        return total_worth
+
 
     def calc_worth_house(self, house):
         """ 
@@ -227,7 +273,7 @@ class area():
                     continue
             
             for h_corner in h.corners:
-                
+
                 for house_corner in house.corners:
                     
                     x_dist = abs(h_corner[0] - house_corner[0])
@@ -243,7 +289,6 @@ class area():
         extra_value = house.value * house.extra_value * (min_dist - house.mandatory_free_space)
 
         value = base_value + extra_value
-
         return value
 
     def check_in_bound(self, bottom_left_cor, top_right_cor):
@@ -251,7 +296,7 @@ class area():
 
         if bottom_left_cor[0] < 0 or bottom_left_cor[1] < 0 or top_right_cor[0] >= self.width or top_right_cor[1] >= self.height:
             return False
-        
+
         return True
 
     def make_csv(self):
@@ -291,7 +336,7 @@ class area():
             bottom_left_xy = str(house.bottom_left_cor[0]) + ',' + str(house.bottom_left_cor[1])
             top_right_xy = str(house.top_right_cor[0]) + ',' + str(house.top_right_cor[1])
             type_house = house.type_house.upper()
-            
+
             # Append values to the house_list
             house_list.append([structure,bottom_left_xy,top_right_xy,type_house])
 
@@ -360,7 +405,6 @@ class House(Structure):
 
         self.horizontal = horizontal
 
-        # TODO changing horizontal should swap the width and height.
         if type_house == "bungalow":
             self.width = 11
             self.height = 7
@@ -420,4 +464,28 @@ class House(Structure):
 
         return self.__str__()
 
+class greedy():
+
+    def __init__(self):
+        self.worth = 0
+
+    def greedy(self, house, area):
+        best_x = 0
+        best_y = 0
+
+        # Checks place for house
+        for y in range(area.height - house.height):
+            for x in range(area.width - house.width):
+                if area.check_valid(house, x, y):
+                    area.place_housegreedy(house, x, y)
+                    worth = area.calc_worth_area()
+
+                    # Selects best place for house
+                    if worth > self.worth:
+                        self.worth = worth
+                        best_x = x
+                        best_y = y
+
+        # Places house in best place
+        area.place_housegreedy(house, best_x, best_y)
 

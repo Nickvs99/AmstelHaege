@@ -17,7 +17,7 @@ class area():
 
         self.height = 180
         self.width = 160
-        
+
         # Stores all structures in their respective type
         self.structures = {"Water": [], "House":[]}
 
@@ -308,6 +308,10 @@ class area():
         # Open the current output.csv
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
+            
+        # (Over)write each line of house_list into the csv-file
+          for house in house_list:
+              wr.writerow(house)
 
             # (Over)write each line of house_list into the csv-file
             for house in house_list:

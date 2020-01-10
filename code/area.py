@@ -72,7 +72,7 @@ class area():
             for y in range(house.bottom_left_cor[1], house.top_right_cor[1]):
                 for x in range(house.bottom_left_cor[0], house.top_right_cor[0]):
                     try:
-                        self.area[y][x] = house.state
+                        area[y][x] = house.state
                     except:
                         print(x, y)
 
@@ -107,7 +107,7 @@ class area():
             if counter >= 1:
                 house.bottom_left_cor = [0, 0]
                 house.top_right_cor = [0 + house.width, 0 + house.height]
-                house.set_corners(house.bottom_left_cor, house.top_right_cor)
+                house.set_corners()
                 self.structures["House"].append(house)
                 greedyalgorithm = greedy()
                 greedyalgorithm.greedy(house, self)
@@ -118,7 +118,7 @@ class area():
                 house.bottom_left_cor = [74, 85]
                 house.top_right_cor = [74 + house.width, 85 + house.height]
 
-                house.set_corners(house.bottom_left_cor, house.top_right_cor)
+                house.set_corners()
 
                 self.structures["House"].append(house)
             counter += 1
@@ -130,7 +130,7 @@ class area():
 
         house.bottom_left_cor = [x, y]
         house.top_right_cor = [x + house.width, y + house.height]
-        house.set_corners(house.bottom_left_cor, house.top_right_cor)
+        house.set_corners()
 
 
     def place_houses(self, houses_count):
@@ -151,14 +151,15 @@ class area():
 
         houses = []
         for i in range(maison_count):
-            r = random.choice([True, False])
+            r = random.choice([True])
             houses.append(House("maison", r))
 
         for i in range(bungalow_count):
-            r = random.choice([True, False])
+            r = random.choice([True])
             houses.append(House("bungalow", r))
 
         for i in range(one_person_house_count):
+            r = random.choice([True])
             houses.append(House("one_person_home", r))
 
         return houses
@@ -175,8 +176,8 @@ class area():
         while not house_placed and while_count < 1000:
 
             # Get random bottom_left x and y coordinate
-            x = int(random.random() * (self.width - house.width))
-            y = int(random.random() * (self.height - house.height))
+            x = int(random.random() * (self.width - house.width + 1))
+            y = int(random.random() * (self.height - house.height + 1))
 
             if self.check_valid(house, x, y):
                 
@@ -294,7 +295,7 @@ class area():
     def check_in_bound(self, bottom_left_cor, top_right_cor):
         """ Checks if a given x and y coordinates fall within the bounds. """
 
-        if bottom_left_cor[0] < 0 or bottom_left_cor[1] < 0 or top_right_cor[0] >= self.width or top_right_cor[1] >= self.height:
+        if bottom_left_cor[0] < 0 or bottom_left_cor[1] < 0 or top_right_cor[0] > self.width or top_right_cor[1] > self.height:
             return False
 
         return True
@@ -474,8 +475,8 @@ class greedy():
         best_y = 0
 
         # Checks place for house
-        for y in range(area.height - house.height):
-            for x in range(area.width - house.width):
+        for y in range(area.height - house.height + 1):
+            for x in range(area.width - house.width + 1):
                 if area.check_valid(house, x, y):
                     area.place_housegreedy(house, x, y)
                     worth = area.calc_worth_area()

@@ -79,10 +79,26 @@ class area():
         bungalow_count = int(0.25 * houses_count)
         maison_count = int(0.15 * houses_count)
 
-        houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
 
+        self.houses = []
+        houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
+        counter = 0
         for house in houses:
-            self.place_house(house)
+            if counter == 1:
+                house.bottom_left_cor = [0, 0]
+                house.top_right_cor = [0 + house.width, 0 + house.height]
+                house.set_corners(house.bottom_left_cor, house.top_right_cor)
+                self.structures["House"].append(house)
+                greedyalgorithm = greedy()
+                greedyalgorithm.greedy(house, self)
+            else:
+                house.bottom_left_cor = [80, 80]
+                house.top_right_cor = [80 + house.width, 80 + house.height]
+                counter += 1
+
+                house.set_corners(house.bottom_left_cor, house.top_right_cor)
+
+                self.structures["House"].append(house)
 
     def place_housegreedy(self, house, x, y):
         """
@@ -96,16 +112,17 @@ class area():
         house_placed = False
         while_count = 0
         while not house_placed and while_count < 1000:
+            house.bottom_left_cor = [0, 0]
+            house.top_right_cor = [0 + house.width, 0 + house.height]
 
+            house.set_corners(house.bottom_left_cor, house.top_right_cor)
 
             if self.check_valid(house, x, y):
-
                 house.bottom_left_cor = [x, y]
                 house.top_right_cor = [x + house.width, y + house.height]
 
                 house.set_corners(house.bottom_left_cor, house.top_right_cor)
 
-                self.structures["House"].append(house)
 
                 house_placed = True
 
@@ -224,7 +241,6 @@ class area():
         total_worth = 0
         for  house in self.structures["House"]:
             total_worth += self.calc_worth_house(house)
-
         return total_worth
 
     def calc_worth_house(self, house):
@@ -248,7 +264,6 @@ class area():
         base_value = house.value
         extra_value = house.value * house.extra_value * (min_dist - house.mandatory_free_space)
         value = base_value + extra_value
-
         return value
 
     def getBorder(self, bottom_left_cor, top_right_cor):
@@ -445,16 +460,18 @@ class greedy():
     def greedy(self, house, area):
         best_x = 0
         best_y = 0
-        new_area.place_house(house, best_x, best_y)
-        new_area.ShowArea()
-        for y in range(area.height - house.height - house.mandatory_free_space):
-            for x in range(area.width - house. height - house.mandatory_free_space):
+        area.ShowArea()
+        for y in range(area.height - house.height):
+            for x in range(area.width - house. height):
                 if area.check_valid(house, x, y):
-                    new_area.place_house(house, x, y)
-                    worth = new_area.calc_worth_area()
+                    area.place_housegreedy(house, x, y)
+                    worth = area.calc_worth_area()
                     if worth > self.worth:
+                        print(x)
+                        print(y)
                         print(worth)
                         self.worth = worth
                         best_x = x
                         best_y = y
-        area.place_house(house, best_x, best_y)
+        area.place_housegreedy(house, best_x, best_y)
+        area.ShowArea()

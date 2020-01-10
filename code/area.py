@@ -51,7 +51,7 @@ class area():
 
                 water.bottom_left_cor = [bottom, left]
                 water.top_right_cor = [top, right]
-                water.set_corners(water.bottom_left_cor, water.top_right_cor)
+                water.set_corners()
 
                 self.structures["Water"].append(water)
 
@@ -59,12 +59,13 @@ class area():
         """ Fill the area with the objects with the state of the structures"""
 
         for water in self.structures["Water"]:
-            # print(water.bottom_left_cor, water.top_right_cor)
+
             for y in range(water.bottom_left_cor[1], water.top_right_cor[1]):
                 for x in range(water.bottom_left_cor[0], water.top_right_cor[0]):
                     area[y][x] = 1
 
         for house in self.structures["House"]:
+
             for y in range(house.bottom_left_cor[1], house.top_right_cor[1]):
                 for x in range(house.bottom_left_cor[0], house.top_right_cor[0]):
                     try:
@@ -103,13 +104,15 @@ class area():
 
         houses = []
         for i in range(maison_count):
-            houses.append(House("maison"))
+            r = random.choice([True, False])
+            houses.append(House("maison", r))
 
         for i in range(bungalow_count):
-            houses.append(House("bungalow"))
+            r = random.choice([True, False])
+            houses.append(House("bungalow", r))
 
         for i in range(one_person_house_count):
-            houses.append(House("one_person_home"))
+            houses.append(House("one_person_home", r))
 
         return houses
 
@@ -129,11 +132,10 @@ class area():
             y = int(random.random() * (self.height - house.height))
 
             if self.check_valid(house, x, y):
-
+                
                 house.bottom_left_cor = [x, y]
                 house.top_right_cor = [x + house.width, y + house.height]
-
-                house.set_corners(house.bottom_left_cor, house.top_right_cor)
+                house.set_corners()
 
                 self.structures["House"].append(house)
 
@@ -152,7 +154,6 @@ class area():
             - The house is not allowed to overlap other houses.
             - The house has a mandatory free space. 
          """
-
         test_bottom_left = [x, y]
         test_top_right = [x + test_house.width, y + test_house.height]
         test_top_left = [x, y + test_house.height]
@@ -166,6 +167,8 @@ class area():
 
         # Checks if any of the corners of the test_house are in a house or their mandatory free space
         for house in self.structures["House"]:
+            if house == test_house:
+                continue
 
             for test_corner in test_corners:
                 
@@ -211,7 +214,6 @@ class area():
         Calculates the worth of a house. The worth is
         worth = base_value + base_value * extra_value * (min_dist - mandatory_free_space)
         """
-
 
         # Get the minimum distance from one corner of the house to another corner of any house.
         min_dist = math.inf
@@ -323,11 +325,11 @@ class Structure():
 
         return self.corners
 
-    def set_corners(self, bottom_left_cor, top_right_cor):
+    def set_corners(self):
         """ Sets the bottom_right_cor and top_left_cor"""
 
-        self.bottom_right_cor = [top_right_cor[0], bottom_left_cor[1]]
-        self.top_left_cor = [bottom_left_cor[0], top_right_cor[1]]
+        self.bottom_right_cor = [self.top_right_cor[0], self.bottom_left_cor[1]]
+        self.top_left_cor = [self.bottom_left_cor[0], self.top_right_cor[1]]
 
         self.corners = [self.bottom_left_cor, self.bottom_right_cor, self.top_left_cor, self.top_right_cor]
 
@@ -340,12 +342,12 @@ class Structure():
 
 class House(Structure):
 
-    def __init__(self, type_house):
+    def __init__(self, type_house, horizontal):
         super().__init__("House")
 
         self.type_house = type_house
-        self.x = 0
-        self.y = 0
+
+        self.horizontal = horizontal
 
         # TODO changing horizontal should swap the width and height.
         if type_house == "bungalow":
@@ -355,7 +357,8 @@ class House(Structure):
             self.state = 3
             self.value = 399000
             self.extra_value = 0.04
-            self.horizontal = True
+
+            self.set_orientation(horizontal)
 
         elif type_house == "maison":
             self.width = 12
@@ -364,7 +367,9 @@ class House(Structure):
             self.mandatory_free_space = 6
             self.value = 610000
             self.extra_value = 0.06
-            self.horizontal = True
+
+            self.set_orientation(horizontal)
+
 
         elif type_house == "one_person_home":
             self.width = 8
@@ -373,10 +378,28 @@ class House(Structure):
             self.mandatory_free_space = 2
             self.value = 285000
             self.extra_value = 0.03
-            self.horizontal = True
+
+            self.set_orientation(horizontal)
 
         else:
             print("Invalid type_house")
+
+    def set_orientation(self, horizontal):
+        """ Adjusts the width and height depending on the if the house object is placed horizontal or not. """
+
+        width = self.width
+        height = self.height
+
+        if horizontal:
+            self.width = max(width, height)
+            self.height = min(width, height)
+
+        else:
+            self.width = min(width, height)
+            self.height = max(width, height)
+
+        self.horizontal = horizontal
+        
 
     def __str__(self):
 

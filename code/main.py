@@ -1,7 +1,3 @@
-"""
-
-"""
-
 import csv
 from area import area
 import random
@@ -12,7 +8,7 @@ def main():
 
     new_area = area()
 
-    new_area.load_water()
+    new_area.load_water('wijk2')
 
     new_area.place_houses(20)
 
@@ -22,7 +18,7 @@ def main():
 
     new_area.plot_area()
     
-    # new_area.make_csv()
+    new_area.make_csv()
 
     
  

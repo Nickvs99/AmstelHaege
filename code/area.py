@@ -81,7 +81,6 @@ class area():
         houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
         counter = 0
         for house in houses:
-            counter += 1
             print(counter)
             if counter >= 1:
                 house.bottom_left_cor = [0, 0]
@@ -98,7 +97,7 @@ class area():
                 house.set_corners(house.bottom_left_cor, house.top_right_cor)
 
                 self.structures["House"].append(house)
-        self.ShowArea()
+            counter += 1
 
     def place_housegreedy(self, house, x, y):
         """

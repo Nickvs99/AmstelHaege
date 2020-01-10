@@ -12,8 +12,6 @@ def main():
 
     new_area.place_houses(20)
 
-    new_area.make_csv()
-
     # new_area.place_housesgreedy(10)
 
     # print(new_area.structures)
@@ -23,9 +21,9 @@ def main():
     # print(new_area.structures)
 
     # input()
-    new_area.plot_area()
+    # new_area.plot_area()
     
-    # new_area.make_csv()
+    new_area.make_csv()
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

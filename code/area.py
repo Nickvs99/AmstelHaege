@@ -305,10 +305,10 @@ class area():
 
         # Store values csv_output_list
         csv_output_list = self.make_csv_output_list()
-        # print(csv_output_list)
+        print(csv_output_list)
 
         # Use csv_output_list to make the csv-output
-        self.csv_output(csv_output_list)
+        # self.csv_output(csv_output_list)
     
     def make_csv_output_list(self):
         """ Stores house-coordinates in a nested list """
@@ -322,38 +322,61 @@ class area():
 
         # print(self.structures)
 
-        for water in self.structures["Water"]:
-            structure = 'water_' + str(water_count)
-            water_count += 1
+        for key in self.structures:
+            for area_type in self.structures[key]:
+                if area_type.structur_type == 'Water':
+                    structure = area_type.structur_type.lower() + '_' + str(water_count)
+                    type_area = area_type.structur_type.upper()
+                    water_count += 1
+                elif area_type.type_house == 'one_person_home':
+                    structure = area_type.type_house + '_' + str(one_person_count)
+                    type_area = area_type.type_house.upper()
+                    one_person_count += 1
+                elif area_type.type_house == 'bungalow':
+                    structure = area_type.type_house + '_' + str(bungalow_count)
+                    type_area = area_type.type_house.upper()
+                    bungalow_count += 1
+                elif area_type.type_house == 'maison':
+                    structure = area_type.type_house + '_' + str(maison_count)
+                    type_area = area_type.type_house.upper()
+                    maison_count += 1
 
-            # Make string representation of the coordinates
-            bottom_left_xy = str(water.bottom_left_cor[0]) + ',' + str(water.bottom_left_cor[1])
-            top_right_xy = str(water.top_right_cor[0]) + ',' + str(water.top_right_cor[1])
-            type_water = water.structur_type.upper()
+                bottom_left_xy = str(area_type.bottom_left_cor[0]) + ',' + str(area_type.bottom_left_cor[1])
+                top_right_xy = str(area_type.top_right_cor[0]) + ',' + str(area_type.top_right_cor[1])
+                
 
-            # Append values to the csv_output_list
-            csv_output_list.append([structure,bottom_left_xy,top_right_xy,type_water])
+                csv_output_list.append([structure,bottom_left_xy,top_right_xy,type_area])
+                
+
+        # for water in self.structures["Water"]:
+            
+        #     # Make string representation for the csv-output
+        #     structure = 'water_' + str(water_count)
+        #     bottom_left_xy = str(water.bottom_left_cor[0]) + ',' + str(water.bottom_left_cor[1])
+        #     top_right_xy = str(water.top_right_cor[0]) + ',' + str(water.top_right_cor[1])
+        #     type_water = water.structur_type.upper()
+        #     water_count += 1
+
+        #     # Append values to the csv_output_list
+        #     csv_output_list.append([structure,bottom_left_xy,top_right_xy,type_water])
         
-        for house in self.structures["House"]:
+        # for house in self.structures["House"]:
 
-            # Make structure of each house and update housenumber
-            if house.type_house == 'one_person_home':
-                structure = house.type_house + '_' + str(one_person_count)
-                one_person_count += 1
-            elif house.type_house == 'bungalow':
-                structure = house.type_house + '_' + str(bungalow_count)
-                bungalow_count += 1
-            elif house.type_house == 'maison':
-                structure = house.type_house + '_' + str(maison_count)
-                maison_count += 1
+        #     if house.type_house == 'one_person_home':
+        #         structure = house.type_house + '_' + str(one_person_count)
+        #         one_person_count += 1
+        #     elif house.type_house == 'bungalow':
+        #         structure = house.type_house + '_' + str(bungalow_count)
+        #         bungalow_count += 1
+        #     elif house.type_house == 'maison':
+        #         structure = house.type_house + '_' + str(maison_count)
+        #         maison_count += 1
 
-            # Make string representation of the coordinates
-            bottom_left_xy = str(house.bottom_left_cor[0]) + ',' + str(house.bottom_left_cor[1])
-            top_right_xy = str(house.top_right_cor[0]) + ',' + str(house.top_right_cor[1])
-            type_house = house.type_house.upper()
+        #     bottom_left_xy = str(house.bottom_left_cor[0]) + ',' + str(house.bottom_left_cor[1])
+        #     top_right_xy = str(house.top_right_cor[0]) + ',' + str(house.top_right_cor[1])
+        #     type_house = house.type_house.upper()
 
-            # Append values to the csv_output_list
-            csv_output_list.append([structure,bottom_left_xy,top_right_xy,type_house])
+        #     csv_output_list.append([structure,bottom_left_xy,top_right_xy,type_house])
 
         return csv_output_list
 

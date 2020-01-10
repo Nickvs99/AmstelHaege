@@ -209,7 +209,8 @@ class area():
 
         # Checks if any of the corners of the test_house are in a house
         for house in self.structures["House"]:
-            # print(house.corners)
+            if house == test_house:
+                continue
             for test_corner in test_corners:
                 corner_bottom_left = [house.corners[0][0] - house.mandatory_free_space, house.corners[0][1] - house.mandatory_free_space]
                 corner_top_right = [house.corners[3][0] + house.mandatory_free_space, house.corners[3][1] + house.mandatory_free_space]

@@ -78,27 +78,27 @@ class area():
         one_person_house_count = int(0.6 * houses_count)
         bungalow_count = int(0.25 * houses_count)
         maison_count = int(0.15 * houses_count)
-
-
-        self.houses = []
         houses = self.create_houses(one_person_house_count, bungalow_count, maison_count)
         counter = 0
         for house in houses:
-            if counter == 1:
+            counter += 1
+            print(counter)
+            if counter >= 1:
                 house.bottom_left_cor = [0, 0]
                 house.top_right_cor = [0 + house.width, 0 + house.height]
                 house.set_corners(house.bottom_left_cor, house.top_right_cor)
                 self.structures["House"].append(house)
                 greedyalgorithm = greedy()
                 greedyalgorithm.greedy(house, self)
+                print(self.calc_worth_area())
             else:
-                house.bottom_left_cor = [80, 80]
-                house.top_right_cor = [80 + house.width, 80 + house.height]
-                counter += 1
+                house.bottom_left_cor = [74, 85]
+                house.top_right_cor = [74 + house.width, 85 + house.height]
 
                 house.set_corners(house.bottom_left_cor, house.top_right_cor)
 
                 self.structures["House"].append(house)
+        self.ShowArea()
 
     def place_housegreedy(self, house, x, y):
         """
@@ -107,29 +107,10 @@ class area():
         If it does not succeed, try new coordinates.
         """
 
-        # TODO not sure if this works when large houses gets placed first and then the smaller
+        house.bottom_left_cor = [x, y]
+        house.top_right_cor = [x + house.width, y + house.height]
+        house.set_corners(house.bottom_left_cor, house.top_right_cor)
 
-        house_placed = False
-        while_count = 0
-        while not house_placed and while_count < 1000:
-            house.bottom_left_cor = [0, 0]
-            house.top_right_cor = [0 + house.width, 0 + house.height]
-
-            house.set_corners(house.bottom_left_cor, house.top_right_cor)
-
-            if self.check_valid(house, x, y):
-                house.bottom_left_cor = [x, y]
-                house.top_right_cor = [x + house.width, y + house.height]
-
-                house.set_corners(house.bottom_left_cor, house.top_right_cor)
-
-
-                house_placed = True
-
-            while_count += 1
-
-        if while_count == 1000:
-            raise Exception("Something went wrong when placing a house")
 
     def place_houses(self, houses_count):
         """ Places the houses randomly. """
@@ -461,18 +442,13 @@ class greedy():
     def greedy(self, house, area):
         best_x = 0
         best_y = 0
-        area.ShowArea()
         for y in range(area.height - house.height):
-            for x in range(area.width - house. height):
+            for x in range(area.width - house.width):
                 if area.check_valid(house, x, y):
                     area.place_housegreedy(house, x, y)
                     worth = area.calc_worth_area()
                     if worth > self.worth:
-                        print(x)
-                        print(y)
-                        print(worth)
                         self.worth = worth
                         best_x = x
                         best_y = y
         area.place_housegreedy(house, best_x, best_y)
-        area.ShowArea()

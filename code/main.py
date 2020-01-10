@@ -18,7 +18,7 @@ def main():
 
     new_area.plot_area()
     
-    # new_area.make_csv()
+    new_area.make_csv()
 
     
  

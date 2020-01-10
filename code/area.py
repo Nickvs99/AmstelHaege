@@ -29,7 +29,6 @@ class area():
 
         return [[ 0 for i in range(self.width)] for j in range(self.height)]
 
-
     def load_water(self, filename):
         """ Gets the water from the csv file and creates objects from them. """
 
@@ -216,7 +215,6 @@ class area():
         worth = base_value + base_value * extra_value * (min_dist - mandatory_free_space)
         """
 
-
         # Get the minimum distance from one corner of the house to another corner of any house.
         min_dist = math.inf
         for h in self.structures["House"]:
@@ -272,25 +270,23 @@ class area():
 
         house_list = [['structure','bottom_left_xy','top_right_xy','type']]
 
-        for house in self.houses:
+        for house in self.structures["House"]:
+            # print(f"{house.type_house} - {house.bottom_left_cor} - {house.top_right_cor}")
 
             # Make structure of each house and update housenumber
-            type_house = house.type_house
-            if type_house == 'one_person_home':
-                structure = type_house + '_' + str(one_person_count)
+            if house.type_house == 'one_person_home':
+                structure = house.type_house + '_' + str(one_person_count)
                 one_person_count += 1
-            elif type_house == 'bungalow':
-                structure = type_house + '_' + str(bungalow_count)
+            elif house.type_house == 'bungalow':
+                structure = house.type_house + '_' + str(bungalow_count)
                 bungalow_count += 1
-            elif type_house == 'maison':
-                structure = type_house + '_' + str(maison_count)
+            elif house.type_house == 'maison':
+                structure = house.type_house + '_' + str(maison_count)
                 maison_count += 1
 
             # Make string representation of the coordinates
-            bottom_left_xy = str(house.x) + ',' + str(house.y)
-            top_right_x = house.x + house.width - 1
-            top_right_y = house.y + house.height - 1
-            top_right_xy = str(top_right_x) + ',' + str(top_right_y)
+            bottom_left_xy = str(house.bottom_left_cor[0]) + ',' + str(house.bottom_left_cor[1])
+            top_right_xy = str(house.top_right_cor[0]) + ',' + str(house.top_right_cor[1])
             type_house = house.type_house.upper()
             
             # Append values to the house_list
@@ -308,10 +304,10 @@ class area():
         # Open the current output.csv
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
-            
-        # (Over)write each line of house_list into the csv-file
-          for house in house_list:
-              wr.writerow(house)
+
+            # (Over)write each line of house_list into the csv-file
+            for house in house_list:
+                wr.writerow(house)
 
 class Structure():
     """

@@ -20,10 +20,10 @@ def main():
     start = timeit.default_timer()
     
     # Find the seed with the highest worth and retrieve the grid
-    best_seed = best_random(10)
+    best_seed, Dict = best_random(1000)
     set_random_seed(best_seed)
     new_area = area()
-    new_area.loadwater('wijk2')
+    new_area.load_water('wijk2')
     new_area.place_houses(20)
     print(new_area.calc_worth_area())
     # new_area.ShowArea()
@@ -33,8 +33,7 @@ def main():
     stop = timeit.default_timer()
     print('Runtime: ', stop - start)
 
-    #showplot
-
+    show_plot(Dict)
 
 def best_random(n):
     """ 
@@ -52,7 +51,7 @@ def best_random(n):
 
         # Make a random grid
         new_area = area()
-        new_area.loadwater('wijk2')
+        new_area.load_water('wijk2')
         new_area.place_houses(20)
 
         # Add the seed with its worth in the dictionary
@@ -63,7 +62,7 @@ def best_random(n):
 
     # show_plot(Dict)
 
-    return seed_most_worth
+    return seed_most_worth, Dict
 
 def show_plot(Dict):
 
@@ -73,10 +72,10 @@ def show_plot(Dict):
         mylist.append(Dict[key])    
     
     num_bins = 10
-    n, bins, patches = plt.hist(mylist, num_bins, normed=1, facecolor='blue', alpha=0.5)
+    n, bins, patches = plt.hist(mylist, num_bins, density=1, stacked=True, facecolor='blue', alpha=0.5)
 
-    plt.ylabel('Amount found (in %)')
-    plt.xlabel('Area worth (in milion)')
+    plt.ylabel('Amount found')
+    plt.xlabel('Area worth')
     plt.title('Title')
 
     plt.show()

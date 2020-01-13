@@ -9,15 +9,13 @@ HOUSES = 20
 
 def main():
 
-    set_random_seed()
-
     area = Area(NEIGHBOURHOOD, HOUSES)
 
     algorithm(area, ALGORITHM)
 
     area.plot_area()
     
-    area.make_csv()
+    area.make_csv_output()
 
 def algorithm(area, algorithm_name):
 

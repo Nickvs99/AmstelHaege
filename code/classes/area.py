@@ -111,6 +111,13 @@ class Area():
 
         test_corners = [test_bottom_left, test_bottom_right, test_top_left, test_top_right]
 
+        # Checks if any of the corners of the test_house are in water
+        for water in self.structures["Water"]:
+
+            for test_corner in test_corners:
+                if self.check_within_custom_bounds(test_corner[0], test_corner[1], water.corners[0], water.corners[3]):
+                    return False
+
         # Checks if any of the corners of the test_house are in a house or their mandatory free space
         for house in self.structures["House"]:
             if house == test_house:
@@ -124,14 +131,6 @@ class Area():
 
                 if self.check_within_custom_bounds(test_corner[0], test_corner[1], corner_bottom_left, corner_top_right):
                     return False
-
-        # Checks if any of the corners of the test_house are in water
-        for water in self.structures["Water"]:
-
-            for test_corner in test_corners:
-                if self.check_within_custom_bounds(test_corner[0], test_corner[1], water.corners[0], water.corners[3]):
-                    return False
-
 
         return True
 

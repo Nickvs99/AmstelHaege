@@ -41,7 +41,7 @@ def main():
     
     # area.make_csv_output()
 
-    show_plot(seed_worth, ITERATIONS)
+    show_plot(seed_worth)
     
 
 def algorithm(area, algorithm_name):
@@ -85,7 +85,7 @@ def best_result(iterations):
 
     return seed_most_worth, seed_worth
 
-def show_plot(seed_worth, iterations):
+def show_plot(seed_worth):
 
     all_worths = []
 
@@ -99,7 +99,7 @@ def show_plot(seed_worth, iterations):
     plt.xlabel('Area worth')
     plt.title('All found area worths')
 
-    plt.gca().yaxis.set_major_formatter(PercentFormatter(iterations))
+    plt.gca().yaxis.set_major_formatter(PercentFormatter(ITERATIONS))
 
     plt.show()
 

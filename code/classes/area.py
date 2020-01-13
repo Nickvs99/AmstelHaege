@@ -179,8 +179,20 @@ class Area():
                     # Use the maximum value, since the minimum value wouldnt reach the object
                     dist = max(x_dist, y_dist)
 
+                    # If the distance is so much more than the minimal distance, we don't have to 
+                    # check the rest of the corners
+                    if dist > min_dist + 2 * 24:
+                        break
+
                     if dist < min_dist:
                         min_dist = dist
+
+                else:
+                    # Continue if the inner loop wasn't broken.
+                    continue
+
+                # Inner loop was broken, break the outer.
+                break
 
         base_value = house.value
         extra_value = house.value * house.extra_value * (min_dist - house.mandatory_free_space)

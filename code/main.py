@@ -9,9 +9,14 @@ HOUSES = 20
 
 def main():
 
+    start = timeit.default_timer()
+
     area = Area(NEIGHBOURHOOD, HOUSES)
 
     algorithm(area, ALGORITHM)
+
+    stop = timeit.default_timer()
+    print('Runtime: ', stop - start)
 
     area.plot_area()
     

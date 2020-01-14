@@ -67,6 +67,7 @@ def best_result(iterations):
 
     best_worth = 0
     best_seed = 0
+    area_worths = []
 
     for i in range(iterations):
         

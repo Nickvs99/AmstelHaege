@@ -3,13 +3,15 @@ from classes.area import Area
 from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
 
-ALGORITHM = "random"
+from time import time
+
+ALGORITHM = "greedy"
 NEIGHBOURHOOD = "wijk2"
-HOUSES = 20
+HOUSES = 10
 
 def main():
 
-    start = timeit.default_timer()
+    set_random_seed(0.7417376257371039)
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
@@ -24,6 +26,8 @@ def main():
 
 def algorithm(area, algorithm_name):
 
+    start = time()
+
     # TODO switch case statement
     if algorithm_name == "random":
         random_placement(area)
@@ -37,7 +41,13 @@ def algorithm(area, algorithm_name):
     else:
         raise Exception("Invalid algorithm name")
 
+    end = time()
 
+    print(f"Runtime: {end - start}")
+    print(f"Worth: {area.calc_worth_area()}")
+    for h in area.structures["House"]:
+        print(h)
+    
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.
     Use the same seed to get the same results. By default it uses a random seed."""

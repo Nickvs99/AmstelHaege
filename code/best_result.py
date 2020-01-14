@@ -16,32 +16,28 @@ from algorithms.greedy import place_housesgreedy
 
 
 ALGORITHM = "random"
-NEIGHBOURHOOD = "wijk3"
-HOUSES = 40
-ITERATIONS = 10000
+NEIGHBOURHOOD = "wijk2"
+HOUSES = 20
+ITERATIONS = 1000
 
 def main():
     
     start = timeit.default_timer()
     
-    best_seed, seed_worth = best_result(ITERATIONS)
+    best_set, best_worth = best_result(ITERATIONS)
     
-    set_random_seed(best_seed)
+    set_random_seed(best_set)
     
     area = Area(NEIGHBOURHOOD, HOUSES)
     
     algorithm(area, ALGORITHM)
 
-    print(f"Worth: {seed_worth[best_seed]}")
+    print(f"Worth: {best_worth}")
     
     stop = timeit.default_timer()
     print('Runtime: ', stop - start)
 
     area.plot_area()
-    
-    # area.make_csv_output()
-
-    show_plot(seed_worth)
     
 
 def algorithm(area, algorithm_name):
@@ -69,7 +65,8 @@ def best_result(iterations):
     the seed with the highest calucalted worth 
     """
 
-    seed_worth = {}
+    best_worth = 0
+    best_seed = 0
 
     for i in range(iterations):
         
@@ -79,29 +76,13 @@ def best_result(iterations):
     
         algorithm(area, ALGORITHM)
 
-        seed_worth[seed] = area.calc_worth_area()
+        area_worth = area.calc_worth_area()
 
-    seed_most_worth = max(seed_worth, key=lambda key: seed_worth[key])
+        if area_worth > best_worth:
+            best_worth = area_worth
+            best_seed = seed
 
-    return seed_most_worth, seed_worth
-
-def show_plot(seed_worth):
-
-    all_worths = []
-
-    for key in seed_worth:
-        all_worths.append(seed_worth[key])    
-    
-    num_bins = 50
-    n, bins, patches = plt.hist(all_worths, num_bins, facecolor='blue', edgecolor='black', alpha=0.5)
-
-    plt.ylabel('Amount found')
-    plt.xlabel('Area worth')
-    plt.title('All found area worths')
-
-    plt.gca().yaxis.set_major_formatter(PercentFormatter(ITERATIONS))
-
-    plt.show()
+    return best_seed, best_worth
 
 
 def set_random_seed(r = random.random()):

@@ -16,9 +16,9 @@ from algorithms.greedy import place_housesgreedy
 
 
 ALGORITHM = "random"
-NEIGHBOURHOOD = "wijk2"
+NEIGHBOURHOOD = "wijk1"
 HOUSES = 20
-ITERATIONS = 1000
+ITERATIONS = 10000
 
 def main():
     

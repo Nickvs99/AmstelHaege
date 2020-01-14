@@ -2,12 +2,8 @@ import random
 from classes.area import Area
 from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
-
-<<<<<<< HEAD
-=======
 from time import time
 
->>>>>>> 9a4ef6a5c92847536cb5cc861d606864fe02f261
 ALGORITHM = "greedy"
 NEIGHBOURHOOD = "wijk2"
 HOUSES = 10

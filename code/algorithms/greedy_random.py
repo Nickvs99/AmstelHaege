@@ -1,3 +1,88 @@
 """
 Short description of the algorithm
 """
+
+import random
+from classes.structure import House
+
+def greedy(area, house):
+    best_worth = 0
+    best_x = 0
+    best_y = 0
+
+    # Checks place for house
+    for i in range(100):
+        x = int(random.random() * (area.width - house.width + 1))
+        y = int(random.random() * (area.height - house.height + 1))
+        house.set_orientation(True)
+        if area.check_valid(house, x, y):
+            place_housegreedyrandom(area, house, x, y)
+            worth = area.calc_worth_area()
+
+                # Selects best place for house
+            if worth > best_worth:
+                best_worth = worth
+                best_x = x
+                best_y = y
+                best_orientation = True
+
+        house.set_orientation(False)
+        if area.check_valid(house, x, y):
+            place_housegreedyrandom(area, house, x, y)
+            worth = area.calc_worth_area()
+            # Selects best place for house
+            if worth > best_worth:
+                best_worth = worth
+                best_x = x
+                best_y = y
+                best_orientation = False
+
+    # Places house in best place
+    house.set_orientation(best_orientation)
+    place_housegreedyrandom(area, house, best_x, best_y)
+
+def create_houses_greedy(area, one_person_house_count, bungalow_count, maison_count):
+        """ Creates a list with houses. """
+
+        houses = []
+        for i in range(maison_count):
+            r = random.choice([True])
+            houses.append(House("maison", r))
+
+        for i in range(bungalow_count):
+            r = random.choice([True])
+            houses.append(House("bungalow", r))
+
+        for i in range(one_person_house_count):
+            r = random.choice([True])
+            houses.append(House("one_person_home", r))
+
+        return houses
+
+def place_housesgreedyrandom(area):
+    """ Places the houses randomly. """
+
+    # Makes houses
+    houses = create_houses_greedy(area, area.one_person_house_count, area.bungalow_count, area.maison_count)
+    counter = 0
+    for house in houses:
+
+        # Places the rest of the houses
+        house.bottom_left_cor = [0, 0]
+        house.top_right_cor = [0 + house.width, 0 + house.height]
+        house.set_corners()
+        area.structures["House"].append(house)
+        greedy(area, house)
+        counter += 1
+        print(counter)
+        print(area.calc_worth_area())
+
+
+def place_housegreedyrandom(area, house, x, y):
+    """
+    Place a house.
+    """
+
+    house.bottom_left_cor = [x, y]
+    house.top_right_cor = [x + house.width, y + house.height]
+    house.set_corners()

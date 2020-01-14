@@ -13,19 +13,35 @@ def greedy(area, house):
     # Checks place for house
     for y in range(area.height - house.height + 1):
         for x in range(area.width - house.width + 1):
+            house.set_orientation(True)
             if area.check_valid(house, x, y):
                 place_housegreedy(area, house, x, y)
                 worth = area.calc_worth_area()
 
+
+                    # Selects best place for house
+                if worth > best_worth:
+                    best_worth = worth
+                    best_x = x
+                    best_y = y
+                    best_orientation = True
+
+            house.set_orientation(False)
+            if area.check_valid(house, x, y):
+                place_housegreedy(area, house, x, y)
+                worth = area.calc_worth_area()
                 # Selects best place for house
                 if worth > best_worth:
                     best_worth = worth
                     best_x = x
                     best_y = y
+                    best_orientation = False
+
 
     # Places house in best place
+    house.set_orientation(best_orientation)
     place_housegreedy(area, house, best_x, best_y)
-    
+
 def create_houses_greedy(area, one_person_house_count, bungalow_count, maison_count):
         """ Creates a list with houses. """
 

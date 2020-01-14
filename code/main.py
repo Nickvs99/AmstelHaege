@@ -2,6 +2,7 @@ import random
 from classes.area import Area
 from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
+from algorithms.greedy_random import place_housesgreedyrandom
 from time import time
 
 ALGORITHM = "greedy"
@@ -32,7 +33,7 @@ def algorithm(area, algorithm_name):
         place_housesgreedy(area)
 
     elif algorithm_name == "greedy_random":
-        greedy_random(area)
+        place_housesgreedyrandom(area)
 
     else:
         raise Exception("Invalid algorithm name")

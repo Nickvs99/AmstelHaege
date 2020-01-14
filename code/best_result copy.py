@@ -22,8 +22,25 @@ ITERATIONS = 1000
 
 def main():
     
-    best_result()
+    start = timeit.default_timer()
+    
+    best_set, best_worth, area_worths = best_result(ITERATIONS)
 
+    print(area_worths)
+    
+    set_random_seed(best_set)
+    
+    area = Area(NEIGHBOURHOOD, HOUSES)
+    
+    algorithm(area, ALGORITHM)
+
+    print(f"Worth: {best_worth}")
+    
+    stop = timeit.default_timer()
+    print('Runtime: ', stop - start)
+
+    area.plot_area()
+    
 
 def algorithm(area, algorithm_name):
 
@@ -44,18 +61,17 @@ def algorithm(area, algorithm_name):
 
     return worth
 
-def best_result():
+def best_result(iterations):
     """ 
     Iterates over n amount of random grids and returns 
     the seed with the highest calucalted worth 
     """
-    start = timeit.default_timer()
 
     best_worth = 0
     best_seed = 0
     area_worths = []
 
-    for i in range(ITERATIONS):
+    for i in range(iterations):
         
         seed = set_random_seed(random.random())
 
@@ -71,33 +87,8 @@ def best_result():
             best_worth = area_worth
             best_seed = seed
 
-    set_random_seed(best_seed)
-    
-    area = Area(NEIGHBOURHOOD, HOUSES)
-    
-    algorithm(area, ALGORITHM)
+    return best_seed, best_worth, area_worths
 
-    print(f"Worth: {best_worth}")
-    
-    stop = timeit.default_timer()
-    print('Runtime: ', stop - start)
-
-    area.plot_area()
-
-    show_plot(area_worths)
-    
-def show_plot(area_worths): 
-
-    num_bins = 50
-    n, bins, patches = plt.hist(area_worths, num_bins, facecolor='blue', edgecolor='black', alpha=0.5)
-
-    plt.ylabel('Amount found')
-    plt.xlabel('Area worth')
-    plt.title('All found area worths')
-
-    plt.gca().yaxis.set_major_formatter(PercentFormatter(ITERATIONS))
-
-    plt.show()
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging. 

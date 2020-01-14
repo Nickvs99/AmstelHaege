@@ -2,8 +2,9 @@ import random
 from classes.area import Area
 from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
+from algorithms.greedy_random import place_housesgreedyrandom
 
-ALGORITHM = "random"
+ALGORITHM = "greedy"
 NEIGHBOURHOOD = "wijk2"
 HOUSES = 20
 
@@ -16,7 +17,7 @@ def main():
     algorithm(area, ALGORITHM)
 
     area.plot_area()
-    
+
     area.make_csv()
 
 def algorithm(area, algorithm_name):
@@ -29,7 +30,7 @@ def algorithm(area, algorithm_name):
         place_housesgreedy(area)
 
     elif algorithm_name == "greedy_random":
-        greedy_random(area)
+        place_housesgreedyrandom(area)
 
     else:
         raise Exception("Invalid algorithm name")

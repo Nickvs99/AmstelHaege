@@ -1,3 +1,5 @@
+import math
+
 class Structure():
     """
     Structure object. This object stores:
@@ -7,12 +9,27 @@ class Structure():
     - the name, a unique id ('water1', 'water2')
     """
 
-    def __init__(self, structur_type):
-
-        self.structur_type = structur_type
+    def __init__(self, name):
+        
         self.bottom_left_cor = [None, None]
         self.top_right_cor = [None, None]
-        self.structure_name = None
+        self.name = name
+        self.type = self.get_type(name)
+
+    def get_type(self, name):
+        """ 
+        Returns the type of the house based on its name.
+        ex. maison_23 -> maison
+        """
+
+        # name_split = name.split("_")
+        # name_split.pop()
+        # name = "_".join(name_split)
+
+        name_split = name.split("_")
+        name_split.pop()
+        name = "_".join(name_split)
+        return name
 
     def get_corners(self):
         """ 
@@ -32,21 +49,21 @@ class Structure():
 
     def __str__(self):
 
-        return f"[{self.structure_name}, {self.bottom_left_cor}, {self.top_right_cor}, {self.structur_type}]"
+        return f"[{self.name}, {self.bottom_left_cor}, {self.top_right_cor}, {self.structur_type}]"
 
     def __repr__(self):
         return self.__str__()
 
 class House(Structure):
 
-    def __init__(self, type_house, horizontal):
-        super().__init__("House")
-
-        self.type_house = type_house
-
+    def __init__(self, name, horizontal):
+        super().__init__(name)
+        
         self.horizontal = horizontal
 
-        if type_house == "bungalow":
+        self.neighbour_distances = {}
+
+        if self.type == "bungalow":
             self.width = 11
             self.height = 7
             self.mandatory_free_space = 3
@@ -56,7 +73,7 @@ class House(Structure):
 
             self.set_orientation(horizontal)
 
-        elif type_house == "maison":
+        elif self.type == "maison":
             self.width = 12
             self.height = 10
             self.state = 4
@@ -66,8 +83,7 @@ class House(Structure):
 
             self.set_orientation(horizontal)
 
-
-        elif type_house == "one_person_home":
+        elif self.type == "one_person_home":
             self.width = 8
             self.height = 8
             self.state = 2
@@ -78,7 +94,28 @@ class House(Structure):
             self.set_orientation(horizontal)
 
         else:
-            print("Invalid type_house")
+            print(f"Invalid type: {self.type}")
+
+    def init_distances(self, houses):
+        """ 
+        Initiialize the distances for all houses.
+        The key is a the name for all houses.
+        Value is math.inf
+        """
+
+        self.neighbour_distances = {}
+
+        for h in houses:
+
+            if h == self:
+                continue
+
+            self.neighbour_distances[h.name] = math.inf
+
+    def get_min_dist(self):
+        """ Returns the minimum distance from all distances. """
+
+        return min(self.neighbour_distances.values())
 
     def set_orientation(self, horizontal):
         """ Adjusts the width and height depending on the if the house object is placed horizontal or not. """
@@ -99,7 +136,7 @@ class House(Structure):
 
     def __str__(self):
 
-        return f"{self.type_house}: {self.bottom_left_cor}, {self.top_right_cor}"
+        return f"{self.name}: {self.bottom_left_cor}, {self.top_right_cor}, {self.get_min_dist()}"
 
     def __repr__(self):
 

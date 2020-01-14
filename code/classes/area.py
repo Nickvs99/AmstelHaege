@@ -40,6 +40,8 @@ class Area():
         location = "../../wijken/" + filename + ".csv"
         path = os.path.join(my_path, location)
 
+
+        water_count = 0
         # Open the csv-file as a dictionary
         with open(path) as csv_file:
 
@@ -53,7 +55,7 @@ class Area():
                 bottom, left, top, right = int(bottom), int(left), int(top), int(right)
 
                 # Create the water object
-                water = Structure("Water")
+                water = Structure("water_" + str(water_count))
 
                 water.bottom_left_cor = [bottom, left]
                 water.top_right_cor = [top, right]
@@ -111,6 +113,13 @@ class Area():
 
         test_corners = [test_bottom_left, test_bottom_right, test_top_left, test_top_right]
 
+        # Checks if any of the corners of the test_house are in water
+        for water in self.structures["Water"]:
+
+            for test_corner in test_corners:
+                if self.check_within_custom_bounds(test_corner[0], test_corner[1], water.corners[0], water.corners[3]):
+                    return False
+
         # Checks if any of the corners of the test_house are in a house or their mandatory free space
         for house in self.structures["House"]:
             if house == test_house:
@@ -123,13 +132,6 @@ class Area():
                 corner_top_right = [house.corners[3][0] + house.mandatory_free_space, house.corners[3][1] + house.mandatory_free_space]
 
                 if self.check_within_custom_bounds(test_corner[0], test_corner[1], corner_bottom_left, corner_top_right):
-                    return False
-
-        # Checks if any of the corners of the test_house are in water
-        for water in self.structures["Water"]:
-
-            for test_corner in test_corners:
-                if self.check_within_custom_bounds(test_corner[0], test_corner[1], water.corners[0], water.corners[3]):
                     return False
 
         return True
@@ -160,29 +162,8 @@ class Area():
         worth = base_value + base_value * extra_value * (min_dist - mandatory_free_space)
         """
 
-        # Get the minimum distance from one corner of the house to another corner of any house.
-        min_dist = math.inf
-        for h in self.structures["House"]:
-
-            # Dont check distances if the house is the same as h
-            if h == house:
-                    continue
-            
-            for h_corner in h.corners:
-
-                for house_corner in house.corners:
-                    
-                    x_dist = abs(h_corner[0] - house_corner[0])
-                    y_dist = abs(h_corner[1] - house_corner[1])
-
-                    # Use the maximum value, since the minimum value wouldnt reach the object
-                    dist = max(x_dist, y_dist)
-
-                    if dist < min_dist:
-                        min_dist = dist
-
         base_value = house.value
-        extra_value = house.value * house.extra_value * (min_dist - house.mandatory_free_space)
+        extra_value = house.value * house.extra_value * (house.get_min_dist() - house.mandatory_free_space)
 
         value = base_value + extra_value
         return value
@@ -209,40 +190,22 @@ class Area():
     def make_csv_output_list(self):
         """ Stores house-coordinates in a nested list """
 
-        water_count = 1
-        one_person_count = 1
-        bungalow_count = 1
-        maison_count = 1
-
-        csv_output_list = [['structure','bottom_left_xy','top_right_xy','type']]
+        house_list = [['structure','bottom_left_xy','top_right_xy','type']]
 
         for key in self.structures:
-            for area_type in self.structures[key]:
-                if area_type.structur_type == 'Water':
-                    structure = area_type.structur_type.lower() + str(water_count)
-                    type_area = area_type.structur_type.upper()
-                    water_count += 1
-                elif area_type.type_house == 'one_person_home':
-                    structure = area_type.type_house + '_' + str(one_person_count)
-                    type_area = area_type.type_house.upper()
-                    one_person_count += 1
-                elif area_type.type_house == 'bungalow':
-                    structure = area_type.type_house + '_' + str(bungalow_count)
-                    type_area = area_type.type_house.upper()
-                    bungalow_count += 1
-                elif area_type.type_house == 'maison':
-                    structure = area_type.type_house + '_' + str(maison_count)
-                    type_area = area_type.type_house.upper()
-                    maison_count += 1
+            for structure in self.structures[key]:
 
-                bottom_left_xy = str(area_type.bottom_left_cor[0]) + ',' + str(area_type.bottom_left_cor[1])
-                top_right_xy = str(area_type.top_right_cor[0]) + ',' + str(area_type.top_right_cor[1])
+                # Make string representation of the coordinates
+                bottom_left_xy = str(structure.bottom_left_cor[0]) + ',' + str(structure.bottom_left_cor[1])
+                top_right_xy = str(structure.top_right_cor[0]) + ',' + str(structure.top_right_cor[1])
 
-                csv_output_list.append([structure,bottom_left_xy,top_right_xy,type_area])
+                # Append values to the house_list
+                house_list.append([structure.name,bottom_left_xy,top_right_xy,structure.type])
 
-        return csv_output_list
+        return house_list
 
     def csv_output(self, csv_output_list):
+
         """ (Over)writes the houselist into the ouput.csv """
 
         # Specify the path of the csv-file
@@ -253,6 +216,43 @@ class Area():
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
 
-            # (Over)write each line of csv_output_list into the csv-file
-            for house in csv_output_list:
+            # (Over)write each line of house_list into the csv-file
+            for house in house_list:
                 wr.writerow(house)
+    
+    def update_distances(self, house):
+        """ Update the distances."""
+        
+        # Reset all distances for house
+        house.init_distances(self.structures["House"])
+
+        # Reset all distances related to the house
+        for h in self.structures["House"]:
+            
+            if h == house:
+                continue
+            
+            h.neighbour_distances[house.name] = math.inf
+        
+        for h in self.structures["House"]:
+            
+            if h == house:
+                continue
+
+            for corner in h.corners:
+
+                for new_corner in house.corners:
+
+                    x_dist = abs(corner[0] - new_corner[0])
+                    y_dist = abs(corner[1] - new_corner[1])
+
+                    # Use the maximum value, since the minimum value wouldnt reach the object
+                    dist = max(x_dist, y_dist)
+
+                    if dist < h.neighbour_distances[house.name]:
+                        h.neighbour_distances[house.name] = dist
+                    
+                    if dist < house.neighbour_distances[h.name]:
+                        house.neighbour_distances[h.name] = dist
+
+

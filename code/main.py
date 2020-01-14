@@ -16,9 +16,6 @@ def main():
 
     algorithm(area, ALGORITHM)
 
-    stop = timeit.default_timer()
-    print('Runtime: ', stop - start)
-
     area.plot_area()
     
     area.make_csv_output()

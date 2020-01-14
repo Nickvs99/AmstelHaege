@@ -160,41 +160,8 @@ class Area():
         worth = base_value + base_value * extra_value * (min_dist - mandatory_free_space)
         """
 
-        # Get the minimum distance from one corner of the house to another corner of any house.
-        min_dist = math.inf
-        for h in self.structures["House"]:
-
-            # Dont check distances if the house is the same as h
-            if h == house:
-                    continue
-            
-            for h_corner in h.corners:
-
-                for house_corner in house.corners:
-                    
-                    x_dist = abs(h_corner[0] - house_corner[0])
-                    y_dist = abs(h_corner[1] - house_corner[1])
-
-                    # Use the maximum value, since the minimum value wouldnt reach the object
-                    dist = max(x_dist, y_dist)
-
-                    # If the distance is so much more than the minimal distance, we don't have to 
-                    # check the rest of the corners
-                    if dist > min_dist + 2 * 24:
-                        break
-
-                    if dist < min_dist:
-                        min_dist = dist
-
-                else:
-                    # Continue if the inner loop wasn't broken.
-                    continue
-
-                # Inner loop was broken, break the outer.
-                break
-
         base_value = house.value
-        extra_value = house.value * house.extra_value * (min_dist - house.mandatory_free_space)
+        extra_value = house.value * house.extra_value * (house.get_min_dist() - house.mandatory_free_space)
 
         value = base_value + extra_value
         return value
@@ -264,3 +231,41 @@ class Area():
             # (Over)write each line of house_list into the csv-file
             for house in house_list:
                 wr.writerow(house)
+    
+    def update_distances(self, house):
+        """ Update the distances."""
+        
+        # Reset all distances for house
+        house.init_distances(self.structures["House"])
+
+        # Reset all distances related to the house
+        for h in self.structures["House"]:
+            
+            if h == house:
+                continue
+            
+            h.neighbour_distances[house.structure_name] = math.inf
+        
+        for h in self.structures["House"]:
+            
+            if h == house:
+                continue
+
+            for corner in h.corners:
+
+                for new_corner in house.corners:
+
+                    x_dist = abs(corner[0] - new_corner[0])
+                    y_dist = abs(corner[1] - new_corner[1])
+
+                    # Use the maximum value, since the minimum value wouldnt reach the object
+                    dist = max(x_dist, y_dist)
+
+                    if dist < h.neighbour_distances[house.structure_name]:
+                        h.neighbour_distances[house.structure_name] = dist
+                    
+                    if dist < house.neighbour_distances[h.structure_name]:
+                        house.neighbour_distances[h.structure_name] = dist
+
+
+

@@ -7,7 +7,7 @@ from time import time
 
 ALGORITHM = "greedy"
 NEIGHBOURHOOD = "wijk2"
-HOUSES = 10
+HOUSES = 20
 
 def main():
 
@@ -40,7 +40,10 @@ def algorithm(area, algorithm_name):
 
     end = time()
 
-    print(f"It took {end - start} seconds")
+    print(f"Runtime: {end - start}")
+    print(f"Worth: {area.calc_worth_area()}")
+    for h in area.structures["House"]:
+        print(h)
     
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

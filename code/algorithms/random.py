@@ -17,16 +17,24 @@ def create_houses(area, one_person_house_count, bungalow_count, maison_count):
         houses = []
         for i in range(maison_count):
             r = random.choice([True, False])
-            houses.append(House("maison", r))
+            house = House("maison", r)
+            house.structure_name = "maison_" + str(i)
+            houses.append(house)
+            
 
         for i in range(bungalow_count):
             r = random.choice([True, False])
-            houses.append(House("bungalow", r))
-
+            house = House("bungalow", r)
+            house.structure_name = "bungalow_" + str(i)
+            houses.append(house)
+            
         for i in range(one_person_house_count):
             r = random.choice([True, False])
-            houses.append(House("one_person_home", r))
+            house = House("one_person_home", r)
+            house.structure_name = "one_person_home_" + str(i)
+            houses.append(house)
 
+            
         return houses
 
 def place_houses(area):
@@ -54,12 +62,13 @@ def place_house(area, house):
 
         if area.check_valid(house, x, y):
             
+            # TODO code should be outside if statement
             house.bottom_left_cor = [x, y]
             house.top_right_cor = [x + house.width, y + house.height]
             house.set_corners()
 
             area.structures["House"].append(house)
-
+            area.update_distances(house)
             house_placed = True
 
         while_count += 1

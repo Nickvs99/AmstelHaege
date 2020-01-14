@@ -40,6 +40,8 @@ class Area():
         location = "../../wijken/" + filename + ".csv"
         path = os.path.join(my_path, location)
 
+
+        water_count = 0
         # Open the csv-file as a dictionary
         with open(path) as csv_file:
 
@@ -53,7 +55,7 @@ class Area():
                 bottom, left, top, right = int(bottom), int(left), int(top), int(right)
 
                 # Create the water object
-                water = Structure()
+                water = Structure("water_" + str(water_count))
 
                 water.bottom_left_cor = [bottom, left]
                 water.top_right_cor = [top, right]
@@ -193,27 +195,15 @@ class Area():
 
         house_list = [['structure','bottom_left_xy','top_right_xy','type']]
 
-        for house in self.structures["House"]:
-            # print(f"{house.type_house} - {house.bottom_left_cor} - {house.top_right_cor}")
+        for key in self.structures:
+            for structure in self.structures[key]:
 
-            # Make structure of each house and update housenumber
-            if house.type_house == 'one_person_home':
-                structure = house.type_house + '_' + str(one_person_count)
-                one_person_count += 1
-            elif house.type_house == 'bungalow':
-                structure = house.type_house + '_' + str(bungalow_count)
-                bungalow_count += 1
-            elif house.type_house == 'maison':
-                structure = house.type_house + '_' + str(maison_count)
-                maison_count += 1
+                # Make string representation of the coordinates
+                bottom_left_xy = str(structure.bottom_left_cor[0]) + ',' + str(structure.bottom_left_cor[1])
+                top_right_xy = str(structure.top_right_cor[0]) + ',' + str(structure.top_right_cor[1])
 
-            # Make string representation of the coordinates
-            bottom_left_xy = str(house.bottom_left_cor[0]) + ',' + str(house.bottom_left_cor[1])
-            top_right_xy = str(house.top_right_cor[0]) + ',' + str(house.top_right_cor[1])
-            type_house = house.type_house.upper()
-
-            # Append values to the house_list
-            house_list.append([structure,bottom_left_xy,top_right_xy,type_house])
+                # Append values to the house_list
+                house_list.append([structure.name,bottom_left_xy,top_right_xy,structure.type])
 
         return house_list
 
@@ -244,7 +234,7 @@ class Area():
             if h == house:
                 continue
             
-            h.neighbour_distances[house.structure_name] = math.inf
+            h.neighbour_distances[house.name] = math.inf
         
         for h in self.structures["House"]:
             
@@ -261,11 +251,11 @@ class Area():
                     # Use the maximum value, since the minimum value wouldnt reach the object
                     dist = max(x_dist, y_dist)
 
-                    if dist < h.neighbour_distances[house.structure_name]:
-                        h.neighbour_distances[house.structure_name] = dist
+                    if dist < h.neighbour_distances[house.name]:
+                        h.neighbour_distances[house.name] = dist
                     
-                    if dist < house.neighbour_distances[h.structure_name]:
-                        house.neighbour_distances[h.structure_name] = dist
+                    if dist < house.neighbour_distances[h.name]:
+                        house.neighbour_distances[h.name] = dist
 
 
 

@@ -32,21 +32,19 @@ def create_houses_greedy(area, one_person_house_count, bungalow_count, maison_co
         houses = []
         for i in range(maison_count):
             r = random.choice([True])
-            house = House("maison", r)
-            house.structure_name = "maison_" + str(i)
-            houses.append(house)
-        for i in range(bungalow_count):
-            r = random.choice([True])
-            house = House("bungalow", r)
-            house.structure_name = "bungalow_" + str(i)
-            houses.append(house)
-        for i in range(one_person_house_count):
-            r = random.choice([True])
-            house = House("one_person_home", r)
-            house.structure_name = "one_person_home_" + str(i)
+            house = House("maison_" + str(i), r)
             houses.append(house)
 
-        
+        for i in range(bungalow_count):
+            r = random.choice([True])
+            house = House("bungalow_" + str(i), r)
+            houses.append(house)
+
+        for i in range(one_person_house_count):
+            r = random.choice([True])
+            house = House("one_person_home_" + str(i), r)
+            houses.append(house)
+
         for h in houses:
             h.init_distances(houses)
 

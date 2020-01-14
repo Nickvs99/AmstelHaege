@@ -37,7 +37,9 @@ def greedy(area, house):
                     best_y = y
                     best_orientation = False
 
+
     # Places house in best place
+    house.set_orientation(best_orientation)
     place_housegreedy(area, house, best_x, best_y)
 
 def create_houses_greedy(area, one_person_house_count, bungalow_count, maison_count):

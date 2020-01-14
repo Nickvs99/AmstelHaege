@@ -4,14 +4,13 @@ The seed of the grid with the highest calculated worth, will be shown and saved.
 """
 
 import csv
-from area import area
 import random
 import operator
-import sys
 import timeit
 import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
+from classes.area import Area
 
 
 def main():
@@ -20,20 +19,18 @@ def main():
     start = timeit.default_timer()
     
     # Find the seed with the highest worth and retrieve the grid
-    best_seed, Dict = best_random(1000)
-    set_random_seed(best_seed)
-    new_area = area()
-    new_area.load_water('wijk2')
-    new_area.place_houses(20)
+    # best_seed, Dict = best_random(1000)
+    # set_random_seed(best_seed)
+    new_area = Area('wijk2', 20)
     print(new_area.calc_worth_area())
-    # new_area.ShowArea()
-    # new_area.make_csv()
+    new_area.plot_area()
+    new_area.make_csv_output()
 
     # End runtime and print the actual runtime
     stop = timeit.default_timer()
     print('Runtime: ', stop - start)
 
-    show_plot(Dict)
+    # show_plot(Dict)
 
 def best_random(n):
     """ 
@@ -50,17 +47,13 @@ def best_random(n):
         seed = set_random_seed(random.random())
 
         # Make a random grid
-        new_area = area()
-        new_area.load_water('wijk2')
-        new_area.place_houses(20)
+        new_area = Area('wijk2', 20)
 
         # Add the seed with its worth in the dictionary
         Dict[seed] = int(new_area.calc_worth_area())
 
     # Retrieve the seed with highest calculated worth
     seed_most_worth = max(Dict, key=lambda key: Dict[key])
-
-    # show_plot(Dict)
 
     return seed_most_worth, Dict
 
@@ -72,7 +65,7 @@ def show_plot(Dict):
         mylist.append(Dict[key])    
     
     num_bins = 10
-    n, bins, patches = plt.hist(mylist, num_bins, density=1, stacked=True, facecolor='blue', alpha=0.5)
+    n, bins, patches = plt.hist(mylist, num_bins, facecolor='blue', alpha=0.5)
 
     plt.ylabel('Amount found')
     plt.xlabel('Area worth')

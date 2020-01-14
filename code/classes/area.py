@@ -176,22 +176,19 @@ class Area():
 
         return True
 
-    def make_csv(self):
+    def make_csv_output(self):
         """ Function which commands to update the output """
 
-        # Store values house_list
-        house_list = self.make_house_list()
+        # Store values csv_output_list
+        csv_output_list = self.make_csv_output_list()
 
-        # Use house_list to make the csv-output
-        self.csv_output(house_list)
+        print(csv_output_list)
+
+        # Use csv_output_list to make the csv-output
+        # self.csv_output(csv_output_list)
     
-    def make_house_list(self):
+    def make_csv_output_list(self):
         """ Stores house-coordinates in a nested list """
-
-        # Startvalue housenumber
-        one_person_count = 1
-        bungalow_count = 1
-        maison_count = 1
 
         house_list = [['structure','bottom_left_xy','top_right_xy','type']]
 
@@ -207,8 +204,9 @@ class Area():
 
         return house_list
 
-    def csv_output(self, house_list):
-        """ (Over)writes the houselist into the ouput.csv """
+    def csv_output(self, csv_output_list):
+
+      """ (Over)writes the houselist into the ouput.csv """
 
         # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))
@@ -256,6 +254,5 @@ class Area():
                     
                     if dist < house.neighbour_distances[h.name]:
                         house.neighbour_distances[h.name] = dist
-
 
 

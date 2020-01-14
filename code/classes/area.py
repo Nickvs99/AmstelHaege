@@ -206,7 +206,7 @@ class Area():
 
     def csv_output(self, csv_output_list):
 
-      """ (Over)writes the houselist into the ouput.csv """
+        """ (Over)writes the houselist into the ouput.csv """
 
         # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))

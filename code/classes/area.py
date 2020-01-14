@@ -53,7 +53,7 @@ class Area():
                 bottom, left, top, right = int(bottom), int(left), int(top), int(right)
 
                 # Create the water object
-                water = Structure("Water")
+                water = Structure()
 
                 water.bottom_left_cor = [bottom, left]
                 water.top_right_cor = [top, right]

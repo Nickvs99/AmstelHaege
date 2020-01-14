@@ -5,9 +5,9 @@ from algorithms.greedy import place_housesgreedy
 
 from time import time
 
-ALGORITHM = "greedy"
+ALGORITHM = "random"
 NEIGHBOURHOOD = "wijk2"
-HOUSES = 20
+HOUSES = 10
 
 def main():
 

@@ -32,36 +32,36 @@ class Area():
 
         return [[ 0 for i in range(self.width)] for j in range(self.height)]
 
-    def load_water(self, filename):
+    def load_water(self, neighbourhood):
         """ Gets the water from the csv file and creates objects from them. """
 
         # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))
-        location = "../../wijken/" + filename + ".csv"
+        location = "..\..\wijken\\" + neighbourhood + ".csv"
         path = os.path.join(my_path, location)
-
 
         water_count = 0
         # Open the csv-file as a dictionary
         with open(path) as csv_file:
 
-            csv_reader = csv.DictReader(csv_file)
+                csv_reader = csv.DictReader(csv_file)
 
-            # Retrieve the coordinates of the bottom-left and top-right of the water(s)
-            for row in csv_reader:
-                bottom,left = row['bottom_left_xy'].split(",")
-                top,right  = row['top_right_xy'].split(",")
+                # Retrieve the coordinates of the bottom-left and top-right of the water(s)
+                for row in csv_reader:
+                    bottom,left = row['bottom_left_xy'].split(",")
+                    top,right  = row['top_right_xy'].split(",")
 
-                bottom, left, top, right = int(bottom), int(left), int(top), int(right)
+                    bottom, left, top, right = int(bottom), int(left), int(top), int(right)
 
-                # Create the water object
-                water = Structure("water_" + str(water_count))
+                    # Create the water object
+                    water = Structure("water_" + str(water_count))
 
-                water.bottom_left_cor = [bottom, left]
-                water.top_right_cor = [top, right]
-                water.set_corners()
+                    water.bottom_left_cor = [bottom, left]
+                    water.top_right_cor = [top, right]
+                    water.set_corners()
 
-                self.structures["Water"].append(water)
+                    self.structures["Water"].append(water)
+        
 
     def fill_area(self, area):
         """ Fill the area with the objects with the state of the structures"""
@@ -151,6 +151,7 @@ class Area():
         """ Calculates the worth of the area. """
 
         total_worth = 0
+        
         for  house in self.structures["House"]:
             total_worth += self.calc_worth_house(house)
 
@@ -210,7 +211,7 @@ class Area():
 
         # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))
-        path = os.path.join(my_path, "../../csv-output/output.csv")
+        path = os.path.join(my_path, "..\..\csv-output\output.csv\\")
 
         # Open the current output.csv
         with open(path, 'w', newline='') as myfile:

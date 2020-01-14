@@ -4,7 +4,7 @@ from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
 from algorithms.greedy_random import place_housesgreedyrandom
 
-ALGORITHM = "greedy"
+ALGORITHM = "greedy_random"
 NEIGHBOURHOOD = "wijk2"
 HOUSES = 20
 

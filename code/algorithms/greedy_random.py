@@ -19,7 +19,7 @@ def greedy(area, house):
             place_housegreedyrandom(area, house, x, y)
             worth = area.calc_worth_area()
 
-                # Selects best place for house
+            # Selects best place for house
             if worth > best_worth:
                 best_worth = worth
                 best_x = x
@@ -47,15 +47,21 @@ def create_houses_greedy(area, one_person_house_count, bungalow_count, maison_co
         houses = []
         for i in range(maison_count):
             r = random.choice([True])
-            houses.append(House("maison", r))
+            house = House("maison_" + str(i), r)
+            houses.append(house)
 
         for i in range(bungalow_count):
             r = random.choice([True])
-            houses.append(House("bungalow", r))
+            house = House("bungalow_" + str(i), r)
+            houses.append(house)
 
         for i in range(one_person_house_count):
             r = random.choice([True])
-            houses.append(House("one_person_home", r))
+            house = House("one_person_home_" + str(i), r)
+            houses.append(house)
+
+        for h in houses:
+            h.init_distances(houses)
 
         return houses
 
@@ -64,7 +70,6 @@ def place_housesgreedyrandom(area):
 
     # Makes houses
     houses = create_houses_greedy(area, area.one_person_house_count, area.bungalow_count, area.maison_count)
-    counter = 0
     for house in houses:
 
         # Places the rest of the houses
@@ -73,10 +78,8 @@ def place_housesgreedyrandom(area):
         house.set_corners()
         area.structures["House"].append(house)
         greedy(area, house)
-        counter += 1
-        print(counter)
-        print(area.calc_worth_area())
 
+        print(area.calc_worth_area())
 
 def place_housegreedyrandom(area, house, x, y):
     """
@@ -86,3 +89,5 @@ def place_housegreedyrandom(area, house, x, y):
     house.bottom_left_cor = [x, y]
     house.top_right_cor = [x + house.width, y + house.height]
     house.set_corners()
+
+    area.update_distances(house)

@@ -46,6 +46,7 @@ def hill_climber(area):
 
     for house in area.structures["House"]:
 
+        # store house coordinates
         saved_bottom_left = house.bottom_left_cor
         saved_top_right = house.top_right_cor
         
@@ -55,6 +56,7 @@ def hill_climber(area):
         best_bottom_left = house.bottom_left_cor
         best_top_right = house.top_right_cor
         
+        # move object by the range in steps
         for move_steps in range(1,10):
 
             for direction in move_directions:
@@ -68,7 +70,10 @@ def hill_climber(area):
                 elif direction == "left":
                     move = [x - move_steps, y]
 
+                # Check if valid the move is valid 
                 if area.check_valid(house, move[0], move[1]):
+
+                    # Place the house in the new coordinates and check if the worth is the highest
                     place_house_hillclimbing(area, house, move, move_steps)
                     worth = area.calc_worth_area()
                     if worth > best_worth:
@@ -76,11 +81,12 @@ def hill_climber(area):
                         best_bottom_left = house.bottom_left_cor
                         best_top_right = house.top_right_cor
 
+            # Restore the coordinate of the house object
             place_house_restore(area, house, saved_bottom_left, saved_top_right)  
 
         house.bottom_left_cor = best_bottom_left
         house.top_right_cor = best_top_right
-        update_distance(area, house)
+        update_coordinates(area, house)
 
     print(f"Best worth: {best_worth}")
     for h in area.structures["House"]:
@@ -92,15 +98,15 @@ def place_house_hillclimbing(area, house, move, move_steps):
 
     house.bottom_left_cor = move
     house.top_right_cor = [move[0] + house.width, move[1] + house.height]
-    update_distance(area, house)
+    update_coordinates(area, house)
 
 def place_house_restore(area, house, bottom_left_cor, top_right_cor):
     
     house.bottom_left_cor = bottom_left_cor
     house.top_right_cor = top_right_cor
-    update_distance(area, house)
+    update_coordinates(area, house)
 
-def update_distance(area, house):
+def update_coordinates(area, house):
     
     house.set_corners()
     area.update_distances(house)

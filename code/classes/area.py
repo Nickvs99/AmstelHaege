@@ -152,7 +152,7 @@ class Area():
 
         total_worth = 0
         
-        for  house in self.structures["House"]:
+        for house in self.structures["House"]:
             total_worth += self.calc_worth_house(house)
 
         return total_worth

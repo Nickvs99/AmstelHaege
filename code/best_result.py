@@ -85,6 +85,8 @@ def best_result():
     area.plot_area()
 
     show_plot(area_worths)
+
+    return area
     
 def show_plot(area_worths): 
 

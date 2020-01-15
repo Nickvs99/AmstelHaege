@@ -75,25 +75,15 @@ def place_housesgreedy(area):
     for house in houses:
         print(counter)
 
-        # Places the rest of the houses
-        if counter >= 1:
-            house.bottom_left_cor = [0, 0]
-            house.top_right_cor = [0 + house.width, 0 + house.height]
-            house.set_corners()
-            area.structures["House"].append(house)
-            greedy(area, house)
-            print(area.calc_worth_area())
+        house.bottom_left_cor = [0, 0]
+        house.top_right_cor = [0 + house.width, 0 + house.height]
+        house.set_corners()
+        area.structures["House"].append(house)
+        greedy(area, house)
+        print(area.calc_worth_area())
 
-        # Places house in first position
-        else:
-            house.bottom_left_cor = [74, 85]
-            house.top_right_cor = [74 + house.width, 85 + house.height]
 
-            house.set_corners()
-
-            area.structures["House"].append(house)
         counter += 1
-
 def place_housegreedy(area, house, x, y):
     """
     Place a house.

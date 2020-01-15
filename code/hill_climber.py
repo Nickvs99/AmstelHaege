@@ -49,61 +49,38 @@ def hill_climber(area):
         saved_bottom_left = house.bottom_left_cor
         saved_top_right = house.top_right_cor
         
+        x = house.bottom_left_cor[0]
+        y = house.bottom_left_cor[1]
+
         best_bottom_left = house.bottom_left_cor
         best_top_right = house.top_right_cor
         
         for move_steps in range(1,10):
 
-            # for direction in move_directions:
+            for direction in move_directions:
 
-            # Move up
-            if area.check_valid(house, house.bottom_left_cor[0],house.bottom_left_cor[1] + move_steps):
-                place_house_hillclimbing(area, house, "up", move_steps)
-                worth = area.calc_worth_area()
-                if worth > best_worth:
-                    best_worth = worth
-                    best_bottom_left = house.bottom_left_cor
-                    best_top_right = house.top_right_cor
+                if direction == "up":
+                    move = [x, y + move_steps]
+                elif direction == "right":
+                    move = [x + move_steps, y]
+                elif direction == "down":
+                    move = [x, y - move_steps]
+                elif direction == "left":
+                    move = [x - move_steps, y]
 
-            place_house_restore(area, house, saved_bottom_left, saved_top_right)            
-                
-            # Move right
-            if area.check_valid(house, house.bottom_left_cor[0] + move_steps,house.bottom_left_cor[1]):
-                place_house_hillclimbing(area, house, "right", move_steps)
-                worth = area.calc_worth_area()
-                if worth > best_worth:
-                    best_worth = worth
-                    best_bottom_left = [house.bottom_left_cor[0] + move_steps,house.bottom_left_cor[1]]
-                    best_top_right = [house.top_right_cor[0] + move_steps,house.top_right_cor[1]]
+                if area.check_valid(house, move[0], move[1]):
+                    place_house_hillclimbing(area, house, move, move_steps)
+                    worth = area.calc_worth_area()
+                    if worth > best_worth:
+                        best_worth = worth
+                        best_bottom_left = house.bottom_left_cor
+                        best_top_right = house.top_right_cor
 
-            place_house_restore(area, house, saved_bottom_left, saved_top_right)
-
-            # Move down
-            if area.check_valid(house, house.bottom_left_cor[0],house.bottom_left_cor[1] - move_steps):
-                place_house_hillclimbing(area, house, "down", move_steps)
-                worth = area.calc_worth_area()
-                if worth > best_worth:
-                    best_worth = worth
-                    best_bottom_left = [house.bottom_left_cor[0],house.bottom_left_cor[1] - move_steps]
-                    best_top_right = [house.top_right_cor[0],house.top_right_cor[1] - move_steps]
-
-            place_house_restore(area, house, saved_bottom_left, saved_top_right)
-
-            # Move left
-            if area.check_valid(house, house.bottom_left_cor[0] - move_steps,house.bottom_left_cor[1]):
-                place_house_hillclimbing(area, house, "left", move_steps)
-                worth = area.calc_worth_area()
-                if worth > best_worth:
-                    best_worth = worth
-                    best_bottom_left = [house.bottom_left_cor[0] - move_steps,house.bottom_left_cor[1]]
-                    best_top_right = [house.top_right_cor[0] - move_steps,house.top_right_cor[1]]
-            
-            place_house_restore(area, house, saved_bottom_left, saved_top_right)
+            place_house_restore(area, house, saved_bottom_left, saved_top_right)  
 
         house.bottom_left_cor = best_bottom_left
         house.top_right_cor = best_top_right
-        house.set_corners()
-        area.update_distances(house)
+        update_distance(area, house)
 
     print(f"Best worth: {best_worth}")
     for h in area.structures["House"]:
@@ -111,34 +88,22 @@ def hill_climber(area):
 
     area.plot_area()
 
-def place_house_hillclimbing(area, house, move_direction, move_steps):
+def place_house_hillclimbing(area, house, move, move_steps):
 
-    if move_direction == "up":
-        house.bottom_left_cor[1] = house.bottom_left_cor[1] + move_steps
-        house.top_right_cor[1] = house.top_right_cor[1] + move_steps
-    
-    elif move_direction == "right":
-        house.bottom_left_cor[0] = house.bottom_left_cor[0] + move_steps
-        house.top_right_cor[0] = house.top_right_cor[0] + move_steps
-    
-    elif move_direction == "down":
-        house.bottom_left_cor[1] = house.bottom_left_cor[1] - move_steps
-        house.top_right_cor[1] = house.top_right_cor[1] - move_steps
-
-    elif move_direction == "left":
-        house.bottom_left_cor[0] = house.bottom_left_cor[0] - move_steps
-        house.top_right_cor[0] = house.top_right_cor[0] - move_steps
-
-    house.set_corners()
-    area.update_distances(house)
+    house.bottom_left_cor = move
+    house.top_right_cor = [move[0] + house.width, move[1] + house.height]
+    update_distance(area, house)
 
 def place_house_restore(area, house, bottom_left_cor, top_right_cor):
     
     house.bottom_left_cor = bottom_left_cor
     house.top_right_cor = top_right_cor
+    update_distance(area, house)
+
+def update_distance(area, house):
+    
     house.set_corners()
     area.update_distances(house)
-    
 
 def algorithm(area, algorithm_name):
 

@@ -9,9 +9,11 @@ def greedy(area, house):
     best_worth = 0
     best_x = 0
     best_y = 0
+    print(best_x)
+    print(best_y)
 
     # Checks place for house
-    for i in range(100):
+    for i in range(1000):
         x = int(random.random() * (area.width - house.width + 1))
         y = int(random.random() * (area.height - house.height + 1))
         house.set_orientation(True)
@@ -39,6 +41,7 @@ def greedy(area, house):
 
     # Places house in best place
     house.set_orientation(best_orientation)
+
     place_housegreedyrandom(area, house, best_x, best_y)
 
 def create_houses_greedy(area, one_person_house_count, bungalow_count, maison_count):

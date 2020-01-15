@@ -14,9 +14,9 @@ def greedy(area, house):
     for i in range(100):
         x = int(random.random() * (area.width - house.width + 1))
         y = int(random.random() * (area.height - house.height + 1))
-        house.set_orientation(True)
+        house.set_coordinates([x,y], True)
         if area.check_valid(house, x, y):
-            place_housegreedyrandom(area, house, x, y)
+            area.update_distances(house)
             worth = area.calc_worth_area()
 
             # Selects best place for house
@@ -26,9 +26,9 @@ def greedy(area, house):
                 best_y = y
                 best_orientation = True
 
-        house.set_orientation(False)
+        house.set_coordinates([x,y], False)
         if area.check_valid(house, x, y):
-            place_housegreedyrandom(area, house, x, y)
+            area.update_distances(house)
             worth = area.calc_worth_area()
             # Selects best place for house
             if worth > best_worth:
@@ -37,9 +37,9 @@ def greedy(area, house):
                 best_y = y
                 best_orientation = False
 
-    # Places house in best place
-    house.set_orientation(best_orientation)
-    place_housegreedyrandom(area, house, best_x, best_y)
+    house.set_coordinates([best_x,best_y], True)
+    area.update_distances(house)
+
 
 def create_houses_greedy(area, one_person_house_count, bungalow_count, maison_count):
         """ Creates a list with houses. """
@@ -80,14 +80,3 @@ def place_housesgreedyrandom(area):
         greedy(area, house)
 
         print(area.calc_worth_area())
-
-def place_housegreedyrandom(area, house, x, y):
-    """
-    Place a house.
-    """
-
-    house.bottom_left_cor = [x, y]
-    house.top_right_cor = [x + house.width, y + house.height]
-    house.set_corners()
-
-    area.update_distances(house)

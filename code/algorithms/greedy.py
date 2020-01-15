@@ -13,23 +13,23 @@ def greedy(area, house):
     # Checks place for house
     for y in range(area.height - house.height + 1):
         for x in range(area.width - house.width + 1):
-            house.set_orientation(True)
+            house.set_coordinates([x,y], True)
             if area.check_valid(house, x, y):
-                place_housegreedy(area, house, x, y)
+                area.update_distances(house)
                 worth = area.calc_worth_area()
 
-
-                    # Selects best place for house
+                # Selects best place for house
                 if worth > best_worth:
                     best_worth = worth
                     best_x = x
                     best_y = y
                     best_orientation = True
 
-            house.set_orientation(False)
+            house.set_coordinates([x,y], False)
             if area.check_valid(house, x, y):
-                place_housegreedy(area, house, x, y)
+                area.update_distances(house)
                 worth = area.calc_worth_area()
+
                 # Selects best place for house
                 if worth > best_worth:
                     best_worth = worth
@@ -39,8 +39,9 @@ def greedy(area, house):
 
 
     # Places house in best place
-    house.set_orientation(best_orientation)
-    place_housegreedy(area, house, best_x, best_y)
+    house.set_coordinates([best_x, best_y], best_orientation)
+    area.update_distances(house)
+
 
 def create_houses_greedy(area, one_person_house_count, bungalow_count, maison_count):
         """ Creates a list with houses. """
@@ -75,22 +76,10 @@ def place_housesgreedy(area):
     for house in houses:
         print(counter)
 
-        house.bottom_left_cor = [0, 0]
-        house.top_right_cor = [0 + house.width, 0 + house.height]
-        house.set_corners()
+        house.set_coordinates([0,0], house.horizontal)
         area.structures["House"].append(house)
         greedy(area, house)
         print(area.calc_worth_area())
 
 
         counter += 1
-def place_housegreedy(area, house, x, y):
-    """
-    Place a house.
-    """
-
-    house.bottom_left_cor = [x, y]
-    house.top_right_cor = [x + house.width, y + house.height]
-    house.set_corners()
-
-    area.update_distances(house)

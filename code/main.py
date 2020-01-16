@@ -6,13 +6,13 @@ from algorithms.greedy_random import place_housesgreedyrandom
 from algorithms.hill_climber import hill_climber
 from time import time
 
-ALGORITHM = "random"
+ALGORITHM = "greedy"
 NEIGHBOURHOOD = "wijk2"
-HOUSES = 10
+HOUSES = 20
 
 def main():
 
-    set_random_seed(0.6113775665997402)
+    set_random_seed()
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 

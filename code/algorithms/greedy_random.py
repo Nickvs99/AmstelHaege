@@ -11,9 +11,10 @@ def greedy(area, house):
     best_y = 0
 
     # Checks place for house
+    min_dist = min(house.width, house.height)
     for i in range(100):
-        x = int(random.random() * (area.width - house.width + 1))
-        y = int(random.random() * (area.height - house.height + 1))
+        x = int(random.random() * (area.width - min_dist + 1))
+        y = int(random.random() * (area.height - min_dist + 1))
         house.set_coordinates([x,y], True)
         if area.check_valid(house, x, y):
             area.update_distances(house)
@@ -37,7 +38,7 @@ def greedy(area, house):
                 best_y = y
                 best_orientation = False
 
-    house.set_coordinates([best_x,best_y], True)
+    house.set_coordinates([best_x,best_y], best_orientation)
     area.update_distances(house)
 
 

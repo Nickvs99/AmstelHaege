@@ -26,7 +26,7 @@ from classes.area import Area
 
 MUTATE_RATE = 0.1
 POPULATION = 50
-EVOLVE_ITERATIONS = 20
+EVOLVE_ITERATIONS = 100
 
 class Individual(Area):
     """ An individual from the population. Stores an area object and the worth and fitness values."""
@@ -34,16 +34,55 @@ class Individual(Area):
     def __init__(self, area):
 
         self.area = area
-        self.worth = area.calc_worth_area()
-        self.fitness = self.calc_fitness(self.worth)
+        self.calc_fitness()
 
-    def calc_fitness(self, worth):
+    def calc_fitness(self):
         """
         Calculates fitness value. This value is used to determine the
         chance that this individual can reproduce.
         """
 
-        return (worth / 1000000) ** 3
+        self.worth = self.area.calc_worth_area()
+        self.fitness = (self.worth / 1000000) ** 3
+
+    def mutate(self):
+        """ 
+        Mutates the individual. Mutations are:
+        - switch orientation
+        - move coordinates
+        """
+
+        r = random.random()
+
+        for house in self.area.structures["House"]:
+
+            r = random.random()
+            if r > 0.3:
+                continue
+            
+            initial_x = house.bottom_left_cor[0]
+            initial_y = house.bottom_left_cor[1]
+            while_count = 0
+            while while_count < 1000:
+
+                # Random coordinates shift
+                diff_x = int(random.random() * 10 - 5)
+                diff_y = int(random.random() * 10 - 5)
+
+                x = initial_x + diff_x
+                y = initial_y + diff_y
+
+                house.set_coordinates([x, y], house.horizontal)
+
+                if self.area.check_valid(house, x, y):
+
+                    break
+
+                while_count += 1
+            self.area.update_distances(house)
+
+        self.calc_fitness()
+        
 
 def evolution(area):
     """ The main program. """
@@ -90,9 +129,6 @@ def evolution(area):
 
 def evolve(individuals):
     """ Evolve the population one generation further."""    
-    
-    # Create a copy of the old generation
-    old_generation = copy.deepcopy(individuals)
 
     # Accumulate fitness
     total_fitness = 0
@@ -122,6 +158,11 @@ def evolve(individuals):
                 
                 new_generation.append(copy.deepcopy(individual))
                 break
+
+    # Mutate individuals
+    for individual in new_generation:
+        individual.mutate()
+            
 
     return new_generation
 

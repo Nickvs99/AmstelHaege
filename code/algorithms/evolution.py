@@ -11,7 +11,7 @@ Step Three: Repeat the following regenerational steps until termination:
     Select the best-fit individuals for reproduction. (Parents)
     Breed new individuals through crossover and mutation operations to give birth to offspring.
     Evaluate the individual fitness of new individuals.
-    Replace least-fit population with new individuals.
+    TODO Replace least-fit population with new individuals.
 
 """
 
@@ -95,37 +95,46 @@ def evolution(area):
         random_placement(copy_area)
         individuals.append(Individual(copy_area))
     
+    # Sort individuals
+    individuals.sort(key=lambda x: x.worth, reverse=True)
+
     # Lists to keep track of the progress op the populations
-    avg_worths, best_worths, total_best = [], [], []
+    avg_worths, best_worths = [avg_individuals(individuals)], [get_best_individual(individuals).worth]
     best_worth = 0
     best_individual = None
+    stale_counter = 0
 
     print("Evolve")
-    for i in range(EVOLVE_ITERATIONS):
-        print("Generaton: ", i)
+    i = 0
+    # while stale_counter < 5:
+    while i < 100:
+        print("Generaton: ", i, best_worths[-1])
 
         individuals = evolve(individuals)
 
         # Append statistics to lists
+        avg_worth = avg_individuals(individuals)
+
+        if avg_worth == avg_worths[-1]:
+            stale_counter += 1
+        else:
+            stale_counter = 0
+
         avg_worths.append(avg_individuals(individuals))
+        best_worths.append(get_best_individual(individuals).worth)
 
-        new_best_individual = get_best_individual(individuals)
-        new_best_worth = new_best_individual.worth
-        if new_best_worth > best_worth:
-            best_worth = new_best_worth
-            best_individual = new_best_individual
+        i += 1
 
-        best_worths.append(new_best_worth)
-        total_best.append(best_worth)
+    print("Worth: ", best_worths[-1])
 
     # Plot the progress of the population
     plt.plot(avg_worths)
     plt.plot(best_worths)
-    plt.plot(total_best)
-
+    
     plt.show()
 
-    best_individual.area.plot_area()
+    # Set area to the best area. Then the main function can use it further
+    area = get_best_individual(individuals).area
 
 def evolve(individuals):
     """ Evolve the population one generation further."""    
@@ -147,7 +156,7 @@ def evolve(individuals):
         cum_fitness += individual.norm_fitness
         individual.cum_fitness = cum_fitness
 
-    new_generation = []
+    mutations = []
     # Fill the new generation
     for i in range(POPULATION):
         r = random.random()
@@ -156,13 +165,26 @@ def evolve(individuals):
         for individual in individuals:
             if individual.cum_fitness > r:
                 
-                new_generation.append(copy.deepcopy(individual))
+                mutations.append(copy.deepcopy(individual))
                 break
 
     # Mutate individuals
-    for individual in new_generation:
+    for individual in mutations:
         individual.mutate()
-            
+    
+    mutations.sort(key=lambda x: x.worth, reverse=True)
+
+    # Get the n best from both generations
+    old_generation_count = 0
+    mutation_count = 0
+    new_generation = []
+    for i in range(POPULATION):
+        if individuals[old_generation_count].worth > mutations[mutation_count].worth:
+            new_generation.append(individuals[old_generation_count])
+            old_generation_count += 1
+        else:
+            new_generation.append(mutations[mutation_count])
+            mutation_count += 1
 
     return new_generation
 

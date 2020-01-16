@@ -1,26 +1,36 @@
+"""
+main.py
+"""
+
+
 import random
+from time import time
+
 from classes.area import Area
 from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
 from algorithms.greedy_random import place_housesgreedyrandom
-from algorithms.hill_climber_random import hill_climber
-from time import time
+from algorithms.hill_climber_random import hill_climber_random
+from algorithms.hill_climber_steps import hill_climber_steps
+
 
 ALGORITHM = "greedy_random"
 NEIGHBOURHOOD = "wijk2"
-HOUSES = 20
+HOUSES = 60
 
 def main():
 
-    set_random_seed(0.7417376257371039)
+    set_random_seed(0.3198218894314162)
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
     algorithm(area, ALGORITHM)
 
     area.plot_area()
-
+    
     area.make_csv_output()
+
+    hill_climber_steps(area)
 
 def algorithm(area, algorithm_name):
 
@@ -36,18 +46,18 @@ def algorithm(area, algorithm_name):
     elif algorithm_name == "greedy_random":
         place_housesgreedyrandom(area)
 
-    elif algorithm_name == "hill_climber":
-        hill_climber(area)
+    elif algorithm_name == "hill_climber_random":
+        hill_climber_random(area)
 
     else:
         raise Exception("Invalid algorithm name")
 
     end = time()
 
-    print(f"Runtime: {end - start}")
+    # print(f"Runtime: {end - start}")
     print(f"Worth: {area.calc_worth_area()}")
-    for h in area.structures["House"]:
-        print(h)
+    # for h in area.structures["House"]:
+    #     print(h)
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.
@@ -56,6 +66,8 @@ def set_random_seed(r = random.random()):
     random.seed(r)
 
     print(f"Seed: {r}")
+
+    return r
 
 
 if __name__ == "__main__":

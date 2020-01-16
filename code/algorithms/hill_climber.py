@@ -15,30 +15,38 @@ Short description of the algorithm
 # Show plot before - after, with the worth
 
 import random
-from classes.area import Area
-from algorithms.random import random_placement
-from algorithms.greedy import place_housesgreedy
-from algorithms.greedy_random import place_housesgreedyrandom
-from best_result import best_result
 from time import time
+from classes.structure import House
 
-ALGORITHM = "random"
-NEIGHBOURHOOD = "wijk2"
-HOUSES = 10
 
-def main():
+def hill_climber(area, iterations):
 
-    set_random_seed()
+    start = time()
 
-    area = Area(NEIGHBOURHOOD, HOUSES)
+    compare_area_worth = area.calc_worth_area()
 
-    algorithm(area, ALGORITHM)
+    counter = 1
 
+    for i in range(iterations):
+
+        print(counter)
+
+        hill_climber_once(area)
+
+        if compare_area_worth == area.calc_worth_area():
+            break
+        
+        counter += 1
+
+    end = time()
+
+    print(f"Runtime hill climber: {end - start}")
+    
+    print(f"Best worth: {area.calc_worth_area()}")
+    
     area.plot_area()
 
-    hill_climber(area)
-
-def hill_climber(area):
+def hill_climber_once(area):
 
     best_worth = 0
 
@@ -57,7 +65,7 @@ def hill_climber(area):
         best_top_right = house.top_right_cor
         
         # move object by the range in steps
-        for move_steps in range(1,10):
+        for move_steps in range(1,11):
 
             for direction in move_directions:
 
@@ -88,11 +96,9 @@ def hill_climber(area):
         house.top_right_cor = best_top_right
         update_coordinates(area, house)
 
-    print(f"Best worth: {best_worth}")
-    for h in area.structures["House"]:
-        print(h)
+    # for h in area.structures["House"]:
+    #     print(h)
 
-    area.plot_area()
 
 def place_house_hillclimbing(area, house, move, move_steps):
 
@@ -110,39 +116,3 @@ def update_coordinates(area, house):
     
     house.set_corners()
     area.update_distances(house)
-
-def algorithm(area, algorithm_name):
-
-    start = time()
-
-    # TODO switch case statement
-    if algorithm_name == "random":
-        random_placement(area)
-
-    elif algorithm_name == "greedy":
-        place_housesgreedy(area)
-
-    elif algorithm_name == "greedy_random":
-        place_housesgreedyrandom(area)
-
-    else:
-        raise Exception("Invalid algorithm name")
-
-    end = time()
-
-    # print(f"Runtime: {end - start}")
-    print(f"Worth: {area.calc_worth_area()}")
-    for h in area.structures["House"]:
-        print(h)
-    
-def set_random_seed(r = random.random()):
-    """ Sets a random seed. This seed can be used with debugging.
-    Use the same seed to get the same results. By default it uses a random seed."""
-
-    random.seed(r)
-
-    print(f"Seed: {r}")
-
-
-if __name__ == "__main__":
-    main()

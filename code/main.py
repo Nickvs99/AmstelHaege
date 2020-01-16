@@ -3,16 +3,16 @@ from classes.area import Area
 from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
 from algorithms.greedy_random import place_housesgreedyrandom
-from algorithm.hill_climber import hill_climber_placement
+from algorithms.hill_climber import hill_climber
 from time import time
 
-ALGORITHM = "greedy_random"
+ALGORITHM = "random"
 NEIGHBOURHOOD = "wijk2"
 HOUSES = 10
 
 def main():
 
-    set_random_seed(0.7417376257371039)
+    set_random_seed()
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
@@ -20,7 +20,9 @@ def main():
 
     area.plot_area()
     
-    area.make_csv_output()
+    # area.make_csv_output()
+
+    hill_climber(area, 100)
 
 def algorithm(area, algorithm_name):
 
@@ -35,9 +37,6 @@ def algorithm(area, algorithm_name):
 
     elif algorithm_name == "greedy_random":
         place_housesgreedyrandom(area)
-
-    elif algorithm_name == "hill_climber":
-        hill_climber_placement(area)
 
     else:
         raise Exception("Invalid algorithm name")

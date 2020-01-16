@@ -5,52 +5,28 @@ The seed of the grid with the highest calculated worth, will be shown and saved.
 
 import csv
 import random
-import timeit
+from time import time
+
 import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
+
 from classes.area import Area
-from algorithms.random import random_placement
-from algorithms.greedy import place_housesgreedy
-from algorithms.greedy_random import place_housesgreedyrandom
+from main import algorithm, set_random_seed
 
 
-ALGORITHM = "greedy_random"
+ALGORITHM = "random"
 NEIGHBOURHOOD = "wijk2"
-HOUSES = 10
+HOUSES = 20
 ITERATIONS = 1000
-
-def main():
-    
-    best_result()
-
-
-def algorithm(area, algorithm_name):
-
-    # TODO switch case statement
-    if algorithm_name == "random":
-        random_placement(area)
-
-    elif algorithm_name == "greedy":
-        place_housesgreedy(area)
-
-    elif algorithm_name == "greedy_random":
-        place_housesgreedyrandom(area)
-
-    else:
-        raise Exception("Invalid algorithm name")
-
-    worth = area.calc_worth_area() 
-
-    return worth
 
 def best_result():
     """ 
     Iterates over n amount of random grids and returns 
     the seed with the highest calucalted worth 
     """
-    start = timeit.default_timer()
+    start = time()
 
     best_worth = 0
     best_seed = 0
@@ -78,10 +54,11 @@ def best_result():
     
     algorithm(area, ALGORITHM)
 
-    print(f"Worth: {best_worth}")
+    print(f"Best worth: {best_worth}")
     
-    stop = timeit.default_timer()
-    print('Runtime: ', stop - start)
+    end = time()
+
+    print(f"Runtime: {end - start}")
 
     area.plot_area()
 
@@ -101,15 +78,7 @@ def show_plot(area_worths):
     plt.gca().yaxis.set_major_formatter(PercentFormatter(ITERATIONS))
 
     plt.show()
-
-def set_random_seed(r = random.random()):
-    """ Sets a random seed. This seed can be used with debugging. 
-    Use the same seed to get the same results. By default it uses a random seed."""
-
-    random.seed(r)
-
-    return r
     
 
 if __name__ == "__main__":
-    main()
+    best_result()

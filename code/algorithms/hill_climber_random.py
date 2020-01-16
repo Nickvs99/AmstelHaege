@@ -2,7 +2,6 @@
 Short description of the algorithm
 """
 from algorithms.greedy_random import place_housesgreedyrandom
-from algorithms.greedy_random import place_housegreedyrandom
 from classes.structure import House
 import random
 

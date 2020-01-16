@@ -1,13 +1,15 @@
 """
-Short description of the algorithm
+This interpretation of hill climbing works on a generated solution.
+Each house object will be moved in specific steps horizontally and vertically.
+All the moves will be checked for validation and the best results stored.
+This process will be iterated and stopped if the best area is found.
 """
 
-import random
 from time import time
 from classes.structure import House
 
 
-def hill_climber(area):
+def hill_climber_steps(area):
 
     start = time()
 
@@ -67,14 +69,14 @@ def hill_climber_once(area):
                     move = [x - move_steps, y]
                 
                 # Check if valid the move is valid for both orientations
-                for orientation in ["True", "False"]:
+                for orientation in [True, False]:
                     
-                    house.horizontal = orientation
+                    house.set_coordinates(move, orientation)
 
                     if area.check_valid(house, move[0], move[1]):
 
                         # Place the house in the new coordinates and check if the worth is the highest
-                        place_house_hillclimbing(area, house, move, house.horizontal)
+                        area.update_distances(house)
                         worth = area.calc_worth_area()
                         if worth > best_worth:
                             best_worth = worth

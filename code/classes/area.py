@@ -183,10 +183,8 @@ class Area():
         # Store values csv_output_list
         csv_output_list = self.make_csv_output_list()
 
-        print(csv_output_list)
-
         # Use csv_output_list to make the csv-output
-        # self.csv_output(csv_output_list)
+        self.csv_output(csv_output_list)
     
     def make_csv_output_list(self):
         """ Stores house-coordinates in a nested list """

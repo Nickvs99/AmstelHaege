@@ -138,6 +138,14 @@ class House(Structure):
 
         self.horizontal = horizontal
         
+    def set_coordinates(self, bottom_left_cor, horizontal):
+
+        self.set_orientation(horizontal)
+
+        self.bottom_left_cor = bottom_left_cor
+        self.top_right_cor = [bottom_left_cor[0] + self.width, bottom_left_cor[1] + self.height]
+
+        self.set_corners()
 
     def __str__(self):
 

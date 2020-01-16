@@ -3,15 +3,16 @@ from classes.area import Area
 from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
 from algorithms.greedy_random import place_housesgreedyrandom
+from algorithms.evolution import evolution
 from time import time
 
-ALGORITHM = "greedy"
+ALGORITHM = "evolution"
 NEIGHBOURHOOD = "wijk2"
 HOUSES = 10
 
 def main():
 
-    set_random_seed(0.7417376257371039)
+    set_random_seed()
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
@@ -34,6 +35,9 @@ def algorithm(area, algorithm_name):
 
     elif algorithm_name == "greedy_random":
         place_housesgreedyrandom(area)
+    
+    elif algorithm_name == "evolution":
+        evolution(area)
 
     else:
         raise Exception("Invalid algorithm name")

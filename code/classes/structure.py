@@ -113,9 +113,14 @@ class House(Structure):
             self.neighbour_distances[h.name] = math.inf
 
     def get_min_dist(self):
-        """ Returns the minimum distance from all distances. """
+        """ Returns the minimum distance to a neighbour or if it does not exist the distance to the edge. """
 
-        return min(self.neighbour_distances.values())
+        if self.neighbour_distances == {}:
+            # Return min dist to edge
+            return min(self.bottom_left_cor[0], 160 - self.top_right_cor[0], self.bottom_left_cor[1], 180 - self.top_right_cor[1])
+        
+        else:
+            return min(self.neighbour_distances.values())
 
     def set_orientation(self, horizontal):
         """ Adjusts the width and height depending on the if the house object is placed horizontal or not. """
@@ -133,6 +138,14 @@ class House(Structure):
 
         self.horizontal = horizontal
         
+    def set_coordinates(self, bottom_left_cor, horizontal):
+
+        self.set_orientation(horizontal)
+
+        self.bottom_left_cor = bottom_left_cor
+        self.top_right_cor = [bottom_left_cor[0] + self.width, bottom_left_cor[1] + self.height]
+
+        self.set_corners()
 
     def __str__(self):
 

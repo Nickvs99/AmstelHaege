@@ -49,27 +49,23 @@ def place_house(area, house):
     If it does not succeed, try new coordinates.
     """
 
-    house_placed = False
     while_count = 0
-    while not house_placed and while_count < 1000:
+    while while_count < 1000:
 
         # Get random bottom_left x and y coordinate
         x = int(random.random() * (area.width - house.width + 1))
         y = int(random.random() * (area.height - house.height + 1))
 
-        if area.check_valid(house, x, y):
-            
-            # TODO code should be outside if statement
-            house.bottom_left_cor = [x, y]
-            house.top_right_cor = [x + house.width, y + house.height]
-            house.set_corners()
+        house.set_coordinates([x,y], house.horizontal)
 
-            area.structures["House"].append(house)
-            area.update_distances(house)
-            house_placed = True
+        if area.check_valid(house, x, y):
+            break
 
         while_count += 1
+        if while_count == 1000:
 
-    if while_count == 1000:
+            raise Exception("Something went wrong when placing a house. There was probably to little room to fit an extra house.") 
 
-        raise Exception("Something went wrong when placing a house. There was probably to little room to fit an extra house.") 
+
+    area.structures["House"].append(house)
+    area.update_distances(house)

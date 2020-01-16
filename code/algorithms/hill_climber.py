@@ -19,30 +19,34 @@ from time import time
 from classes.structure import House
 
 
-def hill_climber(area, iterations):
+def hill_climber(area):
 
     start = time()
 
     compare_area_worth = area.calc_worth_area()
 
-    counter = 1
+    # counter = 1
 
-    for i in range(iterations):
+    for i in range(1000):
 
-        print(counter)
+        # print(counter)
 
         hill_climber_once(area)
 
-        if compare_area_worth == area.calc_worth_area():
+        worth = area.calc_worth_area()
+
+        if compare_area_worth < worth:
+            compare_area_worth = worth
+        else:
             break
         
-        counter += 1
+        # counter += 1
 
     end = time()
 
     print(f"Runtime hill climber: {end - start}")
     
-    print(f"Best worth: {area.calc_worth_area()}")
+    print(f"Best worth: {worth}")
     
     area.plot_area()
 
@@ -82,7 +86,7 @@ def hill_climber_once(area):
                 if area.check_valid(house, move[0], move[1]):
 
                     # Place the house in the new coordinates and check if the worth is the highest
-                    place_house_hillclimbing(area, house, move, move_steps)
+                    place_house_hillclimbing(area, house, move, house.horizontal)
                     worth = area.calc_worth_area()
                     if worth > best_worth:
                         best_worth = worth
@@ -100,11 +104,10 @@ def hill_climber_once(area):
     #     print(h)
 
 
-def place_house_hillclimbing(area, house, move, move_steps):
+def place_house_hillclimbing(area, house, bottom_left_cor, horizontal):
 
-    house.bottom_left_cor = move
-    house.top_right_cor = [move[0] + house.width, move[1] + house.height]
-    update_coordinates(area, house)
+    house.set_coordinates(bottom_left_cor, horizontal)
+    area.update_distances(house)  
 
 def place_house_restore(area, house, bottom_left_cor, top_right_cor):
     

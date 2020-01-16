@@ -13,11 +13,12 @@ from matplotlib.ticker import PercentFormatter
 from classes.area import Area
 from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
+from algorithms.greedy_random import place_housesgreedyrandom
 
 
-ALGORITHM = "random"
+ALGORITHM = "greedy_random"
 NEIGHBOURHOOD = "wijk2"
-HOUSES = 20
+HOUSES = 10
 ITERATIONS = 1000
 
 def main():
@@ -35,7 +36,7 @@ def algorithm(area, algorithm_name):
         place_housesgreedy(area)
 
     elif algorithm_name == "greedy_random":
-        greedy_random(area)
+        place_housesgreedyrandom(area)
 
     else:
         raise Exception("Invalid algorithm name")

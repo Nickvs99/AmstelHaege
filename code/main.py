@@ -22,7 +22,7 @@ def main():
     
     # area.make_csv_output()
 
-    hill_climber(area, 100)
+    hill_climber(area)
 
 def algorithm(area, algorithm_name):
 
@@ -45,8 +45,8 @@ def algorithm(area, algorithm_name):
 
     print(f"Runtime: {end - start}")
     print(f"Worth: {area.calc_worth_area()}")
-    for h in area.structures["House"]:
-        print(h)
+    # for h in area.structures["House"]:
+    #     print(h)
     
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

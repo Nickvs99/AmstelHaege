@@ -9,8 +9,11 @@ def greedy(area, house):
     best_worth = 0
     best_x = 0
     best_y = 0
+    print(best_x)
+    print(best_y)
 
     # Checks place for house
+
     min_dist = min(house.width, house.height)
     for i in range(100):
         x = int(random.random() * (area.width - min_dist + 1))

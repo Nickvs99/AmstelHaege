@@ -6,9 +6,9 @@ from algorithms.greedy_random import place_housesgreedyrandom
 from algorithms.hill_climber import hill_climber
 from time import time
 
-ALGORITHM = "greedy"
+ALGORITHM = "greedy_random"
 NEIGHBOURHOOD = "wijk2"
-HOUSES = 20
+HOUSES = 40
 
 def main():
 

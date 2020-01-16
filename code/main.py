@@ -16,11 +16,11 @@ from algorithms.hill_climber_steps import hill_climber_steps
 
 ALGORITHM = "greedy_random"
 NEIGHBOURHOOD = "wijk2"
-HOUSES = 20
+HOUSES = 60
 
 def main():
 
-    set_random_seed()
+    set_random_seed(0.3198218894314162)
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
@@ -55,7 +55,7 @@ def algorithm(area, algorithm_name):
     end = time()
 
     # print(f"Runtime: {end - start}")
-    # print(f"Worth: {area.calc_worth_area()}")
+    print(f"Worth: {area.calc_worth_area()}")
     # for h in area.structures["House"]:
     #     print(h)
 
@@ -65,7 +65,7 @@ def set_random_seed(r = random.random()):
 
     random.seed(r)
 
-    # print(f"Seed: {r}")
+    print(f"Seed: {r}")
 
     return r
 

@@ -13,6 +13,8 @@ def hill_climber_steps(area):
 
     start = time()
 
+    counter = 1
+
     compare_area_worth = area.calc_worth_area()
 
     for i in range(1000):
@@ -24,7 +26,10 @@ def hill_climber_steps(area):
         if compare_area_worth < worth:
             compare_area_worth = worth
         else:
+            print(counter)
             break
+
+        counter += 1
 
     end = time()
 

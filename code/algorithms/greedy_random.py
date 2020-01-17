@@ -6,18 +6,19 @@ import random
 from classes.structure import House
 
 def greedy(area, house):
+
+    """ Checks best random location for house over multiple iterations. """
     best_worth = 0
     best_x = 0
     best_y = 0
-    print(best_x)
-    print(best_y)
 
     # Checks place for house
-
     min_dist = min(house.width, house.height)
     for i in range(100):
         x = int(random.random() * (area.width - min_dist + 1))
         y = int(random.random() * (area.height - min_dist + 1))
+
+        # Checks house placement horizontally
         house.set_coordinates([x,y], True)
         if area.check_valid(house, x, y):
             area.update_distances(house)
@@ -30,10 +31,12 @@ def greedy(area, house):
                 best_y = y
                 best_orientation = True
 
+        # Checks house placement vertically
         house.set_coordinates([x,y], False)
         if area.check_valid(house, x, y):
             area.update_distances(house)
             worth = area.calc_worth_area()
+            
             # Selects best place for house
             if worth > best_worth:
                 best_worth = worth
@@ -41,6 +44,7 @@ def greedy(area, house):
                 best_y = y
                 best_orientation = False
 
+    # Places house on best spot
     house.set_coordinates([best_x,best_y], best_orientation)
     area.update_distances(house)
 

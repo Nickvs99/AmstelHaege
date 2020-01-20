@@ -211,14 +211,14 @@ class Area():
 
         # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))
-        path = os.path.join(my_path, "..\..\csv-output\output.csv\\")
+        path = os.path.join(my_path, "..\..\csv-output\output.csv")
 
         # Open the current output.csv
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
 
             # (Over)write each line of house_list into the csv-file
-            for house in house_list:
+            for house in csv_output_list:
                 wr.writerow(house)
     
     def update_distances(self, house):

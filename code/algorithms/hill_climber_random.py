@@ -8,7 +8,7 @@ import random
 def hill_climber_random(area):
     place_housesgreedyrandom(area)
     worth_global = area.calc_worth_area()
-    area.plot_area()
+    area.plot_area("test", "test", "test")
     worth = 0
 
 

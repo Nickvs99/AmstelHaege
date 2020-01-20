@@ -14,8 +14,8 @@ from algorithms.hill_climber_random import hill_climber_random
 from algorithms.hill_climber_steps import hill_climber_steps
 
 
-ALGORITHM = "greedy"
-NEIGHBOURHOOD = "wijk1"
+ALGORITHM = "random"
+NEIGHBOURHOOD = "wijk2"
 HOUSES = 20
 
 def main():

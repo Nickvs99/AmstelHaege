@@ -27,7 +27,7 @@ from classes.area import Area
 
 POPULATION = 50
 EVOLVE_ITERATIONS = 200
-STALE_COUNTER = 20
+STALE_COUNTER = 1
 
 MOVE_RATE = 0.3
 ORIENTATION_RATE = 0.1
@@ -130,7 +130,8 @@ class Individual(Area):
             house.set_coordinates([initial_x2, initial_y2], initial_orientation2)
             house2.set_coordinates([initial_x, initial_y], initial_orientation)
 
-            if not (self.area.check_valid(house, initial_x2, initial_y2) or self.area.check_valid(house2, initial_x, initial_y)):
+            # TODO this line fucks things up
+            if not (self.area.check_valid(house, initial_x2, initial_y2) and self.area.check_valid(house2, initial_x, initial_y)):
 
                 # reset houses if not valid
                 house.set_coordinates([initial_x, initial_y], initial_orientation)
@@ -150,7 +151,7 @@ def evolution(area):
     individuals = []
     for i in range(POPULATION):
         copy_area = copy.deepcopy(area)
-        place_housesgreedyrandom(copy_area)
+        random_placement(copy_area)
         individuals.append(Individual(copy_area))
     
     # When initial method is greedy
@@ -170,7 +171,8 @@ def evolution(area):
     stale_counter = 0
 
     i = 0
-    while stale_counter < STALE_COUNTER:
+    # while stale_counter < STALE_COUNTER:
+    while i < 10:
         print("Generaton: ", i, best_worths[-1], avg_worths[-1])
 
         individuals = evolve(individuals)
@@ -195,10 +197,11 @@ def evolution(area):
     plt.plot(best_worths)   
     plt.show()
 
-    for h in get_best_individual(individuals).area.structures["House"]:
-        print(h)
 
-    return get_best_individual(individuals).area
+    # Copy all values to the original area. Now main can do all of its operations on the best area
+    area.structures = get_best_individual(individuals).area.structures
+    for h in area.structures["House"]:
+        area.update_distances(h)
 
 def evolve(individuals):
     """ Evolve the population one generation further."""    

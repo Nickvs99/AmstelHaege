@@ -16,7 +16,7 @@ def main():
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
-    area = algorithm(area, ALGORITHM)
+    algorithm(area, ALGORITHM)
 
     area.plot_area()
     
@@ -37,9 +37,7 @@ def algorithm(area, algorithm_name):
         place_housesgreedyrandom(area)
     
     elif algorithm_name == "evolution":
-        area = evolution(area)
-        return area
-
+        evolution(area)
     else:
         raise Exception("Invalid algorithm name")
 

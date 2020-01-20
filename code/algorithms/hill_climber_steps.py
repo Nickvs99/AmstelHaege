@@ -44,6 +44,8 @@ def hill_climber_steps(area, neighbourhood, houses):
     
     area.plot_area(neighbourhood, houses, "Hill Climber (steps)")
 
+    area.make_csv_output()
+
 def hill_climber_once(area):
     """ 
     Moves each house object seperatly and stores the coordinates with the best area worth.

@@ -14,9 +14,11 @@ from algorithms.hill_climber_random import hill_climber_random
 from algorithms.hill_climber_steps import hill_climber_steps
 
 
-ALGORITHM = "greedy"
-NEIGHBOURHOOD = "wijk2"
 HOUSES = 20
+NEIGHBOURHOOD = "wijk2"
+ALGORITHM = "random"
+HILL_CLIMBER = "hill_climber_steps"
+
 
 def main():
 
@@ -30,9 +32,8 @@ def main():
     
     area.make_csv_output()
 
-    hill_climber_steps(area, NEIGHBOURHOOD, HOUSES)
-    
-    area.make_csv_output()
+    hill_climber(area, HILL_CLIMBER)
+
 
 def algorithm(area, algorithm_name):
 
@@ -60,6 +61,14 @@ def algorithm(area, algorithm_name):
     # print(f"Worth: {area.calc_worth_area()}")
     # for h in area.structures["House"]:
     #     print(h)
+
+def hill_climber(area, hill_climber_name):
+
+    if hill_climber_name == "hill_climber_steps":
+        hill_climber_steps(area, NEIGHBOURHOOD, HOUSES)
+
+    elif hill_climber_name == "hill_climber_random":
+        hill_climber_random(area)
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

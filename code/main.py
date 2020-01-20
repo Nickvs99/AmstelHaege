@@ -12,7 +12,7 @@ HOUSES = 20
 
 def main():
 
-    set_random_seed(0.1703509274952969)
+    set_random_seed()
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 

@@ -11,7 +11,7 @@ Step Three: Repeat the following regenerational steps until termination:
     Select the best-fit individuals for reproduction. (Parents)
     Breed new individuals through crossover and mutation operations to give birth to offspring.
     Evaluate the individual fitness of new individuals.
-    TODO Replace least-fit population with new individuals.
+    Replace least-fit population with new individuals.
 
 """
 
@@ -27,10 +27,11 @@ from classes.area import Area
 
 POPULATION = 50
 EVOLVE_ITERATIONS = 200
-STALE_COUNTER = 1
+STALE_COUNTER = 20
 
 MOVE_RATE = 0.3
-ORIENTATION_RATE = 0.2
+ORIENTATION_RATE = 0.1
+SWAP_RATE = 0.1
 
 class Individual(Area):
     """ An individual from the population. Stores an area object and the worth and fitness values."""
@@ -108,8 +109,39 @@ class Individual(Area):
             
             self.area.update_distances(house)
 
+        # Swap houses
+        for house in self.area.structures["House"]:
+            initial_x = house.bottom_left_cor[0]
+            initial_y = house.bottom_left_cor[1]
+            initial_orientation = house.horizontal
+
+            r = random.random()
+            if r > ORIENTATION_RATE:
+                continue
+
+            house2 = random.choice(self.area.structures["House"])
+            initial_x2 = house2.bottom_left_cor[0]
+            initial_y2 = house2.bottom_left_cor[1]
+            initial_orientation2 = house2.horizontal
+            if house == house2:
+                continue
+
+            # Swap the two houses, if the swap is not valid, nothing happens.
+            house.set_coordinates([initial_x2, initial_y2], initial_orientation2)
+            house2.set_coordinates([initial_x, initial_y], initial_orientation)
+
+            if not (self.area.check_valid(house, initial_x2, initial_y2) or self.area.check_valid(house2, initial_x, initial_y)):
+
+                # reset houses if not valid
+                house.set_coordinates([initial_x, initial_y], initial_orientation)
+                house2.set_coordinates([initial_x2, initial_y2], initial_orientation2)
+
+            self.area.update_distances(house)
+            self.area.update_distances(house2)
+
         self.calc_fitness()
 
+    
 def evolution(area):
     """ The main program. """
 
@@ -162,6 +194,9 @@ def evolution(area):
     plt.plot(avg_worths)
     plt.plot(best_worths)   
     plt.show()
+
+    for h in get_best_individual(individuals).area.structures["House"]:
+        print(h)
 
     return get_best_individual(individuals).area
 

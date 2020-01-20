@@ -9,7 +9,7 @@ from time import time
 from classes.structure import House
 
 
-def hill_climber_steps(area, neighbourhood, houses, algorithm):
+def hill_climber_steps(area, neighbourhood, houses):
     """ 
     Iterates over single hill climbers and returns the area with the highest worth.
     """
@@ -55,7 +55,6 @@ def hill_climber_once(area):
 
     for house in area.structures["House"]:
 
-        # store house coordinates
         saved_bottom_left = house.bottom_left_cor
         saved_orientation = house.horizontal
 

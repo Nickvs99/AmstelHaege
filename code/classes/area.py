@@ -61,6 +61,8 @@ class Area():
                     water.set_corners()
 
                     self.structures["Water"].append(water)
+
+                    water_count += 1
         
 
     def fill_area(self, area):
@@ -191,7 +193,7 @@ class Area():
     def make_csv_output_list(self):
         """ Stores house-coordinates in a nested list """
 
-        house_list = [['structure','bottom_left_xy','top_right_xy','type']]
+        csv_output_list = [['structure','bottom_left_xy','top_right_xy','type']]
 
         for key in self.structures:
             for structure in self.structures[key]:
@@ -200,10 +202,10 @@ class Area():
                 bottom_left_xy = str(structure.bottom_left_cor[0]) + ',' + str(structure.bottom_left_cor[1])
                 top_right_xy = str(structure.top_right_cor[0]) + ',' + str(structure.top_right_cor[1])
 
-                # Append values to the house_list
-                house_list.append([structure.name,bottom_left_xy,top_right_xy,structure.type])
+                # Append values to the csv_output_list
+                csv_output_list.append([structure.name,bottom_left_xy,top_right_xy,structure.type])
 
-        return house_list
+        return csv_output_list
 
     def csv_output(self, csv_output_list):
 
@@ -218,8 +220,8 @@ class Area():
             wr = csv.writer(myfile)
 
             # (Over)write each line of house_list into the csv-file
-            for house in csv_output_list:
-                wr.writerow(house)
+            for structure in csv_output_list:
+                wr.writerow(structure)
     
     def update_distances(self, house):
         """ Update the distances."""

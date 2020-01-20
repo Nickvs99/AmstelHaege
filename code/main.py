@@ -15,7 +15,7 @@ from algorithms.hill_climber_steps import hill_climber_steps
 
 
 ALGORITHM = "greedy"
-NEIGHBOURHOOD = "wijk1"
+NEIGHBOURHOOD = "wijk2"
 HOUSES = 20
 
 def main():
@@ -30,7 +30,9 @@ def main():
     
     area.make_csv_output()
 
-    hill_climber_steps(area, NEIGHBOURHOOD, HOUSES, ALGORITHM)
+    hill_climber_steps(area, NEIGHBOURHOOD, HOUSES)
+    
+    area.make_csv_output()
 
 def algorithm(area, algorithm_name):
 
@@ -56,8 +58,8 @@ def algorithm(area, algorithm_name):
 
     print(f"Runtime original: {end - start}")
     # print(f"Worth: {area.calc_worth_area()}")
-    for h in area.structures["House"]:
-        print(h)
+    # for h in area.structures["House"]:
+    #     print(h)
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.
@@ -65,7 +67,7 @@ def set_random_seed(r = random.random()):
 
     random.seed(r)
 
-    print(f"Seed original: {r}")
+    print(f"Seed: {r}")
 
     return r
 

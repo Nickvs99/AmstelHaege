@@ -2,13 +2,13 @@
 Short description of the algorithm
 """
 from algorithms.greedy_random import place_housesgreedyrandom
+from algorithms.greedy_random import place_housegreedyrandom
 from classes.structure import House
 import random
 
 def hill_climber_random(area):
     place_housesgreedyrandom(area)
     worth_global = area.calc_worth_area()
-    area.plot_area()
     worth = 0
 
 

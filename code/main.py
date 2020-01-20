@@ -14,10 +14,11 @@ from algorithms.hill_climber_random import hill_climber_random
 from algorithms.hill_climber_steps import hill_climber_steps
 
 
-HOUSES = 20
+HOUSES = 10
 NEIGHBOURHOOD = "wijk2"
 ALGORITHM = "random"
-HILL_CLIMBER = "hill_climber_steps"
+# HILL_CLIMBER = "hill_climber_steps"
+HILL_CLIMBER = None
 
 
 def main():
@@ -30,10 +31,13 @@ def main():
 
     area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
     
-    area.make_csv_output()
+    area.make_csv_output(HILL_CLIMBER)
 
     hill_climber(area, HILL_CLIMBER)
 
+    area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
+    
+    area.make_csv_output(HILL_CLIMBER)
 
 def algorithm(area, algorithm_name):
 
@@ -49,23 +53,20 @@ def algorithm(area, algorithm_name):
     elif algorithm_name == "greedy_random":
         place_housesgreedyrandom(area)
 
-    elif algorithm_name == "hill_climber_random":
-        hill_climber_random(area)
-
     else:
         raise Exception("Invalid algorithm name")
 
     end = time()
 
-    print(f"Runtime original: {end - start}")
-    # print(f"Worth: {area.calc_worth_area()}")
+    print(f"Runtime: {end - start}")
+    
     # for h in area.structures["House"]:
     #     print(h)
 
 def hill_climber(area, hill_climber_name):
 
     if hill_climber_name == "hill_climber_steps":
-        hill_climber_steps(area, NEIGHBOURHOOD, HOUSES)
+        hill_climber_steps(area)
 
     elif hill_climber_name == "hill_climber_random":
         hill_climber_random(area)

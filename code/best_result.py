@@ -69,6 +69,7 @@ def best_result():
     
 def show_hist(area_worths): 
 
+    # TODO fitting through histogram
     num_bins = 50
     n, bins, patches = plt.hist(area_worths, num_bins, facecolor='blue', edgecolor='black', alpha=0.5)
 

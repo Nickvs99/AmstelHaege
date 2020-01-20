@@ -9,7 +9,7 @@ from time import time
 from classes.structure import House
 
 
-def hill_climber_steps(area, neighbourhood, houses):
+def hill_climber_steps(area):
     """ 
     Iterates over single hill climbers and returns the area with the highest worth.
     """
@@ -42,9 +42,9 @@ def hill_climber_steps(area, neighbourhood, houses):
     # for h in area.structures["House"]:
     #     print(h)
     
-    area.plot_area(neighbourhood, houses, "Hill Climber (steps)")
+    # area.plot_area(neighbourhood, houses, algorithm)
 
-    area.make_csv_output()
+    # area.make_csv_output(True)
 
 def hill_climber_once(area):
     """ 

@@ -42,7 +42,7 @@ def hill_climber_steps(area, neighbourhood, houses, algorithm):
     # for h in area.structures["House"]:
     #     print(h)
     
-    area.plot_area(neighbourhood, houses, algorithm)
+    area.plot_area(neighbourhood, houses, "Hill Climber (steps)")
 
 def hill_climber_once(area):
     """ 

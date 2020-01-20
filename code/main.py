@@ -12,13 +12,13 @@ HOUSES = 20
 
 def main():
 
-    set_random_seed()
+    set_random_seed(0.1703509274952969)
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
-    algorithm(area, ALGORITHM)
+    area = algorithm(area, ALGORITHM)
 
-    # area.plot_area()
+    area.plot_area()
     
     # area.make_csv_output()
 
@@ -37,7 +37,8 @@ def algorithm(area, algorithm_name):
         place_housesgreedyrandom(area)
     
     elif algorithm_name == "evolution":
-        evolution(area)
+        area = evolution(area)
+        return area
 
     else:
         raise Exception("Invalid algorithm name")
@@ -45,7 +46,7 @@ def algorithm(area, algorithm_name):
     end = time()
 
     print(f"Runtime: {end - start}")
-    # print(f"Worth: {area.calc_worth_area()}")
+    print(f"Worth: {area.calc_worth_area()}")
     # for h in area.structures["House"]:
     #     print(h)
     

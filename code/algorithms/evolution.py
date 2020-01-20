@@ -22,11 +22,15 @@ import matplotlib.pyplot as plt
 
 from algorithms.greedy_random import place_housesgreedyrandom
 from algorithms.random import random_placement
+from algorithms.greedy import place_housesgreedy
 from classes.area import Area
 
-MUTATE_RATE = 0.1
 POPULATION = 50
-EVOLVE_ITERATIONS = 100
+EVOLVE_ITERATIONS = 200
+STALE_COUNTER = 1
+
+MOVE_RATE = 0.3
+ORIENTATION_RATE = 0.2
 
 class Individual(Area):
     """ An individual from the population. Stores an area object and the worth and fitness values."""
@@ -52,20 +56,22 @@ class Individual(Area):
         - move coordinates
         """
 
-        r = random.random()
-
+        # Move houses around
         for house in self.area.structures["House"]:
-
-            r = random.random()
-            if r > 0.3:
-                continue
-            
             initial_x = house.bottom_left_cor[0]
             initial_y = house.bottom_left_cor[1]
+            initial_orientation = house.horizontal
+
+            # TODO seperate functions
+            r = random.random()
+            if r > MOVE_RATE:
+                continue
+            
             while_count = 0
             while while_count < 1000:
 
                 # Random coordinates shift
+                # TODO small changes should have a higher probability than larger changes
                 diff_x = int(random.random() * 10 - 5)
                 diff_y = int(random.random() * 10 - 5)
 
@@ -79,21 +85,48 @@ class Individual(Area):
                     break
 
                 while_count += 1
+            else:
+                house.set_coordinates([initial_x, initial_y], initial_orientation)
+            
+            self.area.update_distances(house)
+
+        # Change orientation of houses
+        for house in self.area.structures["House"]:
+            initial_x = house.bottom_left_cor[0]
+            initial_y = house.bottom_left_cor[1]
+            initial_orientation = house.horizontal
+
+            r = random.random()
+            if r > ORIENTATION_RATE:
+                continue
+
+            house.set_coordinates([initial_x, initial_y], random.choice([True, False]))
+
+            if not self.area.check_valid(house, initial_x, initial_y):
+
+                house.set_coordinates([initial_x, initial_y], initial_orientation)
+            
             self.area.update_distances(house)
 
         self.calc_fitness()
-        
 
 def evolution(area):
     """ The main program. """
 
     # Create an initial set of solutions with the random_greedy algorithm
-    print("creating initial set of solutions...")
+    print("Creating initial set of solutions...")
     individuals = []
     for i in range(POPULATION):
         copy_area = copy.deepcopy(area)
-        random_placement(copy_area)
+        place_housesgreedyrandom(copy_area)
         individuals.append(Individual(copy_area))
+    
+    # When initial method is greedy
+    # individuals = []
+    # copy_area = copy.deepcopy(area)
+    # place_housesgreedy(copy_area)
+    # for i in range(POPULATION):
+    #     individuals.append(Individual(copy.deepcopy(copy_area)))
     
     # Sort individuals
     individuals.sort(key=lambda x: x.worth, reverse=True)
@@ -104,11 +137,9 @@ def evolution(area):
     best_individual = None
     stale_counter = 0
 
-    print("Evolve")
     i = 0
-    # while stale_counter < 5:
-    while i < 100:
-        print("Generaton: ", i, best_worths[-1])
+    while stale_counter < STALE_COUNTER:
+        print("Generaton: ", i, best_worths[-1], avg_worths[-1])
 
         individuals = evolve(individuals)
 
@@ -127,14 +158,12 @@ def evolution(area):
 
     print("Worth: ", best_worths[-1])
 
-    # Plot the progress of the population
+    # # Plot the progress of population
     plt.plot(avg_worths)
-    plt.plot(best_worths)
-    
+    plt.plot(best_worths)   
     plt.show()
 
-    # Set area to the best area. Then the main function can use it further
-    area = get_best_individual(individuals).area
+    return get_best_individual(individuals).area
 
 def evolve(individuals):
     """ Evolve the population one generation further."""    
@@ -156,8 +185,8 @@ def evolve(individuals):
         cum_fitness += individual.norm_fitness
         individual.cum_fitness = cum_fitness
 
-    mutations = []
     # Fill the new generation
+    mutations = []
     for i in range(POPULATION):
         r = random.random()
 

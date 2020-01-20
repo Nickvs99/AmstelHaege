@@ -14,23 +14,23 @@ from algorithms.hill_climber_random import hill_climber_random
 from algorithms.hill_climber_steps import hill_climber_steps
 
 
-ALGORITHM = "greedy_random"
-NEIGHBOURHOOD = "wijk2"
-HOUSES = 60
+ALGORITHM = "greedy"
+NEIGHBOURHOOD = "wijk1"
+HOUSES = 20
 
 def main():
 
-    set_random_seed(0.3198218894314162)
+    set_random_seed()
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
     algorithm(area, ALGORITHM)
 
-    area.plot_area()
+    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
     
     area.make_csv_output()
 
-    hill_climber_steps(area)
+    hill_climber_steps(area, NEIGHBOURHOOD, HOUSES, ALGORITHM)
 
 def algorithm(area, algorithm_name):
 
@@ -54,8 +54,8 @@ def algorithm(area, algorithm_name):
 
     end = time()
 
-    # print(f"Runtime: {end - start}")
-    print(f"Worth: {area.calc_worth_area()}")
+    print(f"Runtime original: {end - start}")
+    # print(f"Worth: {area.calc_worth_area()}")
     # for h in area.structures["House"]:
     #     print(h)
 
@@ -65,7 +65,7 @@ def set_random_seed(r = random.random()):
 
     random.seed(r)
 
-    print(f"Seed: {r}")
+    print(f"Seed original: {r}")
 
     return r
 

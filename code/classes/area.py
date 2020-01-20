@@ -81,7 +81,7 @@ class Area():
                     except:
                         print(x, y)
 
-    def plot_area(self):
+    def plot_area(self, neighbourhood, houses, algorithm):
         """
         Plots the area.
         """
@@ -92,6 +92,8 @@ class Area():
         colorscheme = matplotlib.colors.ListedColormap(['#73b504', '#88AAFF', '#ee4035', '#ffb455', '#b266b2'])
         plt.imshow(area, cmap = colorscheme)
         plt.gca().invert_yaxis()
+        plt.axis('off')
+        plt.title(f"{neighbourhood.capitalize()} | {houses} Houses | {algorithm.capitalize()} | Area Worth = {self.calc_worth_area()}")
         plt.show()
 
     def check_valid(self, test_house, x, y):

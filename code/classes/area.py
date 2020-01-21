@@ -152,7 +152,7 @@ class Area():
 
         total_worth = 0
         
-        for  house in self.structures["House"]:
+        for house in self.structures["House"]:
             total_worth += self.calc_worth_house(house)
 
         return total_worth
@@ -182,8 +182,6 @@ class Area():
 
         # Store values csv_output_list
         csv_output_list = self.make_csv_output_list()
-
-        print(csv_output_list)
 
         # Use csv_output_list to make the csv-output
         # self.csv_output(csv_output_list)

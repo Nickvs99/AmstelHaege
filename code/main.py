@@ -1,10 +1,18 @@
+"""
+main.py
+"""
+
+
 import random
+from time import time
+
 from classes.area import Area
 from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
 from algorithms.greedy_random import place_housesgreedyrandom
+from algorithms.hill_climber_random import hill_climber_random
+from algorithms.hill_climber_steps import hill_climber_steps
 from algorithms.evolution import evolution
-from time import time
 
 ALGORITHM = "evolution"
 NEIGHBOURHOOD = "wijk2"
@@ -22,11 +30,12 @@ def main():
     
     # area.make_csv_output()
 
+    hill_climber_steps(area)
+
 def algorithm(area, algorithm_name):
 
     start = time()
 
-    # TODO switch case statement
     if algorithm_name == "random":
         random_placement(area)
 
@@ -38,6 +47,10 @@ def algorithm(area, algorithm_name):
     
     elif algorithm_name == "evolution":
         evolution(area)
+
+    elif algorithm_name == "hill_climber_random":
+        hill_climber_random(area)
+
     else:
         raise Exception("Invalid algorithm name")
 
@@ -55,6 +68,8 @@ def set_random_seed(r = random.random()):
     random.seed(r)
 
     print(f"Seed: {r}")
+
+    return r
 
 
 if __name__ == "__main__":

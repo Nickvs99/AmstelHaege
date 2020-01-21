@@ -11,10 +11,12 @@ from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
 from algorithms.greedy_random import place_housesgreedyrandom
 from algorithms.hill_climber_random import hill_climber_random
+from algorithms.hill_climber_random_random import hill_climber_random_random
 from algorithms.hill_climber_steps import hill_climber_steps
 from algorithms.evolution import evolution
 
-ALGORITHM = "evolution"
+
+ALGORITHM = "hill_climber_random_random"
 NEIGHBOURHOOD = "wijk2"
 HOUSES = 20
 
@@ -27,8 +29,8 @@ def main():
     algorithm(area, ALGORITHM)
 
     area.plot_area()
-    
-    # area.make_csv_output()
+
+    area.make_csv_output()
 
     hill_climber_steps(area)
 
@@ -50,6 +52,8 @@ def algorithm(area, algorithm_name):
 
     elif algorithm_name == "hill_climber_random":
         hill_climber_random(area)
+    elif algorithm_name == "hill_climber_random_random":
+        hill_climber_random_random(area)
 
     else:
         raise Exception("Invalid algorithm name")

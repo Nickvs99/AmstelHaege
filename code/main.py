@@ -14,6 +14,8 @@ from algorithms.hill_climber_random import hill_climber_random
 from algorithms.hill_climber_random_random import hill_climber_random_random
 from algorithms.hill_climber_steps import hill_climber_steps
 from algorithms.evolution import evolution
+from algorithms.simulated_annealing import simulated_annealing
+
 
 
 HOUSES = 10
@@ -54,7 +56,7 @@ def algorithm(area, algorithm_name):
 
     elif algorithm_name == "greedy_random":
         place_housesgreedyrandom(area)
-    
+
     elif algorithm_name == "evolution":
         evolution(area)
 
@@ -77,10 +79,12 @@ def hill_climber(area, hill_climber_name):
 
     elif hill_climber_name == "hill_climber_random":
         hill_climber_random(area)
-        
+
     elif hill_climber_name == "hill_climber_random_random":
         hill_climber_random_random(area)
 
+    elif hill_climber_name == "simulated_annealing":
+        simulated_annealing(area)
     else:
         raise Exception("Invalid hill climber name")
 
@@ -90,7 +94,7 @@ def hill_climber(area, hill_climber_name):
 
     # for h in area.structures["House"]:
     #     print(h)
-    
+
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

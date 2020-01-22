@@ -14,8 +14,6 @@ def hill_climber_steps(area):
     Iterates over single hill climbers and returns the area with the highest worth.
     """
 
-    start = time()
-
     counter = 1
 
     compare_area_worth = area.calc_worth_area()
@@ -33,18 +31,10 @@ def hill_climber_steps(area):
             break
 
         counter += 1
-
-    end = time()
-
-    print(f"Runtime hill climber (steps): {end - start}")
     
     # print(f"Best worth: {worth}")
     # for h in area.structures["House"]:
     #     print(h)
-    
-    # area.plot_area(neighbourhood, houses, algorithm)
-
-    # area.make_csv_output(True)
 
 def hill_climber_once(area):
     """ 

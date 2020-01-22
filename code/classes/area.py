@@ -181,14 +181,14 @@ class Area():
 
         return True
 
-    def make_csv_output(self, hill_climber):
+    def make_csv_output(self):
         """ Function which commands to update the output """
 
         # Store values csv_output_list
         csv_output_list = self.make_csv_output_list()
 
         # Use csv_output_list to make the csv-output
-        self.csv_output(csv_output_list, hill_climber)
+        self.csv_output(csv_output_list)
     
     def make_csv_output_list(self):
         """ Stores house-coordinates in a nested list """
@@ -207,17 +207,14 @@ class Area():
 
         return csv_output_list
 
-    def csv_output(self, csv_output_list, hill_climber):
+    def csv_output(self, csv_output_list):
 
         """ (Over)writes the houselist into the ouput.csv """
 
         # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))
 
-        if hill_climber is not None:
-            path = os.path.join(my_path, "..\..\csv-output\output_hill_climber.csv")
-        else:
-            path = os.path.join(my_path, "..\..\csv-output\output.csv")
+        path = os.path.join(my_path, "..\..\csv-output\output.csv")
 
         # Open the current output.csv
         with open(path, 'w', newline='') as myfile:

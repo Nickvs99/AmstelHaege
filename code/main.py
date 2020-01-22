@@ -17,8 +17,8 @@ from algorithms.hill_climber_steps import hill_climber_steps
 HOUSES = 10
 NEIGHBOURHOOD = "wijk2"
 ALGORITHM = "random"
-# HILL_CLIMBER = "hill_climber_steps"
-HILL_CLIMBER = None
+HILL_CLIMBER = "hill_climber_steps"
+# HILL_CLIMBER = None
 
 
 def main():
@@ -31,13 +31,15 @@ def main():
 
     area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
     
-    area.make_csv_output(HILL_CLIMBER)
+    area.make_csv_output()
 
-    hill_climber(area, HILL_CLIMBER)
+    if HILL_CLIMBER:
 
-    area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
-    
-    area.make_csv_output(HILL_CLIMBER)
+        hill_climber(area, HILL_CLIMBER)
+
+        area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
+        
+        area.make_csv_output()
 
 def algorithm(area, algorithm_name):
 
@@ -58,18 +60,27 @@ def algorithm(area, algorithm_name):
 
     end = time()
 
-    print(f"Runtime: {end - start}")
+    print(f"Runtime {algorithm_name}: {end - start}")
     
     # for h in area.structures["House"]:
     #     print(h)
 
 def hill_climber(area, hill_climber_name):
 
+    start = time()
+
     if hill_climber_name == "hill_climber_steps":
         hill_climber_steps(area)
 
     elif hill_climber_name == "hill_climber_random":
         hill_climber_random(area)
+
+    else:
+        raise Exception("Invalid hill climber name")
+
+    end = time()
+
+    print(f"Runtime {hill_climber_name}: {end - start}")
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

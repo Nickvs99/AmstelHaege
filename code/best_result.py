@@ -23,9 +23,9 @@ HOUSES = 20
 ITERATIONS = 100
 
 def best_result():
-    """ 
-    Iterates over n amount of random grids and returns 
-    the seed with the highest calucalted worth 
+    """
+    Iterates over n amount of random grids and returns
+    the seed with the highest calucalted worth
     """
     start = time()
 
@@ -34,11 +34,11 @@ def best_result():
     area_worths = []
 
     for i in range(ITERATIONS):
-        
+
         seed = set_random_seed(random.random())
 
         area = Area(NEIGHBOURHOOD, HOUSES)
-    
+
         algorithm(area, ALGORITHM)
 
         area_worth = area.calc_worth_area()
@@ -50,13 +50,13 @@ def best_result():
             best_seed = seed
 
     set_random_seed(best_seed)
-    
+
     area = Area(NEIGHBOURHOOD, HOUSES)
-    
+
     algorithm(area, ALGORITHM)
 
     print(f"Best worth: {best_worth}")
-    
+
     end = time()
 
     print(f"Runtime: {end - start}")
@@ -80,7 +80,7 @@ def show_hist(area_worths):
     plt.gca().yaxis.set_major_formatter(PercentFormatter(ITERATIONS))
 
     plt.show()
-    
+
 
 if __name__ == "__main__":
     best_result()

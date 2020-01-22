@@ -84,3 +84,14 @@ def place_housesgreedyrandom(area):
         greedy(area, house)
 
         print(area.calc_worth_area())
+
+def place_housegreedyrandom(area, house, x, y):
+    """
+    Place a house.
+    """
+
+    house.bottom_left_cor = [x, y]
+    house.top_right_cor = [x + house.width, y + house.height]
+    house.set_corners()
+
+    area.update_distances(house)

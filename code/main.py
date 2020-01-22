@@ -11,7 +11,9 @@ from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
 from algorithms.greedy_random import place_housesgreedyrandom
 from algorithms.hill_climber_random import hill_climber_random
+from algorithms.hill_climber_random_random import hill_climber_random_random
 from algorithms.hill_climber_steps import hill_climber_steps
+from algorithms.evolution import evolution
 
 
 HOUSES = 20
@@ -20,7 +22,6 @@ ALGORITHM = "random"
 HILL_CLIMBER = "hill_climber_steps"
 # HILL_CLIMBER = None
 
-
 def main():
 
     set_random_seed()
@@ -28,10 +29,14 @@ def main():
     area = Area(NEIGHBOURHOOD, HOUSES)
 
     algorithm(area, ALGORITHM)
-
-    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
     
+<<<<<<< HEAD
     # area.make_csv_output()
+=======
+    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
+
+    area.make_csv_output()
+>>>>>>> master
 
     if HILL_CLIMBER:
 
@@ -45,7 +50,6 @@ def algorithm(area, algorithm_name):
 
     start = time()
 
-    # TODO switch case statement
     if algorithm_name == "random":
         random_placement(area)
 
@@ -54,12 +58,15 @@ def algorithm(area, algorithm_name):
 
     elif algorithm_name == "greedy_random":
         place_housesgreedyrandom(area)
+    
+    elif algorithm_name == "evolution":
+        evolution(area)
 
     else:
         raise Exception("Invalid algorithm name")
 
     end = time()
-
+    
     print(f"Runtime {algorithm_name}: {end - start}")
     
     # for h in area.structures["House"]:
@@ -74,6 +81,9 @@ def hill_climber(area, hill_climber_name):
 
     elif hill_climber_name == "hill_climber_random":
         hill_climber_random(area)
+        
+    elif hill_climber_name == "hill_climber_random_random":
+        hill_climber_random_random(area)
 
     else:
         raise Exception("Invalid hill climber name")
@@ -81,6 +91,10 @@ def hill_climber(area, hill_climber_name):
     end = time()
 
     print(f"Runtime {hill_climber_name}: {end - start}")
+
+    # for h in area.structures["House"]:
+    #     print(h)
+    
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

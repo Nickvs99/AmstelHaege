@@ -10,16 +10,17 @@ from time import time
 import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
+from scipy.stats import norm
 from matplotlib.ticker import PercentFormatter
 
 from classes.area import Area
 from main import algorithm, set_random_seed
 
 
-ALGORITHM = "hill_climber_random"
-NEIGHBOURHOOD = "wijk2"
+ALGORITHM = "random"
+NEIGHBOURHOOD = "wijk1"
 HOUSES = 20
-ITERATIONS = 10
+ITERATIONS = 100
 
 def best_result():
     """
@@ -60,14 +61,15 @@ def best_result():
 
     print(f"Runtime: {end - start}")
 
-    area.plot_area()
+    # area.plot_area(int(best_worth))
 
-    show_plot(area_worths)
+    show_hist(area_worths)
 
     return area
+    
+def show_hist(area_worths): 
 
-def show_plot(area_worths):
-
+    # TODO fitting through histogram
     num_bins = 50
     n, bins, patches = plt.hist(area_worths, num_bins, facecolor='blue', edgecolor='black', alpha=0.5)
 

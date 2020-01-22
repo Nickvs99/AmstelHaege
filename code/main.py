@@ -17,9 +17,12 @@ from algorithms.evolution import evolution
 from algorithms.simulated_annealing import simulated_annealing
 
 
-ALGORITHM = "simulated_annealing"
+
+HOUSES = 10
 NEIGHBOURHOOD = "wijk2"
-HOUSES = 20
+ALGORITHM = "random"
+HILL_CLIMBER = "hill_climber_steps"
+# HILL_CLIMBER = None
 
 def main():
 
@@ -28,12 +31,18 @@ def main():
     area = Area(NEIGHBOURHOOD, HOUSES)
 
     algorithm(area, ALGORITHM)
-
-    area.plot_area()
+    
+    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
 
     area.make_csv_output()
 
-    hill_climber_steps(area)
+    if HILL_CLIMBER:
+
+        hill_climber(area, HILL_CLIMBER)
+
+        area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
+        
+        area.make_csv_output()
 
 def algorithm(area, algorithm_name):
 
@@ -51,23 +60,41 @@ def algorithm(area, algorithm_name):
     elif algorithm_name == "evolution":
         evolution(area)
 
-    elif algorithm_name == "hill_climber_random":
-        hill_climber_random(area)
-
-    elif algorithm_name == "hill_climber_random_random":
-        hill_climber_random_random(area)
-
-    elif algorithm_name == "simulated_annealing":
-        simulated_annealing(area)
     else:
         raise Exception("Invalid algorithm name")
 
     end = time()
-
-    print(f"Runtime: {end - start}")
-    print(f"Worth: {area.calc_worth_area()}")
+    
+    print(f"Runtime {algorithm_name}: {end - start}")
+    
     # for h in area.structures["House"]:
     #     print(h)
+
+def hill_climber(area, hill_climber_name):
+
+    start = time()
+
+    if hill_climber_name == "hill_climber_steps":
+        hill_climber_steps(area)
+
+    elif hill_climber_name == "hill_climber_random":
+        hill_climber_random(area)
+
+    elif hill_climber_name == "hill_climber_random_random":
+        hill_climber_random_random(area)
+
+    elif hill_climber_name == "simulated_annealing":
+        simulated_annealing(area)
+    else:
+        raise Exception("Invalid hill climber name")
+
+    end = time()
+
+    print(f"Runtime {hill_climber_name}: {end - start}")
+
+    # for h in area.structures["House"]:
+    #     print(h)
+
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

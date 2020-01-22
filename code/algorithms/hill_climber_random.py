@@ -9,8 +9,8 @@ import random
 def hill_climber_random(area):
     place_housesgreedyrandom(area)
     worth_global = area.calc_worth_area()
-    worth = 0
 
+    worth = 0
 
     for i in range(100):
         if worth < worth_global:

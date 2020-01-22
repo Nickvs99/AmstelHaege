@@ -1,0 +1,14 @@
+structure,bottom_left_xy,top_right_xy,type
+water_0,"0,135","32,180",water
+water_1,"0,0","32,45",water
+water_2,"128,135","160,180",water
+water_3,"128,0","160,45",water
+maison_0,"100,145","110,157",maison
+bungalow_0,"47,101","58,108",bungalow
+bungalow_1,"104,49","115,56",bungalow
+one_person_home_0,"44,156","52,164",one_person_home
+one_person_home_1,"152,77","160,85",one_person_home
+one_person_home_2,"152,123","160,131",one_person_home
+one_person_home_3,"106,94","114,102",one_person_home
+one_person_home_4,"59,51","67,59",one_person_home
+one_person_home_5,"60,7","68,15",one_person_home

@@ -14,9 +14,10 @@ from algorithms.hill_climber_random import hill_climber_random
 from algorithms.hill_climber_random_random import hill_climber_random_random
 from algorithms.hill_climber_steps import hill_climber_steps
 from algorithms.evolution import evolution
+from algorithms.simulated_annealing import simulated_annealing
 
 
-ALGORITHM = "hill_climber_random_random"
+ALGORITHM = "simulated_annealing"
 NEIGHBOURHOOD = "wijk2"
 HOUSES = 20
 
@@ -46,15 +47,18 @@ def algorithm(area, algorithm_name):
 
     elif algorithm_name == "greedy_random":
         place_housesgreedyrandom(area)
-    
+
     elif algorithm_name == "evolution":
         evolution(area)
 
     elif algorithm_name == "hill_climber_random":
         hill_climber_random(area)
+
     elif algorithm_name == "hill_climber_random_random":
         hill_climber_random_random(area)
 
+    elif algorithm_name == "simulated_annealing":
+        simulated_annealing(area)
     else:
         raise Exception("Invalid algorithm name")
 
@@ -64,7 +68,7 @@ def algorithm(area, algorithm_name):
     print(f"Worth: {area.calc_worth_area()}")
     # for h in area.structures["House"]:
     #     print(h)
-    
+
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.
     Use the same seed to get the same results. By default it uses a random seed."""

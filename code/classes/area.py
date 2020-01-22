@@ -61,6 +61,8 @@ class Area():
                     water.set_corners()
 
                     self.structures["Water"].append(water)
+
+                    water_count += 1
         
 
     def fill_area(self, area):
@@ -81,7 +83,7 @@ class Area():
                     except:
                         print(x, y)
 
-    def plot_area(self):
+    def plot_area(self, neighbourhood, houses, algorithm):
         """
         Plots the area.
         """
@@ -92,6 +94,8 @@ class Area():
         colorscheme = matplotlib.colors.ListedColormap(['#73b504', '#88AAFF', '#ee4035', '#ffb455', '#b266b2'])
         plt.imshow(area, cmap = colorscheme)
         plt.gca().invert_yaxis()
+        plt.axis('off')
+        plt.title(f"{neighbourhood.capitalize()} | {houses} Houses | {algorithm.capitalize()} | Area Worth = {self.calc_worth_area()}")
         plt.show()
 
     def check_valid(self, test_house, x, y):
@@ -184,12 +188,12 @@ class Area():
         csv_output_list = self.make_csv_output_list()
 
         # Use csv_output_list to make the csv-output
-        # self.csv_output(csv_output_list)
+        self.csv_output(csv_output_list)
     
     def make_csv_output_list(self):
         """ Stores house-coordinates in a nested list """
 
-        house_list = [['structure','bottom_left_xy','top_right_xy','type']]
+        csv_output_list = [['structure','bottom_left_xy','top_right_xy','type']]
 
         for key in self.structures:
             for structure in self.structures[key]:
@@ -198,10 +202,10 @@ class Area():
                 bottom_left_xy = str(structure.bottom_left_cor[0]) + ',' + str(structure.bottom_left_cor[1])
                 top_right_xy = str(structure.top_right_cor[0]) + ',' + str(structure.top_right_cor[1])
 
-                # Append values to the house_list
-                house_list.append([structure.name,bottom_left_xy,top_right_xy,structure.type])
+                # Append values to the csv_output_list
+                csv_output_list.append([structure.name,bottom_left_xy,top_right_xy,structure.type])
 
-        return house_list
+        return csv_output_list
 
     def csv_output(self, csv_output_list):
 
@@ -209,15 +213,16 @@ class Area():
 
         # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))
-        path = os.path.join(my_path, "..\..\csv-output\output.csv\\")
+
+        path = os.path.join(my_path, "..\..\csv-output\output.csv")
 
         # Open the current output.csv
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
 
             # (Over)write each line of house_list into the csv-file
-            for house in house_list:
-                wr.writerow(house)
+            for structure in csv_output_list:
+                wr.writerow(structure)
     
     def update_distances(self, house):
         """ Update the distances."""

@@ -10,8 +10,9 @@ from classes.structure import House
 
 
 def hill_climber_steps(area):
-
-    start = time()
+    """ 
+    Iterates over single hill climbers and returns the area with the highest worth.
+    """
 
     counter = 1
 
@@ -26,22 +27,19 @@ def hill_climber_steps(area):
         if compare_area_worth < worth:
             compare_area_worth = worth
         else:
-            print(counter)
+            print(f"{counter} iterations needed")
             break
 
         counter += 1
-
-    end = time()
-
-    print(f"Runtime hill climber: {end - start}")
     
-    print(f"Best worth: {worth}")
-    for h in area.structures["House"]:
-        print(h)
-    
-    area.plot_area()
+    # print(f"Best worth: {worth}")
+    # for h in area.structures["House"]:
+    #     print(h)
 
 def hill_climber_once(area):
+    """ 
+    Moves each house object seperatly and stores the coordinates with the best area worth.
+    """
 
     best_worth = 0
 
@@ -49,12 +47,8 @@ def hill_climber_once(area):
 
     for house in area.structures["House"]:
 
-        # store house coordinates
         saved_bottom_left = house.bottom_left_cor
         saved_orientation = house.horizontal
-        
-        x = house.bottom_left_cor[0]
-        y = house.bottom_left_cor[1]
 
         best_bottom_left = house.bottom_left_cor
         best_orientation = house.horizontal
@@ -65,13 +59,13 @@ def hill_climber_once(area):
             for direction in move_directions:
 
                 if direction == "up":
-                    move = [x, y + move_steps]
+                    move = [house.bottom_left_cor[0], house.bottom_left_cor[1] + move_steps]
                 elif direction == "right":
-                    move = [x + move_steps, y]
+                    move = [house.bottom_left_cor[0] + move_steps, house.bottom_left_cor[1]]
                 elif direction == "down":
-                    move = [x, y - move_steps]
+                    move = [house.bottom_left_cor[0], house.bottom_left_cor[1] - move_steps]
                 elif direction == "left":
-                    move = [x - move_steps, y]
+                    move = [house.bottom_left_cor[0] - move_steps, house.bottom_left_cor[1]]
                 
                 # Check if valid the move is valid for both orientations
                 for orientation in [True, False]:
@@ -80,7 +74,7 @@ def hill_climber_once(area):
 
                     if area.check_valid(house, move[0], move[1]):
 
-                        # Place the house in the new coordinates and check if the worth is the highest
+                        # Place the house in the new coordinates and checks highest worth
                         area.update_distances(house)
                         worth = area.calc_worth_area()
                         if worth > best_worth:
@@ -96,6 +90,9 @@ def hill_climber_once(area):
 
 
 def place_house_hillclimbing(area, house, bottom_left_cor, horizontal):
+    """ 
+    Updates coordinates and orientation of the house object and area. 
+    """
 
     house.set_coordinates(bottom_left_cor, horizontal)
     area.update_distances(house)

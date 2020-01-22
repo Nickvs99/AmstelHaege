@@ -15,10 +15,12 @@ Repeat:
 
 import copy
 import random
+import math
 
 import matplotlib.pyplot as plt
 
 from algorithms.greedy_random import place_housesgreedyrandom
+from algorithms.random import random_placement
 from classes.area import Area
 
 POPULATION = 50         # Population size
@@ -33,6 +35,9 @@ SWAP_RATE = 0.1
 # the more likely a good individual will be picked for mutations. This
 # is at the cost of population diversity.
 FITNESS_POWER = 3
+
+# Set SA to True, if you want to add simulated annealing to the algorithm
+SA = False
 
 class Individual(Area):
     """ An individual from the population. Stores an area object and the worth and fitness values."""
@@ -102,7 +107,7 @@ class Individual(Area):
                 house.set_coordinates([initial_x, initial_y], initial_orientation)
             
             self.area.update_distances(house)
-    
+
     def change_orientation(self):
         """
         Mutates the orientation of the houses.
@@ -173,7 +178,7 @@ def evolution(area):
     individuals = []
     for i in range(POPULATION):
         copy_area = copy.deepcopy(area)
-        place_housesgreedyrandom(copy_area)
+        random_placement(copy_area)
         individuals.append(Individual(copy_area))
     
     # Sort individuals
@@ -187,9 +192,8 @@ def evolution(area):
     stale_counter = 0
     generation_count = 0
     
-    # while stale_counter < STALE_COUNTER:
-    while generation_count < 100:
-        print("Generaton: ", generation_count, best_worths[-1], avg_worths[-1])
+    while stale_counter < STALE_COUNTER:
+        print("Generaton: ", generation_count, best_worths[-1], avg_worths[-1], MOVE_RATE)
 
         individuals = evolve(individuals)
 
@@ -205,6 +209,9 @@ def evolution(area):
         best_worths.append(get_best_individual(individuals).worth)
 
         generation_count += 1
+
+        if SA:
+            update_mutate_rates(generation_count)
 
     # # Plot the progress of population
     plt.plot(avg_worths)
@@ -289,3 +296,14 @@ def get_best_individual(individuals):
             best_worth = individual.worth
 
     return best_individual
+
+def update_mutate_rates(generation_count):
+    """ Updates the mutation rates, when simulated annealing is enabled. """
+
+    global MOVE_RATE
+    global SWAP_RATE
+    global ORIENTATION_RATE
+
+    MOVE_RATE = 2 / generation_count + 0.04
+    ORIENTATION_RATE = 2 / generation_count + 0.02
+    SWAP_RATE = 2 / generation_count + 0.02

@@ -14,8 +14,8 @@ from algorithms.hill_climber_random import hill_climber_random
 from algorithms.hill_climber_steps import hill_climber_steps
 
 
-HOUSES = 10
-NEIGHBOURHOOD = "wijk2"
+HOUSES = 20
+NEIGHBOURHOOD = "wijk3"
 ALGORITHM = "random"
 HILL_CLIMBER = "hill_climber_steps"
 # HILL_CLIMBER = None
@@ -31,7 +31,7 @@ def main():
 
     area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
     
-    area.make_csv_output()
+    # area.make_csv_output()
 
     if HILL_CLIMBER:
 

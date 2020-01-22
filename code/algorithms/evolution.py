@@ -18,13 +18,14 @@ import random
 
 import matplotlib.pyplot as plt
 
+from algorithms.random import random_placement
 from algorithms.greedy_random import place_housesgreedyrandom
 from classes.area import Area
 
 POPULATION = 50         # Population size
-STALE_COUNTER = 15      # How many iterations a population is allowed to not grow
+STALE_COUNTER = 10      # How many iterations a population is allowed to not grow
 
-# The mutation rates
+# The initial mutation rates
 MOVE_RATE = 0.3         
 ORIENTATION_RATE = 0.1
 SWAP_RATE = 0.1
@@ -33,6 +34,8 @@ SWAP_RATE = 0.1
 # the more likely a good individual will be picked for mutations. This
 # is at the cost of population diversity.
 FITNESS_POWER = 3
+
+GENERATION_COUNT = 0
 
 class Individual(Area):
     """ An individual from the population. Stores an area object and the worth and fitness values."""
@@ -165,16 +168,8 @@ class Individual(Area):
             self.area.update_distances(house)
             self.area.update_distances(house2)
    
-def evolution(area):
+def evolution(individuals, alpha, beta):
     """ The main program. """
-
-    # Create an initial set of solutions with the random_greedy algorithm
-    print("Creating initial set of solutions...")
-    individuals = []
-    for i in range(POPULATION):
-        copy_area = copy.deepcopy(area)
-        place_housesgreedyrandom(copy_area)
-        individuals.append(Individual(copy_area))
     
     # Sort individuals
     individuals.sort(key=lambda x: x.worth, reverse=True)
@@ -185,11 +180,13 @@ def evolution(area):
     best_worths = [best_individual.worth]
     
     stale_counter = 0
-    generation_count = 0
     
-    # while stale_counter < STALE_COUNTER:
-    while generation_count < 100:
-        print("Generaton: ", generation_count, best_worths[-1], avg_worths[-1])
+    global GENERATION_COUNT
+    GENERATION_COUNT = 0
+
+    while stale_counter < STALE_COUNTER:
+    # while GENERATION_COUNT < 10:
+        # print("Generaton: ", GENERATION_COUNT, best_worths[-1], avg_worths[-1], MOVE_RATE, ORIENTATION_RATE, SWAP_RATE)
 
         individuals = evolve(individuals)
 
@@ -204,18 +201,22 @@ def evolution(area):
         avg_worths.append(calc_avg_individuals(individuals))
         best_worths.append(get_best_individual(individuals).worth)
 
-        generation_count += 1
+        GENERATION_COUNT += 1
+
+        update_mutate_rates(alpha, beta)
 
     # # Plot the progress of population
-    plt.plot(avg_worths)
-    plt.plot(best_worths)   
-    plt.show()
+    # plt.plot(avg_worths)
+    # plt.plot(best_worths)   
+    # plt.show()
+
+    print(f"{alpha}, {beta}, {GENERATION_COUNT}, {best_worths[-1]}")
 
 
     # Copy all values to the original area. Now main can do all of its operations on the best area
-    area.structures = get_best_individual(individuals).area.structures
-    for h in area.structures["House"]:
-        area.update_distances(h)
+    # area.structures = get_best_individual(individuals).area.structures
+    # for h in area.structures["House"]:
+    #     area.update_distances(h)  
 
 def evolve(individuals):
     """ Evolve the population one generation further."""    
@@ -268,6 +269,7 @@ def evolve(individuals):
             new_generation.append(mutations[mutation_count])
             mutation_count += 1
 
+
     return new_generation
 
 def calc_avg_individuals(individuals):
@@ -289,3 +291,35 @@ def get_best_individual(individuals):
             best_worth = individual.worth
 
     return best_individual
+
+def get_initial_population(area):
+
+    # Create an initial set of solutions with the random_greedy algorithm
+    individuals = []
+    for i in range(POPULATION):
+        copy_area = copy.deepcopy(area)
+        place_housesgreedyrandom(copy_area)
+        # random_placement(copy_area)
+        individuals.append(Individual(copy_area))
+
+    print("Created initial population")
+    return individuals
+    
+def update_mutate_rates(alpha, beta):
+    global MOVE_RATE
+    global SWAP_RATE
+    global ORIENTATION_RATE
+
+    MOVE_RATE = alpha / GENERATION_COUNT ** beta + 0.02
+    ORIENTATION_RATE = alpha / GENERATION_COUNT ** beta + 0.02
+    SWAP_RATE = alpha / GENERATION_COUNT ** beta + 0.02
+
+def get_alpha_and_beta(area):
+
+    individuals = get_initial_population(area)
+    for alpha in [1, 2, 5, 10, 15]:
+        for beta in [0.2, 0.4, 0.6, 0.8, 1]:
+
+            new_individuals = copy.deepcopy(individuals)
+            evolution(new_individuals, alpha, beta)
+    

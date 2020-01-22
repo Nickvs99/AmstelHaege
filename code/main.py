@@ -12,7 +12,7 @@ from algorithms.greedy import place_housesgreedy
 from algorithms.greedy_random import place_housesgreedyrandom
 from algorithms.hill_climber_random import hill_climber_random
 from algorithms.hill_climber_steps import hill_climber_steps
-from algorithms.evolution import evolution
+from algorithms.evolution import evolution, get_alpha_and_beta
 
 ALGORITHM = "evolution"
 NEIGHBOURHOOD = "wijk2"
@@ -20,7 +20,7 @@ HOUSES = 20
 
 def main():
 
-    set_random_seed()
+    set_random_seed(0.946704043916933)
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
@@ -30,7 +30,7 @@ def main():
     
     # area.make_csv_output()
 
-    hill_climber_steps(area)
+    # hill_climber_steps(area)
 
 def algorithm(area, algorithm_name):
 
@@ -46,7 +46,7 @@ def algorithm(area, algorithm_name):
         place_housesgreedyrandom(area)
     
     elif algorithm_name == "evolution":
-        evolution(area)
+        get_alpha_and_beta(area)
 
     elif algorithm_name == "hill_climber_random":
         hill_climber_random(area)

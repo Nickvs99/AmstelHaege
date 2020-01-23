@@ -5,10 +5,9 @@ from algorithms.random import random_placement
 import random
 
 def hill_climber_random_random(area):
-    random_placement(area)
-    for i in range(1000000):
+    for i in range(10000):
         worth = area.calc_worth_area()
-        j = int(random.random() * 11 - 0.5)
+        j = int(random.random() * area.houses)
         house = area.structures["House"][j]
         old_x = house.bottom_left_cor[0]
         old_y = house.bottom_left_cor[1]

@@ -1,4 +1,5 @@
 structure,bottom_left_xy,top_right_xy,type
+<<<<<<< HEAD
 water_0,"44,50","116,130",water
 maison_0,"144,93","156,103",maison
 maison_1,"130,35","142,45",maison
@@ -60,3 +61,29 @@ one_person_home_32,"74,28","82,36",one_person_home
 one_person_home_33,"112,136","120,144",one_person_home
 one_person_home_34,"58,38","66,46",one_person_home
 one_person_home_35,"74,42","82,50",one_person_home
+=======
+water_0,"0,135","32,180",water
+water_1,"0,0","32,45",water
+water_2,"128,135","160,180",water
+water_3,"128,0","160,45",water
+maison_0,"80,135","90,147",maison
+maison_1,"112,53","124,63",maison
+maison_2,"52,18","62,30",maison
+bungalow_0,"25,90","36,97",bungalow
+bungalow_1,"112,4","123,11",bungalow
+bungalow_2,"94,165","105,172",bungalow
+bungalow_3,"75,10","82,21",bungalow
+bungalow_4,"72,76","83,83",bungalow
+one_person_home_0,"120,153","128,161",one_person_home
+one_person_home_1,"40,80","48,88",one_person_home
+one_person_home_2,"93,104","101,112",one_person_home
+one_person_home_3,"120,106","128,114",one_person_home
+one_person_home_4,"12,112","20,120",one_person_home
+one_person_home_5,"150,59","158,67",one_person_home
+one_person_home_6,"152,106","160,114",one_person_home
+one_person_home_7,"22,71","30,79",one_person_home
+one_person_home_8,"0,58","8,66",one_person_home
+one_person_home_9,"58,99","66,107",one_person_home
+one_person_home_10,"44,153","52,161",one_person_home
+one_person_home_11,"44,42","52,50",one_person_home
+>>>>>>> master

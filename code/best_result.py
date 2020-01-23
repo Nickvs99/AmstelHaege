@@ -19,7 +19,7 @@ from main import algorithm, set_random_seed
 ALGORITHM = "random"
 NEIGHBOURHOOD = "wijk1"
 HOUSES = 20
-ITERATIONS = 1000
+ITERATIONS = 10000
 
 def best_result():
     """
@@ -36,15 +36,9 @@ def best_result():
 
     for i in range(ITERATIONS):
 
-<<<<<<< HEAD
-        print(i)
-
-        seed = set_random_seed(0.4906269926668486)
-=======
         start = time()
 
         seed = set_random_seed(random.random())
->>>>>>> master
 
         area = Area(NEIGHBOURHOOD, HOUSES)
 
@@ -52,13 +46,9 @@ def best_result():
 
         area_worth = area.calc_worth_area()
 
-<<<<<<< HEAD
-        print(area_worth)
-=======
         end = time()
 
         runtimes.append(end - start)
->>>>>>> master
 
         area_worths.append(area_worth)
 

@@ -30,9 +30,13 @@ def best_result():
 
     best_worth = 0
     best_seed = 0
+    
     area_worths = []
+    runtimes= []
 
     for i in range(ITERATIONS):
+
+        start = time()
 
         seed = set_random_seed(random.random())
 
@@ -41,6 +45,10 @@ def best_result():
         algorithm(area, ALGORITHM)
 
         area_worth = area.calc_worth_area()
+
+        end = time()
+
+        runtimes.append(end - start)
 
         area_worths.append(area_worth)
 
@@ -56,7 +64,9 @@ def best_result():
 
     print(f"Best worth: {best_worth}")
 
-    print(f"Avg worth: {calc_avg_worth(area_worths)} +- {calc_std_dev(area_worths)}")
+    print(f"Avg worth: {calc_avg(area_worths)} +- {calc_std_dev(area_worths)}")
+
+    print(f"Avg runtime: {calc_avg(runtimes)}")
 
     end = time()
 
@@ -85,7 +95,7 @@ def show_hist(area_worths):
 def calc_std_dev(array):
     """Returns the standard deviation of a list of numbers."""
 
-    avg = calc_avg_worth(array)
+    avg = calc_avg(array)
     avg_squared = avg ** 2                           # <x>^2
 
     # Creates a list whose values are the squared versions of lijst
@@ -93,11 +103,11 @@ def calc_std_dev(array):
     for i in range(len(array)):
         list_squared.append(array[i] ** 2)
 
-    avg_of_squared = calc_avg_worth(list_squared)    # <x**2>
+    avg_of_squared = calc_avg(list_squared)    # <x**2>
 
     return (avg_of_squared - avg_squared) ** 0.5
 
-def calc_avg_worth(array):
+def calc_avg(array):
     """Returns the average of a list of numbers """
 
     total  = 0

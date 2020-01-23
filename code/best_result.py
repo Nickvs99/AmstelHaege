@@ -10,7 +10,6 @@ from time import time
 import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
-from scipy.stats import norm
 from matplotlib.ticker import PercentFormatter
 
 from classes.area import Area
@@ -20,7 +19,7 @@ from main import algorithm, set_random_seed
 ALGORITHM = "random"
 NEIGHBOURHOOD = "wijk1"
 HOUSES = 20
-ITERATIONS = 100
+ITERATIONS = 1000
 
 def best_result():
     """
@@ -57,6 +56,8 @@ def best_result():
 
     print(f"Best worth: {best_worth}")
 
+    print(f"Avg worth: {calc_avg_worth(area_worths)} +- {calc_std_dev(area_worths)}")
+
     end = time()
 
     print(f"Runtime: {end - start}")
@@ -81,6 +82,29 @@ def show_hist(area_worths):
 
     plt.show()
 
+def calc_std_dev(array):
+    """Returns the standard deviation of a list of numbers."""
+
+    avg = calc_avg_worth(array)
+    avg_squared = avg ** 2                           # <x>^2
+
+    # Creates a list whose values are the squared versions of lijst
+    list_squared = []
+    for i in range(len(array)):
+        list_squared.append(array[i] ** 2)
+
+    avg_of_squared = calc_avg_worth(list_squared)    # <x**2>
+
+    return (avg_of_squared - avg_squared) ** 0.5
+
+def calc_avg_worth(array):
+    """Returns the average of a list of numbers """
+
+    total  = 0
+    for i in array:
+        total += i
+
+    return total / len(array)
 
 if __name__ == "__main__":
     best_result()

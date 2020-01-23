@@ -76,4 +76,5 @@ def place_housesgreedy(area):
     for house in houses:
         house.set_coordinates([0,0], house.horizontal)
         area.structures["House"].append(house)
+        # Places houses greedy
         greedy(area, house)

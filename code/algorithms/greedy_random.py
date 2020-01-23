@@ -9,13 +9,16 @@ def greedy(area, house):
     best_worth = 0
     best_x = 0
     best_y = 0
-
-    # Checks place for house
-
     min_dist = min(house.width, house.height)
+
+    # Iterates 100 times for each house
     for i in range(100):
+
+        # Set location for house
         x = int(random.random() * (area.width - min_dist + 1))
         y = int(random.random() * (area.height - min_dist + 1))
+
+        # Checks score for house horizotally
         house.set_coordinates([x,y], True)
         if area.check_valid(house, x, y):
             area.update_distances(house)
@@ -28,6 +31,7 @@ def greedy(area, house):
                 best_y = y
                 best_orientation = True
 
+        # Checks score for house vertically
         house.set_coordinates([x,y], False)
         if area.check_valid(house, x, y):
             area.update_distances(house)
@@ -39,6 +43,7 @@ def greedy(area, house):
                 best_y = y
                 best_orientation = False
 
+    # Places house in best place
     house.set_coordinates([best_x,best_y], best_orientation)
     area.update_distances(house)
 
@@ -80,15 +85,3 @@ def place_housesgreedyrandom(area):
         house.set_corners()
         area.structures["House"].append(house)
         greedy(area, house)
-
-
-def place_housegreedyrandom(area, house, x, y):
-    """
-    Place a house.
-    """
-
-    house.bottom_left_cor = [x, y]
-    house.top_right_cor = [x + house.width, y + house.height]
-    house.set_corners()
-
-    area.update_distances(house)

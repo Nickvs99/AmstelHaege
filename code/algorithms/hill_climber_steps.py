@@ -32,7 +32,6 @@ def hill_climber_steps(area):
 
         counter += 1
     
-    # print(f"Best worth: {worth}")
     # for h in area.structures["House"]:
     #     print(h)
 

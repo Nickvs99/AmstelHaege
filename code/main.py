@@ -17,26 +17,22 @@ from algorithms.evolution import evolution
 
 
 HOUSES = 20
-NEIGHBOURHOOD = "wijk3"
+NEIGHBOURHOOD = "wijk1"
 ALGORITHM = "random"
 HILL_CLIMBER = "hill_climber_steps"
 # HILL_CLIMBER = None
 
 def main():
 
-    set_random_seed()
+    set_random_seed(0.4906269926668486)
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
     algorithm(area, ALGORITHM)
     
-<<<<<<< HEAD
-    # area.make_csv_output()
-=======
     area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
 
     area.make_csv_output()
->>>>>>> master
 
     if HILL_CLIMBER:
 

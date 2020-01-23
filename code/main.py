@@ -17,17 +17,11 @@ from algorithms.evolution import evolution
 from algorithms.simulated_annealing import simulated_annealing
 
 
-<<<<<<< HEAD
 HOUSES = 20
 NEIGHBOURHOOD = "wijk1"
-=======
-
-HOUSES = 20
-NEIGHBOURHOOD = "wijk2"
->>>>>>> master
-ALGORITHM = "random"
-HILL_CLIMBER = "simulated_annealing"
-# HILL_CLIMBER = None
+ALGORITHM = "greedy_random"
+# HILL_CLIMBER = "hill_climber_random_random"
+HILL_CLIMBER = None
 
 def main():
 
@@ -42,12 +36,20 @@ def main():
     area.make_csv_output()
 
     if HILL_CLIMBER:
+    
+        start = time()
 
         hill_climber(area, HILL_CLIMBER)
 
+        hill_climber_steps(area)
+
         area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
 
-        area.make_csv_output()
+        end = time()
+
+        print(f"Runtime {HILL_CLIMBER}: {end - start}")
+        
+        # area.make_csv_output()
 
 def algorithm(area, algorithm_name):
 
@@ -77,8 +79,6 @@ def algorithm(area, algorithm_name):
 
 def hill_climber(area, hill_climber_name):
 
-    start = time()
-
     if hill_climber_name == "hill_climber_steps":
         hill_climber_steps(area)
 
@@ -92,10 +92,6 @@ def hill_climber(area, hill_climber_name):
         simulated_annealing(area)
     else:
         raise Exception("Invalid hill climber name")
-
-    end = time()
-
-    print(f"Runtime {hill_climber_name}: {end - start}")
 
     # for h in area.structures["House"]:
     #     print(h)

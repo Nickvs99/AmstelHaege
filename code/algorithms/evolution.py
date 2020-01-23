@@ -178,7 +178,7 @@ def evolution(area):
     individuals = []
     for i in range(POPULATION):
         copy_area = copy.deepcopy(area)
-        random_placement(copy_area)
+        place_housesgreedyrandom(copy_area)
         individuals.append(Individual(copy_area))
     
     # Sort individuals
@@ -215,7 +215,10 @@ def evolution(area):
 
     # # Plot the progress of population
     plt.plot(avg_worths)
-    plt.plot(best_worths)   
+    plt.plot(best_worths)  
+    plt.title("Progress of population")
+    plt.xlabel("Generations") 
+    plt.ylabel("Worth")
     plt.show()
 
 

@@ -9,8 +9,6 @@ def greedy(area, house):
     best_worth = 0
     best_x = 0
     best_y = 0
-    print(best_x)
-    print(best_y)
 
     # Checks place for house
 
@@ -83,7 +81,6 @@ def place_housesgreedyrandom(area):
         area.structures["House"].append(house)
         greedy(area, house)
 
-        print(area.calc_worth_area())
 
 def place_housegreedyrandom(area, house, x, y):
     """

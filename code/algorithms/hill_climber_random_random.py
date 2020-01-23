@@ -1,7 +1,4 @@
-from algorithms.greedy_random import place_housesgreedyrandom
-from algorithms.greedy_random import place_housegreedyrandom
 from classes.structure import House
-from algorithms.random import random_placement
 import random
 
 def hill_climber_random_random(area):
@@ -18,3 +15,14 @@ def hill_climber_random_random(area):
             new_worth = area.calc_worth_area()
             if worth > new_worth:
                 place_housegreedyrandom(area, house, old_x, old_y)
+
+def place_housegreedyrandom(area, house, x, y):
+    """
+    Place a house.
+    """
+
+    house.bottom_left_cor = [x, y]
+    house.top_right_cor = [x + house.width, y + house.height]
+    house.set_corners()
+
+    area.update_distances(house)

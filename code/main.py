@@ -19,10 +19,10 @@ from algorithms.simulated_annealing import simulated_annealing
 
 
 HOUSES = 20
-NEIGHBOURHOOD = "wijk2"
-ALGORITHM = "random"
-HILL_CLIMBER = "simulated_annealing"
-# HILL_CLIMBER = None
+NEIGHBOURHOOD = "wijk1"
+ALGORITHM = "greedy"
+# HILL_CLIMBER = "hill_climber_random"
+HILL_CLIMBER = None
 
 def main():
 

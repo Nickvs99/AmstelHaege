@@ -65,9 +65,12 @@ def best_result():
 
     algorithm(area, ALGORITHM)
 
+    avg_worth = calc_avg(area_worths)
+    std_dev_worth = calc_std_dev(area_worths)
+
     print(f"Best worth: {best_worth}")
 
-    print(f"Avg worth: {calc_avg(area_worths)} +- {calc_std_dev(area_worths)}")
+    print(f"Avg worth: {avg_worth} +- {std_dev_worth}")
 
     print(f"Avg runtime: {calc_avg(runtimes)}")
 
@@ -77,7 +80,7 @@ def best_result():
 
     # area.plot_area(int(best_worth))
 
-    show_hist(area_worths)
+    show_hist(area_worths, avg_worth, std_dev_worth)
 
     if HILL_CLIMBER:
         
@@ -97,15 +100,28 @@ def best_result():
 
     return area
     
-def show_hist(area_worths): 
+def show_hist(area_worths, avg_worth, std_dev): 
 
     # TODO fitting through histogram
     num_bins = 50
+
+    fig, ax = plt.subplots()
+
     n, bins, patches = plt.hist(area_worths, num_bins, facecolor='blue', edgecolor='black', alpha=0.5)
 
     plt.ylabel('Amount found')
     plt.xlabel('Area worth')
     plt.title('All found area worths')
+
+    power = 6
+    avg_worth /= 10 ** power
+    std_dev /= 10 ** power
+
+    # Box with avg and stddev values
+    textstr = '$avg = %.2f * 10 ^ %d$\n$stddev= %.2f * 10 ^ %d$' %(avg_worth, power, std_dev, power)
+    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+    plt.text(0.95, 0.95, textstr, transform=ax.transAxes, fontsize=14,
+        va='top', ha='right', bbox = props)
 
     plt.gca().yaxis.set_major_formatter(PercentFormatter(ITERATIONS))
 

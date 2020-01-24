@@ -19,7 +19,11 @@ from algorithms.simulated_annealing import simulated_annealing
 
 HOUSES = 20
 NEIGHBOURHOOD = "wijk1"
+<<<<<<< HEAD
 ALGORITHM = "greedy_random"
+=======
+ALGORITHM = "random"
+>>>>>>> master
 HILL_CLIMBER = "hill_climber_random_random"
 # HILL_CLIMBER = None
 
@@ -36,13 +40,24 @@ def main():
     area.make_csv_output()
 
     if HILL_CLIMBER:
+<<<<<<< HEAD
     
+=======
+        
+>>>>>>> master
         start = time()
 
         hill_climber(area, HILL_CLIMBER)
 
         hill_climber_steps(area)
 
+<<<<<<< HEAD
+=======
+        end = time()
+
+        print(f"Runtime Hill Climber: {end - start}")
+
+>>>>>>> master
         area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
 
         end = time()

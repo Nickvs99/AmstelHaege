@@ -8,6 +8,19 @@ from .structure import Structure, House
 
 
 class Area():
+    """ 
+    Area object. This object stores information about:
+    - width and height
+    - the number of houses
+    - the number of houses per house type
+    - all Structure objects
+    
+    Furthermore it provides the tools to:
+    - check if a house would be at a valid place
+    - calc worth area
+    - creates the csv output
+    - updates the distances to neighbours for each house
+    """
 
     def __init__(self, neighbourhood, houses):
         self.height = 180
@@ -64,7 +77,6 @@ class Area():
 
                     water_count += 1
         
-
     def fill_area(self, area):
         """ Fill the area with the objects with the state of the structures"""
 
@@ -157,21 +169,10 @@ class Area():
         total_worth = 0
         
         for house in self.structures["House"]:
-            total_worth += self.calc_worth_house(house)
+            total_worth += house.calc_worth()
 
         return total_worth
 
-    def calc_worth_house(self, house):
-        """ 
-        Calculates the worth of a house. The worth is
-        worth = base_value + base_value * extra_value * (min_dist - mandatory_free_space)
-        """
-
-        base_value = house.value
-        extra_value = house.value * house.extra_value * (house.get_min_dist() - house.mandatory_free_space)
-
-        value = base_value + extra_value
-        return value
 
     def check_in_bound(self, bottom_left_cor, top_right_cor):
         """ Checks if a given x and y coordinates fall within the bounds. """

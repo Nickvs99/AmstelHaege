@@ -2,7 +2,7 @@
 This interpretation of hill climbing works on a generated solution.
 Each house object will be moved in specific steps horizontally and vertically.
 All the moves will be checked for validation and the best results stored.
-This process will be iterated and stopped if the best area is found.
+This process will be iterated and stopped(saved) if the best area is found.
 """
 
 from time import time

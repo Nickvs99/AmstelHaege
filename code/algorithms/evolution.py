@@ -20,14 +20,14 @@ import math
 import matplotlib.pyplot as plt
 
 from algorithms.greedy_random import place_housesgreedyrandom
-from algorithms.random import random_placement
 from classes.area import Area
 
+
 POPULATION = 50         # Population size
-STALE_COUNTER = 15      # How many iterations a population is allowed to not grow
+STALE_COUNTER = 1       # How many iterations a population is allowed to not grow
 
 # The mutation rates
-MOVE_RATE = 0.3         
+MOVE_RATE = 0.3      
 ORIENTATION_RATE = 0.1
 SWAP_RATE = 0.1
 
@@ -39,7 +39,7 @@ FITNESS_POWER = 3
 # Set SA to True, if you want to add simulated annealing to the algorithm
 SA = False
 
-class Individual(Area):
+class Individual():
     """ An individual from the population. Stores an area object and the worth and fitness values."""
 
     def __init__(self, area):
@@ -84,12 +84,11 @@ class Individual(Area):
             r = random.random()
             if r > MOVE_RATE:
                 continue
-            
+
             while_count = 0
-            while while_count < 1000:
+            while True:
 
                 # Random coordinates shift
-                # TODO small changes should have a higher probability than larger changes
                 diff_x = int(random.random() * 10 - 5)
                 diff_y = int(random.random() * 10 - 5)
 
@@ -99,12 +98,14 @@ class Individual(Area):
                 house.set_coordinates([x, y], house.horizontal)
 
                 if self.area.check_valid(house, x, y):
-
                     break
 
                 while_count += 1
-            else:
-                house.set_coordinates([initial_x, initial_y], initial_orientation)
+
+                # Set house to its initial state, if no valid place has been found
+                if while_count == 1000:
+                    house.set_coordinates([initial_x, initial_y], initial_orientation)
+                    break
             
             self.area.update_distances(house)
 
@@ -125,6 +126,7 @@ class Individual(Area):
 
             house.set_coordinates([initial_x, initial_y], not initial_orientation)
 
+            # Revert back if the new orientation is not allowed
             if not self.area.check_valid(house, initial_x, initial_y):
 
                 house.set_coordinates([initial_x, initial_y], initial_orientation)
@@ -161,7 +163,7 @@ class Individual(Area):
             house.set_coordinates([initial_x2, initial_y2], initial_orientation2)
             house2.set_coordinates([initial_x, initial_y], initial_orientation)
             
-            # If the swap is not valid, reset the values
+            # If the swap is not valid, reset all values
             if not (self.area.check_valid(house, initial_x2, initial_y2) and self.area.check_valid(house2, initial_x, initial_y)):
 
                 house.set_coordinates([initial_x, initial_y], initial_orientation)
@@ -197,7 +199,6 @@ def evolution(area):
 
         individuals = evolve(individuals)
 
-        # Append statistics to lists
         avg_worth = calc_avg_individuals(individuals)
 
         if avg_worth == avg_worths[-1]:
@@ -205,6 +206,7 @@ def evolution(area):
         else:
             stale_counter = 0
 
+        # Append statistics to lists
         avg_worths.append(calc_avg_individuals(individuals))
         best_worths.append(get_best_individual(individuals).worth)
 
@@ -220,7 +222,6 @@ def evolution(area):
     plt.xlabel("Generations") 
     plt.ylabel("Worth")
     plt.show()
-
 
     # Copy all values to the original area. Now main can do all of its operations on the best area
     area.structures = get_best_individual(individuals).area.structures

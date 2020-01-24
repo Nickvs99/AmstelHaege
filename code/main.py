@@ -21,7 +21,7 @@ from algorithms.simulated_annealing import simulated_annealing
 HOUSES = 20
 NEIGHBOURHOOD = "wijk2"
 ALGORITHM = "random"
-HILL_CLIMBER = "simulated_annealing"
+HILL_CLIMBER = "hill_climber_steps"
 # HILL_CLIMBER = None
 
 def main():

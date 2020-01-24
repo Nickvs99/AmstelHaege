@@ -16,12 +16,21 @@ from algorithms.hill_climber_steps import hill_climber_steps
 from algorithms.evolution import evolution
 from algorithms.simulated_annealing import simulated_annealing
 
-
+# The number of houses
 HOUSES = 60
+
+# The neighbourhood which has to be optimised, choises are
+# "wijk1", "wijk2" or "wijk3"
 NEIGHBOURHOOD = "wijk1"
+
+# Algorithm used for the optimasation, choises are
+# "random", "greedy", "greedy_random", "evolution"
 ALGORITHM = "greedy_random"
-# HILL_CLIMBER = "hill_climber_random_random"
-HILL_CLIMBER = None
+
+# Hill climber used for further optimasation, choises are
+# "hill_climber_steps", "hill_climber_random", "hill_climber_random_random", "simulated_annealing" or
+# None. 
+HILL_CLIMBER = "hill_climber_random_random"
 
 def main():
 

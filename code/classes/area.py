@@ -90,15 +90,10 @@ class Area():
 
             for y in range(house.bottom_left_cor[1], house.top_right_cor[1]):
                 for x in range(house.bottom_left_cor[0], house.top_right_cor[0]):
-                    try:
-                        area[y][x] = house.state
-                    except:
-                        print(x, y)
+                    area[y][x] = house.state
 
     def plot_area(self, neighbourhood, houses, algorithm):
-        """
-        Plots the area.
-        """
+        """ Plots the area """
         
         area = self.create_area()
         self.fill_area(area)
@@ -183,7 +178,7 @@ class Area():
         return True
 
     def make_csv_output(self):
-        """ Function which commands to update the output """
+        """ Function which updates the output file """
 
         # Store values csv_output_list
         csv_output_list = self.make_csv_output_list()
@@ -217,7 +212,7 @@ class Area():
 
         path = os.path.join(my_path, "..\..\csv-output\output.csv")
 
-        # Open the current output.csv
+        # Open the output.csv file
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
 
@@ -259,5 +254,3 @@ class Area():
                     
                     if dist < house.neighbour_distances[h.name]:
                         house.neighbour_distances[h.name] = dist
-
-

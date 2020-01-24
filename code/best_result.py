@@ -39,8 +39,6 @@ def best_result():
     # Iterate the algorithm by the given amount of times
     for i in range(ITERATIONS):
 
-        print(i)
-
         start = time()
 
         seed = set_random_seed(random.random())

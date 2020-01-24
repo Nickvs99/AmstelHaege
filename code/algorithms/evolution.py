@@ -19,7 +19,7 @@ import math
 
 import matplotlib.pyplot as plt
 
-from algorithms.greedy_random import place_housesgreedyrandom
+from algorithms.greedy_random import place_houses_greedy_random
 from algorithms.random import random_placement
 from classes.area import Area
 

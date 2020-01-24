@@ -1,3 +1,4 @@
+# TODO
 """
 Short description of the algorithm
 """
@@ -9,28 +10,32 @@ def hill_climber_random(area):
     worth = 0
 
     # Iteration until no improvement
+    # TODO 100 should be a variable
     for i in range(100):
         if worth < worth_global:
             worth = worth_global
             for house in area.structures["House"]:
                 # Stops in hillcliber
-                greedyhill_climber(area, house)
+                greedy_hill_climber(area, house)
             worth_global = area.calc_worth_area()
 
 
-def greedyhill_climber(area, house):
+def greedy_hill_climber(area, house):
+
     best_worth = area.calc_worth_area()
     best_orientation = house.horizontal
     best_x = house.bottom_left_cor[0]
     best_y = house.bottom_left_cor[1]
 
     # Iterates 1000 times for each house
+    # TODO 1000 should be a variable
     for i in range(1000):
 
         # Sets location for house
         x = int(random.random() * (area.width - house.width + 1))
         y = int(random.random() * (area.height - house.height + 1))
 
+        # TODO create a function for both blocks of code
         # Checks score for house horizotally
         house.set_orientation(True)
         if area.check_valid(house, x, y):
@@ -66,8 +71,5 @@ def move(area, house, x, y):
     Moves a house.
     """
 
-    house.bottom_left_cor = [x, y]
-    house.top_right_cor = [x + house.width, y + house.height]
-    house.set_corners()
-
+    house.set_coordinates([x, y], house.horizontal)
     area.update_distances(house)

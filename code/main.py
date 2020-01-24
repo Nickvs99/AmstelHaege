@@ -8,8 +8,8 @@ from time import time
 
 from classes.area import Area
 from algorithms.random import random_placement
-from algorithms.greedy import place_housesgreedy
-from algorithms.greedy_random import place_housesgreedyrandom
+from algorithms.greedy import place_houses_greedy
+from algorithms.greedy_random import place_houses_greedy_random
 from algorithms.hill_climber_random import hill_climber_random
 from algorithms.hill_climber_random_random import hill_climber_random_random
 from algorithms.hill_climber_steps import hill_climber_steps
@@ -21,8 +21,8 @@ from algorithms.simulated_annealing import simulated_annealing
 HOUSES = 10
 NEIGHBOURHOOD = "wijk1"
 ALGORITHM = "greedy"
-# HILL_CLIMBER = "hill_climber_random"
-HILL_CLIMBER = None
+HILL_CLIMBER = "simulated_annealing"
+# HILL_CLIMBER = None
 
 def main():
 
@@ -52,10 +52,10 @@ def algorithm(area, algorithm_name):
         random_placement(area)
 
     elif algorithm_name == "greedy":
-        place_housesgreedy(area)
+        place_houses_greedy(area)
 
     elif algorithm_name == "greedy_random":
-        place_housesgreedyrandom(area)
+        place_houses_greedy_random(area)
 
     elif algorithm_name == "evolution":
         evolution(area)

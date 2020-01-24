@@ -10,6 +10,7 @@ Amstelhaege is a new residetial area that needs a lay-out. The objective is to g
 * Family house size: 8 x 8 meter,   mandatory free space: 2 meter, worth: € 285.000, extra worth for extra meter free space: 3%
 * Bungalow     size: 11 x 7 meter,  mandatory free space: 3 meter, worth: € 399.000, extra worth for extra meter free space: 4%
 * Mansion      size: 12 x 10 meter, mandatory free space: 6 meter, worth: € 610.000, extra worth for extra meter free space: 6%
+
 | Tables        | Are           | Cool  |
 | ------------- |:-------------:| -----:|
 | col 3 is      | right-aligned | $1600 |

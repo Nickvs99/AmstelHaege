@@ -5,7 +5,7 @@ class Structure():
     Structure object. This object stores:
     - bottom_left_cor
     - top_right_cor
-    - the type ('Water', 'House' etc.)
+    - the type ('Water' or 'House')
     - the name, a unique id ('water1', 'water2', etc.)
     """
 

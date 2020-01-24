@@ -6,7 +6,7 @@ class Structure():
     - bottom_left_cor
     - top_right_cor
     - the type ('Water', 'House' etc.)
-    - the name, a unique id ('water1', 'water2')
+    - the name, a unique id ('water1', 'water2', etc.)
     """
 
     def __init__(self, name):
@@ -22,22 +22,10 @@ class Structure():
         ex. maison_23 -> maison
         """
 
-        # name_split = name.split("_")
-        # name_split.pop()
-        # name = "_".join(name_split)
-
         name_split = name.split("_")
         name_split.pop()
         name = "_".join(name_split)
         return name
-
-    def get_corners(self):
-        """ 
-        Returns all corners.
-        The order is bottom_left, bottom_right, top_left, top_right.
-        """
-
-        return self.corners
 
     def set_corners(self):
         """ Sets the bottom_right_cor and top_left_cor"""
@@ -55,6 +43,20 @@ class Structure():
         return self.__str__()
 
 class House(Structure):
+    """
+    House object. Inherits from the parent Structure class.
+    Stores additional information, such as:
+    - horizontal orientation
+    - width and height
+    - mandatory free space
+    - base value
+    - extra value
+    - distances to neighbours
+    
+    Furthermore it provides the tools to:
+    - calculate its worth
+
+    """
 
     def __init__(self, name, horizontal):
         super().__init__(name)
@@ -98,7 +100,7 @@ class House(Structure):
 
     def init_distances(self, houses):
         """ 
-        Initiialize the distances for all houses.
+        Initialize the distances for all houses.
         The key is a the name for all houses.
         Value is math.inf
         """
@@ -116,14 +118,14 @@ class House(Structure):
         """ Returns the minimum distance to a neighbour or if it does not exist the distance to the edge. """
 
         if self.neighbour_distances == {}:
-            # Return min dist to edge
+
             return min(self.bottom_left_cor[0], 160 - self.top_right_cor[0], self.bottom_left_cor[1], 180 - self.top_right_cor[1])
         
         else:
             return min(self.neighbour_distances.values())
 
     def set_orientation(self, horizontal):
-        """ Adjusts the width and height depending on the if the house object is placed horizontal or not. """
+        """ Adjusts the width and height depending on the houses orientation. """
 
         width = self.width
         height = self.height
@@ -139,6 +141,7 @@ class House(Structure):
         self.horizontal = horizontal
         
     def set_coordinates(self, bottom_left_cor, horizontal):
+        """ Sets the coordinates based on its bottom_left_cor and its orientation"""
 
         self.set_orientation(horizontal)
 
@@ -147,6 +150,17 @@ class House(Structure):
 
         self.set_corners()
 
+    def calc_worth(self):
+        """ 
+        Calculates the worth of a house. The worth is
+        worth = base_value + base_value * extra_value * (min_dist - mandatory_free_space)
+        """
+
+        base_value = self.value
+        extra_value = self.value * self.extra_value * (self.get_min_dist() - self.mandatory_free_space)
+
+        return base_value + extra_value
+
     def __str__(self):
 
         return f"{self.name}: {self.bottom_left_cor}, {self.top_right_cor}, {self.get_min_dist()}"
@@ -154,3 +168,4 @@ class House(Structure):
     def __repr__(self):
 
         return self.__str__()
+

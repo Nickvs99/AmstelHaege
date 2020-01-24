@@ -19,9 +19,9 @@ from algorithms.simulated_annealing import simulated_annealing
 
 
 HOUSES = 20
-NEIGHBOURHOOD = "wijk2"
+NEIGHBOURHOOD = "wijk1"
 ALGORITHM = "random"
-HILL_CLIMBER = "simulated_annealing"
+HILL_CLIMBER = "hill_climber_random_random"
 # HILL_CLIMBER = None
 
 def main():
@@ -37,8 +37,16 @@ def main():
     area.make_csv_output()
 
     if HILL_CLIMBER:
+        
+        start = time()
 
         hill_climber(area, HILL_CLIMBER)
+
+        hill_climber_steps(area)
+
+        end = time()
+
+        print(f"Runtime Hill Climber: {end - start}")
 
         area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
 
@@ -65,14 +73,12 @@ def algorithm(area, algorithm_name):
 
     end = time()
 
-    print(f"Runtime {algorithm_name}: {end - start}")
+    # print(f"Runtime {algorithm_name}: {end - start}")
 
     # for h in area.structures["House"]:
     #     print(h)
 
 def hill_climber(area, hill_climber_name):
-
-    start = time()
 
     if hill_climber_name == "hill_climber_steps":
         hill_climber_steps(area)
@@ -88,10 +94,6 @@ def hill_climber(area, hill_climber_name):
     else:
         raise Exception("Invalid hill climber name")
 
-    end = time()
-
-    print(f"Runtime {hill_climber_name}: {end - start}")
-
     # for h in area.structures["House"]:
     #     print(h)
 
@@ -102,7 +104,7 @@ def set_random_seed(r = random.random()):
 
     random.seed(r)
 
-    print(f"Seed: {r}")
+    # print(f"Seed: {r}")
 
     return r
 

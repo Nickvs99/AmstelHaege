@@ -13,13 +13,16 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
 from classes.area import Area
-from main import algorithm, set_random_seed
+from main import algorithm, hill_climber, set_random_seed
+from algorithms.hill_climber_steps import hill_climber_steps
 
 
-ALGORITHM = "random"
-NEIGHBOURHOOD = "wijk1"
 HOUSES = 20
 ITERATIONS = 1000
+NEIGHBOURHOOD = "wijk1"
+ALGORITHM = "random"
+HILL_CLIMBER = "hill_climber_random_random"
+# HILL_CLIMBER = None
 
 def best_result():
     """
@@ -70,11 +73,27 @@ def best_result():
 
     end = time()
 
-    print(f"Runtime: {end - start}")
+    print(f"Runtime {ALGORITHM}: {end - start}")
 
     # area.plot_area(int(best_worth))
 
     show_hist(area_worths)
+
+    if HILL_CLIMBER:
+        
+        start = time()
+
+        hill_climber(area, HILL_CLIMBER)
+
+        hill_climber_steps(area)
+
+        end = time()
+
+        print(f"Runtime Hill Climber: {end - start}")
+
+        area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
+
+        area.make_csv_output()
 
     return area
     

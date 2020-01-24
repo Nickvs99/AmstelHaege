@@ -1,5 +1,6 @@
 """
 This python file iterates over a specific amount of randomly placed houses on the grid.
+The average area worth with standard deviation and average runtime will be s
 The seed of the grid with the highest calculated worth, will be shown and saved.
 """
 
@@ -18,9 +19,9 @@ from algorithms.hill_climber_steps import hill_climber_steps
 
 
 HOUSES = 60
-ITERATIONS = 10
+ITERATIONS = 1000
 NEIGHBOURHOOD = "wijk1"
-ALGORITHM = "greedy_random"
+ALGORITHM = "random"
 # HILL_CLIMBER = "hill_climber_random_random"
 HILL_CLIMBER = None
 
@@ -38,8 +39,6 @@ def best_result():
 
     # Iterate the algorithm by the given amount of times
     for i in range(ITERATIONS):
-
-        print(i)
 
         start = time()
 
@@ -59,7 +58,9 @@ def best_result():
         
         # Store the highest area_worth with its corresponding seed
         if area_worth > best_worth:
+
             best_worth = area_worth
+
             best_seed = seed
         
         end = time()
@@ -70,6 +71,7 @@ def best_result():
 
     # Calculate average area_worth and its standard deviation
     avg_worth = calc_avg(area_worths)
+
     std_dev_worth = calc_std_dev(area_worths)
 
     print(f"Avg worth: {avg_worth} +- {std_dev_worth}")
@@ -77,7 +79,6 @@ def best_result():
     print(f"Avg runtime: {calc_avg(runtimes)}")
 
     # Retrieve area with the highest area_worth
-
     set_random_seed(best_seed)
 
     area = Area(NEIGHBOURHOOD, HOUSES)

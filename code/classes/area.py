@@ -1,8 +1,8 @@
 import os
 import csv
+import math
 import matplotlib
 import matplotlib.pyplot as plt
-import math
 
 from .structure import Structure, House
 
@@ -143,7 +143,7 @@ class Area():
 
             for test_corner in test_corners:
                 
-                # Get the corners of the non allowed space. This includes the mandatory space.
+                # Get the corners of the non allowed space. This includes the mandatory space
                 corner_bottom_left = [house.corners[0][0] - house.mandatory_free_space, house.corners[0][1] - house.mandatory_free_space]
                 corner_top_right = [house.corners[3][0] + house.mandatory_free_space, house.corners[3][1] + house.mandatory_free_space]
 
@@ -221,7 +221,7 @@ class Area():
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
 
-            # (Over)write each line of house_list into the csv-file
+            # (Over)write each line of the csv-output list into the csv-file
             for structure in csv_output_list:
                 wr.writerow(structure)
     
@@ -251,7 +251,7 @@ class Area():
                     x_dist = abs(corner[0] - new_corner[0])
                     y_dist = abs(corner[1] - new_corner[1])
 
-                    # Use the maximum value, since the minimum value wouldnt reach the object
+                    # Use the maximum value, since the minimum value wouldn't reach the object
                     dist = max(x_dist, y_dist)
 
                     if dist < h.neighbour_distances[house.name]:
@@ -259,5 +259,3 @@ class Area():
                     
                     if dist < house.neighbour_distances[h.name]:
                         house.neighbour_distances[h.name] = dist
-
-

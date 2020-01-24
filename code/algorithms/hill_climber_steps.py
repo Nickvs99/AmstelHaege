@@ -60,10 +60,13 @@ def hill_climber_once(area):
                 # Specify movement in the correct direction
                 if direction == "up":
                     move = [house.bottom_left_cor[0], house.bottom_left_cor[1] + move_steps]
+                
                 elif direction == "right":
                     move = [house.bottom_left_cor[0] + move_steps, house.bottom_left_cor[1]]
+                
                 elif direction == "down":
                     move = [house.bottom_left_cor[0], house.bottom_left_cor[1] - move_steps]
+                
                 elif direction == "left":
                     move = [house.bottom_left_cor[0] - move_steps, house.bottom_left_cor[1]]
                 

@@ -1,7 +1,6 @@
 # AmstelHaege
 
-## Made by Nick van Santen, Hidde van Oijen en Pranto Bishas
-## Team Simcity
+## Made by Nick van Santen, Hidde van Oijen en Pranto Bishas - Team Simcity
 
 
 ### The case

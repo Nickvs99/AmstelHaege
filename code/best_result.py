@@ -17,23 +17,18 @@ from main import algorithm, hill_climber, set_random_seed
 from algorithms.hill_climber_steps import hill_climber_steps
 
 
-HOUSES = 20
-<<<<<<< HEAD
+HOUSES = 40
 ITERATIONS = 10000
-=======
-ITERATIONS = 1000
-NEIGHBOURHOOD = "wijk1"
+NEIGHBOURHOOD = "wijk3"
 ALGORITHM = "random"
-HILL_CLIMBER = "hill_climber_random_random"
-# HILL_CLIMBER = None
->>>>>>> master
+# HILL_CLIMBER = "hill_climber_random_random"
+HILL_CLIMBER = None
 
 def best_result():
     """
     Iterates over n amount of random grids and returns
-    the seed with the highest calucalted worth
+    the area with the highest calucalted worth
     """
-    start = time()
 
     best_worth = 0
     best_seed = 0
@@ -50,63 +45,54 @@ def best_result():
         area = Area(NEIGHBOURHOOD, HOUSES)
 
         algorithm(area, ALGORITHM)
+        
+        if HILL_CLIMBER:
+
+            hill_climber(area, HILL_CLIMBER)
+
+            hill_climber_steps(area)
 
         area_worth = area.calc_worth_area()
-
+        
+        # Store the highest area_worth with its corresponding seed
+        if area_worth > best_worth:
+            best_worth = area_worth
+            best_seed = seed
+        
         end = time()
 
         runtimes.append(end - start)
 
         area_worths.append(area_worth)
 
-        if area_worth > best_worth:
-            best_worth = area_worth
-            best_seed = seed
-
-    set_random_seed(best_seed)
-
-    area = Area(NEIGHBOURHOOD, HOUSES)
-
-    algorithm(area, ALGORITHM)
-
+    # Calculate average area_worth and its standard deviation
     avg_worth = calc_avg(area_worths)
     std_dev_worth = calc_std_dev(area_worths)
-
-    print(f"Best worth: {best_worth}")
 
     print(f"Avg worth: {avg_worth} +- {std_dev_worth}")
 
     print(f"Avg runtime: {calc_avg(runtimes)}")
 
-    end = time()
+    ## Retrieve area with the highest area_worth
 
-    print(f"Runtime {ALGORITHM}: {end - start}")
+    # set_random_seed(best_seed)
 
-    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
+    # area = Area(NEIGHBOURHOOD, HOUSES)
+
+    # algorithm(area, ALGORITHM)
+
+    # area.make_csv_output()
+
+    # area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
 
     show_hist(area_worths, avg_worth, std_dev_worth)
 
-    if HILL_CLIMBER:
-        
-        start = time()
-
-        hill_climber(area, HILL_CLIMBER)
-
-        hill_climber_steps(area)
-
-        end = time()
-
-        print(f"Runtime Hill Climber: {end - start}")
-
-        area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
-
-        area.make_csv_output()
-
-    return area
     
 def show_hist(area_worths, avg_worth, std_dev): 
+    """
+    Returns a histogram with all the saved area_worths and a box with 
+    """
 
-    # TODO fitting through histogram
     num_bins = 50
 
     fig, ax = plt.subplots()

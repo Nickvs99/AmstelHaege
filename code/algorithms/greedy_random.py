@@ -15,7 +15,7 @@ def greedy(area, house):
     # Checks place for house
 
     min_dist = min(house.width, house.height)
-    for i in range(1000):
+    for i in range(10000):
         x = int(random.random() * (area.width - min_dist + 1))
         y = int(random.random() * (area.height - min_dist + 1))
         house.set_coordinates([x,y], True)

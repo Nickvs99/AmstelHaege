@@ -52,12 +52,12 @@ def hill_climber_once(area):
         best_bottom_left = house.bottom_left_cor
         best_orientation = house.horizontal
         
-        # moves object by the range in steps
+        # Move object by the range in steps
         for move_steps in range(1,11):
 
             for direction in move_directions:
                 
-                # Specifies movement in the correct direction
+                # Specify movement in the correct direction
                 if direction == "up":
                     move = [house.bottom_left_cor[0], house.bottom_left_cor[1] + move_steps]
                 elif direction == "right":

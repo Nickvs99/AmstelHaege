@@ -17,11 +17,11 @@ from algorithms.evolution import evolution
 from algorithms.simulated_annealing import simulated_annealing
 
 
-HOUSES = 20
+HOUSES = 60
 NEIGHBOURHOOD = "wijk1"
-ALGORITHM = "random"
-HILL_CLIMBER = "hill_climber_random_random"
-# HILL_CLIMBER = None
+ALGORITHM = "greedy_random"
+# HILL_CLIMBER = "hill_climber_random_random"
+HILL_CLIMBER = None
 
 def main():
 

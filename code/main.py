@@ -2,7 +2,7 @@
 main.py
 """
 
-
+import sys
 import random
 from time import time
 
@@ -16,38 +16,24 @@ from algorithms.hill_climber_random_random import hill_climber_random_random
 from algorithms.evolution import evolution
 from algorithms.simulated_annealing import simulated_annealing
 
-# The number of houses
-HOUSES = 20
-
-# The neighbourhood which has to be optimised, choises are:
-# "wijk1", "wijk2" or "wijk3"
-NEIGHBOURHOOD = "wijk1"
-
-# Algorithm used for the optimasation, choises are:
-# "random", "greedy", "greedy_random", "evolution"
-ALGORITHM = "random"
-
-# Hill climber used for further optimasation, choises are:
-# "hill_climber_steps", "hill_climber_random", "hill_climber_random_random", 
-# "simulated_annealing" or None. 
-HILL_CLIMBER = "hill_climber_random_random"
-# HILL_CLIMBER = None
 
 def main():
 
     start = time()
 
+    neighbourhood, houses, algorithm, hill_climber = check_argv()
+
     seed = set_random_seed()
 
-    area = get_area(NEIGHBOURHOOD, HOUSES, ALGORITHM, HILL_CLIMBER)
+    area = get_area(neighbourhood, houses, algorithm, hill_climber)
     
     end = time()
 
-    print(f"Seed: {seed} \nRuntime : {end - start}")
+    print(f"Seed: {seed} \nRuntime: {end - start}")
     
     area.make_csv_output()
 
-    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
+    area.plot_area(neighbourhood, houses, algorithm)
 
 
 def get_area(neighbourhood, houses, algorithm_name, hill_climber_name):
@@ -98,9 +84,54 @@ def hill_climber(area, hill_climber_name):
 
     elif hill_climber_name == "simulated_annealing":
         simulated_annealing(area)
+    
     else:
         raise Exception("Invalid hill climber name")
 
+
+def check_argv():
+
+    if len(sys.argv) == 4:
+
+        neighbourhood, houses, algorithm = check_neighbourhood_houses_algorithm()
+
+        return neighbourhood, houses, algorithm, None
+
+    elif len(sys.argv) == 5:
+        
+        if sys.argv[4].lower() not in ["hill_climber_steps", "hill_climber_random", "hill_climber_random_random", "simulated_annealing"]:
+            print("Fifth argument must be: 'hill_climber_steps', 'hill_climber_random', 'hill_climber_random_random' or\n \
+                            'simulated_annealing'")
+            sys.exit (1)
+        else:
+            neighbourhood, houses, algorithm = check_neighbourhood_houses_algorithm()
+
+            return neighbourhood, houses, algorithm, sys.argv[4].lower()
+
+    else:
+        print("Usage: python main.py neighbourhood houses algorithm \n or \
+        \nUsage: python main.py neighbourhood houses algorithm hill_climber")
+        sys.exit (1)
+
+
+def check_neighbourhood_houses_algorithm():
+
+    if sys.argv[1].lower() not in ["wijk1", "wijk2", "wijk3"]:
+        print("Second argument must be: 'wijk1', 'wijk2' or 'wijk3'")
+        sys.exit (1)
+
+    elif not sys.argv[2].isdigit():
+        print("Third argument must be a digit")
+        sys.exit (1)
+
+    ## (Optional - functions raise exception if invalid)
+    elif sys.argv[3].lower() not in ["random", "greedy", "random_greedy", "evolution"]:
+        print("Fourth argument must be: 'random', 'greedy', 'random_greedy' or 'evolution'")
+        sys.exit (1)
+
+    else:        
+        return sys.argv[1].lower(), int(sys.argv[2]), sys.argv[3].lower()
+        
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

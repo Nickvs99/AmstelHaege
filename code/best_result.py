@@ -19,7 +19,7 @@ from algorithms.hill_climber_steps import hill_climber_steps
 
 
 HOUSES = 20
-ITERATIONS = 10
+ITERATIONS = 2000
 NEIGHBOURHOOD = "wijk3"
 ALGORITHM = "random"
 # HILL_CLIMBER = "hill_climber_random_random"
@@ -36,7 +36,7 @@ def best_result():
     
     area_worths = []
     runtimes= []
-    print("1")
+    
     # Iterate the algorithm by the given amount of times
     for i in range(ITERATIONS):
 
@@ -46,16 +46,6 @@ def best_result():
 
         area = get_area(NEIGHBOURHOOD, HOUSES, ALGORITHM, HILL_CLIMBER)
 
-        # area = Area(NEIGHBOURHOOD, HOUSES)
-
-        # algorithm(area, ALGORITHM)
-
-        # if HILL_CLIMBER:
-
-        #     hill_climber(area, HILL_CLIMBER)
-
-        #     hill_climber_steps(area)
-
         area_worth = area.calc_worth_area()
         
         # Store the highest area_worth with its corresponding seed
@@ -64,7 +54,7 @@ def best_result():
             best_worth = area_worth
 
             best_seed = seed
-        print("2")
+        
         end = time()
 
         runtimes.append(end - start)
@@ -83,7 +73,7 @@ def best_result():
     # Retrieve area with the highest area_worth
     set_random_seed(best_seed)
 
-    area = get_area()
+    area = get_area(NEIGHBOURHOOD, HOUSES, ALGORITHM, HILL_CLIMBER)
 
     area.make_csv_output()
 
@@ -95,9 +85,16 @@ def best_result():
 def show_hist(area_worths, avg_worth, std_dev): 
     """
     Returns a histogram with all the saved area_worths and a box with 
-    """
+    """    
 
-    num_bins = 50
+    if ITERATIONS < 100:
+        num_bins = 10
+
+    elif ITERATIONS > 1000:
+        num_bins = 50
+    
+    else:
+        num_bins = 25
 
     fig, ax = plt.subplots()
 
@@ -144,6 +141,7 @@ def calc_avg(array):
         total += i
 
     return total / len(array)
+
 
 if __name__ == "__main__":
     best_result()

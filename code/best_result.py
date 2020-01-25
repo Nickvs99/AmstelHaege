@@ -20,8 +20,8 @@ from algorithms.hill_climber_steps import hill_climber_steps
 
 HOUSES = 60
 ITERATIONS = 1000
-NEIGHBOURHOOD = "wijk1"
-ALGORITHM = "random"
+NEIGHBOURHOOD = "wijk3"
+ALGORITHM = "greedy_random"
 # HILL_CLIMBER = "hill_climber_random_random"
 HILL_CLIMBER = None
 
@@ -74,20 +74,22 @@ def best_result():
 
     std_dev_worth = calc_std_dev(area_worths)
 
+    print(f"{NEIGHBOURHOOD} - {HOUSES}")
+
     print(f"Avg worth: {avg_worth} +- {std_dev_worth}")
 
     print(f"Avg runtime: {calc_avg(runtimes)}")
 
-    # Retrieve area with the highest area_worth
-    set_random_seed(best_seed)
+    # # Retrieve area with the highest area_worth
+    # set_random_seed(best_seed)
 
-    area = Area(NEIGHBOURHOOD, HOUSES)
+    # area = Area(NEIGHBOURHOOD, HOUSES)
 
-    algorithm(area, ALGORITHM)
+    # algorithm(area, ALGORITHM)
 
-    area.make_csv_output()
+    # area.make_csv_output()
 
-    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
+    # area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
 
     show_hist(area_worths, avg_worth, std_dev_worth)
 

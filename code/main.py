@@ -86,7 +86,7 @@ def algorithm(area, algorithm_name):
 
     end = time()
 
-    print(f"Runtime {algorithm_name}: {end - start}")
+    # print(f"Runtime {algorithm_name}: {end - start}")
 
     # for h in area.structures["House"]:
     #     print(h)
@@ -118,7 +118,7 @@ def set_random_seed(r = random.random()):
 
     random.seed(r)
 
-    print(f"Seed: {r}")
+    # print(f"Seed: {r}")
 
     return r
 

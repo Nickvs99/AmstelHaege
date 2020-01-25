@@ -14,14 +14,14 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
 from classes.area import Area
-from main import algorithm, hill_climber, set_random_seed
+from main import get_area, set_random_seed, algorithm, hill_climber
 from algorithms.hill_climber_steps import hill_climber_steps
 
 
-HOUSES = 60
-ITERATIONS = 1000
+HOUSES = 20
+ITERATIONS = 10
 NEIGHBOURHOOD = "wijk3"
-ALGORITHM = "greedy_random"
+ALGORITHM = "random"
 # HILL_CLIMBER = "hill_climber_random_random"
 HILL_CLIMBER = None
 
@@ -36,7 +36,7 @@ def best_result():
     
     area_worths = []
     runtimes= []
-
+    print("1")
     # Iterate the algorithm by the given amount of times
     for i in range(ITERATIONS):
 
@@ -44,15 +44,17 @@ def best_result():
 
         seed = set_random_seed(random.random())
 
-        area = Area(NEIGHBOURHOOD, HOUSES)
+        area = get_area(NEIGHBOURHOOD, HOUSES, ALGORITHM, HILL_CLIMBER)
 
-        algorithm(area, ALGORITHM)
-        
-        if HILL_CLIMBER:
+        # area = Area(NEIGHBOURHOOD, HOUSES)
 
-            hill_climber(area, HILL_CLIMBER)
+        # algorithm(area, ALGORITHM)
 
-            hill_climber_steps(area)
+        # if HILL_CLIMBER:
+
+        #     hill_climber(area, HILL_CLIMBER)
+
+        #     hill_climber_steps(area)
 
         area_worth = area.calc_worth_area()
         
@@ -62,7 +64,7 @@ def best_result():
             best_worth = area_worth
 
             best_seed = seed
-        
+        print("2")
         end = time()
 
         runtimes.append(end - start)
@@ -74,22 +76,18 @@ def best_result():
 
     std_dev_worth = calc_std_dev(area_worths)
 
-    print(f"{NEIGHBOURHOOD} - {HOUSES}")
-
     print(f"Avg worth: {avg_worth} +- {std_dev_worth}")
 
     print(f"Avg runtime: {calc_avg(runtimes)}")
+    
+    # Retrieve area with the highest area_worth
+    set_random_seed(best_seed)
 
-    # # Retrieve area with the highest area_worth
-    # set_random_seed(best_seed)
+    area = get_area()
 
-    # area = Area(NEIGHBOURHOOD, HOUSES)
+    area.make_csv_output()
 
-    # algorithm(area, ALGORITHM)
-
-    # area.make_csv_output()
-
-    # area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
+    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
 
     show_hist(area_worths, avg_worth, std_dev_worth)
 

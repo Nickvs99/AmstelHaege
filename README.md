@@ -43,5 +43,9 @@ ALGORITHM: Selects the algorithm to make the place houses.
 * evolution:
 
 HILLCLIMBER: Selects a algorithm to hillclimb on a algorithm run by ALGORITHM variable
+* hillclimber_random: tries every house an x amount of times and places it in the best position. It does that until no further improvement
+* hillclimber_random_random: tries to place a random house on a random location and places it when it scores better. It does this an x amount of times.
+* hillclimber_steps: Checks the x amount of meter in every direction for each house and places the house in the best location.
+* simulated_annealing: Tries to place a random house on a random location for an x amount of times. If better it places the house. If not it places the house by chance. The chance decreases over the amount of iterations.
 
 

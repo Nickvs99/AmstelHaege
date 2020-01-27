@@ -23,6 +23,7 @@ class Area():
     """
 
     def __init__(self, neighbourhood, houses):
+        
         self.height = 180
         self.width = 160
 
@@ -39,14 +40,14 @@ class Area():
 
     def create_area(self):
         """ 
-        Creates an listed list with self.height x self.width dimensions. 
-        This list is filled with zeroes.
+        Creates a nested list with self.height * self.width dimensions. 
+        This list is filled with zeros.
         """
 
         return [[ 0 for i in range(self.width)] for j in range(self.height)]
 
     def load_water(self, neighbourhood):
-        """ Gets the water from the csv file and creates objects from them. """
+        """ Gets the water-data from the csv file and creates objects from them. """
 
         # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))
@@ -54,6 +55,7 @@ class Area():
         path = os.path.join(my_path, location)
 
         water_count = 0
+        
         # Open the csv-file as a dictionary
         with open(path) as csv_file:
 
@@ -78,7 +80,7 @@ class Area():
                     water_count += 1
         
     def fill_area(self, area):
-        """ Fill the area with the objects with the state of the structures"""
+        """ Fill the given area with the objects with the state of the structures"""
 
         for water in self.structures["Water"]:
 
@@ -93,7 +95,7 @@ class Area():
                     area[y][x] = house.state
 
     def plot_area(self, neighbourhood, houses, algorithm):
-        """ Plots the area """
+        """ Plots the current area """
         
         area = self.create_area()
         self.fill_area(area)
@@ -159,7 +161,7 @@ class Area():
         return False
 
     def calc_worth_area(self):
-        """ Calculates the worth of the area. """
+        """ Calculates the worth of the given area. """
 
         total_worth = 0
         
@@ -178,7 +180,7 @@ class Area():
         return True
 
     def make_csv_output(self):
-        """ Function which updates the output file """
+        """ Gives command to store/update the output file """
 
         # Store values csv_output_list
         csv_output_list = self.make_csv_output_list()
@@ -204,7 +206,6 @@ class Area():
         return csv_output_list
 
     def csv_output(self, csv_output_list):
-
         """ (Over)writes the houselist into the ouput.csv """
 
         # Specify the path of the csv-file
@@ -221,7 +222,7 @@ class Area():
                 wr.writerow(structure)
     
     def update_distances(self, house):
-        """ Update the distances."""
+        """ Update the distances from the specific house-object."""
         
         # Reset all distances for house
         house.init_distances(self.structures["House"])

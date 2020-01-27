@@ -37,7 +37,7 @@ SWAP_RATE = 0.1
 FITNESS_POWER = 3
 
 # Set SA to True, if you want to add simulated annealing to the algorithm
-SA = False
+SA = True
 
 class Individual():
     """ An individual from the population. Stores an area object and the worth and fitness values."""
@@ -86,11 +86,13 @@ class Individual():
                 continue
 
             while_count = 0
-            while True:
-
+            valid = False
+            while not valid:
+                
+                max_displacement = 5
                 # Random coordinates shift
-                diff_x = int(random.random() * 10 - 5)
-                diff_y = int(random.random() * 10 - 5)
+                diff_x = int(random.random() * max_displacement  * 2 - max_displacement)
+                diff_y = int(random.random() * max_displacement  * 2 - max_displacement)
 
                 x = initial_x + diff_x
                 y = initial_y + diff_y
@@ -98,15 +100,15 @@ class Individual():
                 house.set_coordinates([x, y], house.horizontal)
 
                 if self.area.check_valid(house, x, y):
-                    break
-
-                while_count += 1
+                    valid = True
 
                 # Set house to its initial state, if no valid place has been found
                 if while_count == 1000:
                     house.set_coordinates([initial_x, initial_y], initial_orientation)
                     break
-            
+
+                while_count += 1
+                
             self.area.update_distances(house)
 
     def change_orientation(self):
@@ -183,7 +185,7 @@ def evolution(area):
         place_housesgreedyrandom(copy_area)
         individuals.append(Individual(copy_area))
     
-    # Sort individuals
+    # Sort individuals by their worth
     individuals.sort(key=lambda x: x.worth, reverse=True)
 
     # Lists to keep track of the progress op the population
@@ -308,6 +310,10 @@ def update_mutate_rates(generation_count):
     global SWAP_RATE
     global ORIENTATION_RATE
 
-    MOVE_RATE = 2 / generation_count + 0.04
-    ORIENTATION_RATE = 2 / generation_count + 0.02
-    SWAP_RATE = 2 / generation_count + 0.02
+    MOVE_RATE = cool_function(generation_count)
+    ORIENTATION_RATE = cool_function(generation_count)
+    SWAP_RATE = cool_function(generation_count)
+
+def cool_function(generation_count):
+
+    return 2 / generation_count + 0.04

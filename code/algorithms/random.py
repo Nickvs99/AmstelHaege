@@ -11,7 +11,7 @@ import random
 from classes.structure import House
 
 def random_placement(area):
-    """ Places the houses randomly. """
+    """ Places a new set of house-objects on a given area. """
 
     houses = create_houses(area, area.one_person_house_count, area.bungalow_count, area.maison_count)
 
@@ -19,7 +19,7 @@ def random_placement(area):
         place_house(area, house)
 
 def create_houses(area, one_person_house_count, bungalow_count, maison_count):
-    """ Creates a list with houses. """
+    """ Creates a list of house-objects. """
 
     # TODO repeated code
     houses = []
@@ -27,7 +27,6 @@ def create_houses(area, one_person_house_count, bungalow_count, maison_count):
         r = random.choice([True, False])
         house = House("maison_" + str(i), r)
         houses.append(house)
-        
 
     for i in range(bungalow_count):
         r = random.choice([True, False])

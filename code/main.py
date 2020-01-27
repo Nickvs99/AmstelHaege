@@ -18,12 +18,13 @@ from algorithms.simulated_annealing import simulated_annealing
 
 
 def main():
+    """ Main function """
 
     start = time()
 
     neighbourhood, houses, algorithm, hill_climber = check_argv()
 
-    seed = set_random_seed()
+    seed = set_random_seed(0.1)
 
     area = get_area(neighbourhood, houses, algorithm, hill_climber)
     
@@ -37,6 +38,10 @@ def main():
 
 
 def get_area(neighbourhood, houses, algorithm_name, hill_climber_name):
+    """ 
+    Runs the specific algorithm with hill_climber, if requested.
+    And returns the generated area. 
+    """
 
     area = Area(neighbourhood, houses)
 
@@ -46,13 +51,11 @@ def get_area(neighbourhood, houses, algorithm_name, hill_climber_name):
 
         hill_climber(area, hill_climber_name)
 
-        hill_climber_steps(area)
-
     return area
 
 
 def algorithm(area, algorithm_name):
-    """ Runs the specific algorithm """
+    """ Runs the specific algorithm with the given area. """
 
     if algorithm_name == "random":
         random_placement(area)
@@ -66,12 +69,9 @@ def algorithm(area, algorithm_name):
     elif algorithm_name == "evolution":
         evolution(area)
 
-    else:
-        raise Exception("Invalid algorithm name")
-
 
 def hill_climber(area, hill_climber_name):
-    """ Runs the specific hill climber """
+    """ Runs the specific hill climber with the given area. """
 
     if hill_climber_name == "hill_climber_steps":
         hill_climber_steps(area)
@@ -84,51 +84,56 @@ def hill_climber(area, hill_climber_name):
 
     elif hill_climber_name == "simulated_annealing":
         simulated_annealing(area)
-    
-    else:
-        raise Exception("Invalid hill climber name")
 
 
 def check_argv():
+    """ Checks the command-line arguments for validity. """
 
+    hill_climber_list = ["hill_climber_steps", "hill_climber_random", 
+                            "hill_climber_random_random", "simulated_annealing"]
+
+    neighbourhood, houses, algorithm = check_neighbourhood_houses_algorithm()
+    
+    # Command-line without hill climber
     if len(sys.argv) == 4:
-
-        neighbourhood, houses, algorithm = check_neighbourhood_houses_algorithm()
-
+        
         return neighbourhood, houses, algorithm, None
 
+    # Command-line with hill climber
     elif len(sys.argv) == 5:
         
-        if sys.argv[4].lower() not in ["hill_climber_steps", "hill_climber_random", "hill_climber_random_random", "simulated_annealing"]:
-            print("Fifth argument must be: 'hill_climber_steps', 'hill_climber_random', 'hill_climber_random_random' or\n \
-                            'simulated_annealing'")
+        if sys.argv[4].lower() not in hill_climber_list:
+            print(f"Hill climber must be: {str(hill_climber_list)[1:-1]}")
             sys.exit (1)
+        
         else:
-            neighbourhood, houses, algorithm = check_neighbourhood_houses_algorithm()
-
             return neighbourhood, houses, algorithm, sys.argv[4].lower()
 
     else:
-        print("Usage: python main.py neighbourhood houses algorithm \n or \
-        \nUsage: python main.py neighbourhood houses algorithm hill_climber")
+        print("Usage: python main.py neighbourhood amount_houses algorithm \n or \
+        \nUsage: python main.py neighbourhood amount_houses algorithm hill_climber")
         sys.exit (1)
 
 
 def check_neighbourhood_houses_algorithm():
+    """ Checks the arguments for the neighbourhood, amount of houses and the algorithm. """
 
-    if sys.argv[1].lower() not in ["wijk1", "wijk2", "wijk3"]:
-        print("Second argument must be: 'wijk1', 'wijk2' or 'wijk3'")
+    neighbourhood_list = ["wijk1", "wijk2", "wijk3"]
+    algorithm_list = ["random", "greedy", "greedy_random", "evolution"]
+
+    if sys.argv[1].lower() not in neighbourhood_list:
+        print(f"Neighbourhood must be: {str(neighbourhood_list)[1:-1]}")
         sys.exit (1)
 
     elif not sys.argv[2].isdigit():
-        print("Third argument must be a digit")
+        print("Amount of houses must be a digit")
         sys.exit (1)
 
-    ## (Optional - functions raise exception if invalid)
-    elif sys.argv[3].lower() not in ["random", "greedy", "random_greedy", "evolution"]:
-        print("Fourth argument must be: 'random', 'greedy', 'random_greedy' or 'evolution'")
+    elif sys.argv[3].lower() not in algorithm_list:
+        print(f"Algorithm must be: {str(algorithm_list)[1:-1]}")
         sys.exit (1)
 
+    # If valid, return their values
     else:        
         return sys.argv[1].lower(), int(sys.argv[2]), sys.argv[3].lower()
         

@@ -18,12 +18,12 @@ from main import get_area, set_random_seed, algorithm, hill_climber
 from algorithms.hill_climber_steps import hill_climber_steps
 
 
-HOUSES = 20
-ITERATIONS = 1000
-NEIGHBOURHOOD = "wijk3"
+HOUSES = 60
+ITERATIONS = 10
+NEIGHBOURHOOD = "wijk1"
 ALGORITHM = "greedy_random"
-# HILL_CLIMBER = "hill_climber_random_random"
-HILL_CLIMBER = None
+HILL_CLIMBER = "hill_climber_steps"
+# HILL_CLIMBER = None
 
 def best_result():
     """
@@ -90,10 +90,8 @@ def show_hist(area_worths, avg_worth, std_dev):
     # For better visualisation of the histogram.
     if ITERATIONS < 100:
         num_bins = 10
-
     elif ITERATIONS > 1000:
         num_bins = 50
-    
     else:
         num_bins = 25
 

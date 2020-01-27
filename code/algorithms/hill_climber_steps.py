@@ -22,22 +22,21 @@ def hill_climber_steps(area):
 
         worth = area.calc_worth_area()
 
-        # Store the highest area_worth or else break loop, 
-        # because a maximum is reached
+        # Store the highest area_worth 
         if compare_area_worth < worth:
             compare_area_worth = worth
         
         elif i == 1000:
             print(f"Too many iterations needed")
 
+        # Break iterationloop, because a value maximum is reached
         else:
             break
-
     
 
 def hill_climber_once(area):
     """ 
-    Moves each house object seperatly and stores the coordinates 
+    Moves each house-object seperatly and stores the coordinates 
     with the best area worth.
     """
 

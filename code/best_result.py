@@ -1,5 +1,6 @@
 """
 This python file iterates over a specific amount of randomly placed houses on the grid.
+The average area worth with standard deviation and average runtime will be s
 The seed of the grid with the highest calculated worth, will be shown and saved.
 """
 
@@ -13,20 +14,22 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
 from classes.area import Area
-from main import algorithm, set_random_seed
+from main import algorithm, hill_climber, set_random_seed
+from algorithms.hill_climber_steps import hill_climber_steps
 
 
-ALGORITHM = "random"
-NEIGHBOURHOOD = "wijk1"
-HOUSES = 20
+HOUSES = 60
 ITERATIONS = 1000
+NEIGHBOURHOOD = "wijk1"
+ALGORITHM = "random"
+# HILL_CLIMBER = "hill_climber_random_random"
+HILL_CLIMBER = None
 
 def best_result():
     """
     Iterates over n amount of random grids and returns
-    the seed with the highest calucalted worth
+    the area with the highest calucalted worth
     """
-    start = time()
 
     best_worth = 0
     best_seed = 0
@@ -34,6 +37,7 @@ def best_result():
     area_worths = []
     runtimes= []
 
+    # Iterate the algorithm by the given amount of times
     for i in range(ITERATIONS):
 
         start = time()
@@ -43,47 +47,56 @@ def best_result():
         area = Area(NEIGHBOURHOOD, HOUSES)
 
         algorithm(area, ALGORITHM)
+        
+        if HILL_CLIMBER:
+
+            hill_climber(area, HILL_CLIMBER)
+
+            hill_climber_steps(area)
 
         area_worth = area.calc_worth_area()
+        
+        # Store the highest area_worth with its corresponding seed
+        if area_worth > best_worth:
 
+            best_worth = area_worth
+
+            best_seed = seed
+        
         end = time()
 
         runtimes.append(end - start)
 
         area_worths.append(area_worth)
 
-        if area_worth > best_worth:
-            best_worth = area_worth
-            best_seed = seed
+    # Calculate average area_worth and its standard deviation
+    avg_worth = calc_avg(area_worths)
 
+    std_dev_worth = calc_std_dev(area_worths)
+
+    print(f"Avg worth: {avg_worth} +- {std_dev_worth}")
+
+    print(f"Avg runtime: {calc_avg(runtimes)}")
+
+    # Retrieve area with the highest area_worth
     set_random_seed(best_seed)
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
     algorithm(area, ALGORITHM)
 
-    avg_worth = calc_avg(area_worths)
-    std_dev_worth = calc_std_dev(area_worths)
+    area.make_csv_output()
 
-    print(f"Best worth: {best_worth}")
-
-    print(f"Avg worth: {avg_worth} +- {std_dev_worth}")
-
-    print(f"Avg runtime: {calc_avg(runtimes)}")
-
-    end = time()
-
-    print(f"Runtime: {end - start}")
-
-    # area.plot_area(int(best_worth))
+    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
 
     show_hist(area_worths, avg_worth, std_dev_worth)
 
-    return area
     
 def show_hist(area_worths, avg_worth, std_dev): 
+    """
+    Returns a histogram with all the saved area_worths and a box with 
+    """
 
-    # TODO fitting through histogram
     num_bins = 50
 
     fig, ax = plt.subplots()

@@ -16,17 +16,25 @@ from algorithms.hill_climber_steps import hill_climber_steps
 from algorithms.evolution import evolution
 from algorithms.simulated_annealing import simulated_annealing
 
+# The number of houses
+HOUSES = 60
 
-
-HOUSES = 20
+# The neighbourhood which has to be optimised, choises are:
+# "wijk1", "wijk2" or "wijk3"
 NEIGHBOURHOOD = "wijk1"
-ALGORITHM = "evolution"
-HILL_CLIMBER = "hill_climber_steps"
-# HILL_CLIMBER = None
+
+# Algorithm used for the optimasation, choises are:
+# "random", "greedy", "greedy_random", "evolution"
+ALGORITHM = "greedy_random"
+
+# Hill climber used for further optimasation, choises are:
+# "hill_climber_steps", "hill_climber_random", "hill_climber_random_random", 
+# "simulated_annealing" or None. 
+HILL_CLIMBER = "hill_climber_random_random"
 
 def main():
 
-    set_random_seed()
+    set_random_seed(0.4906269926668486)
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 
@@ -37,14 +45,27 @@ def main():
     area.make_csv_output()
 
     if HILL_CLIMBER:
+        
+        start = time()
 
         hill_climber(area, HILL_CLIMBER)
 
+        hill_climber_steps(area)
+
+        end = time()
+
+        print(f"Runtime Hill Climber: {end - start}")
+
         area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
 
-        area.make_csv_output()
+        end = time()
+
+        print(f"Runtime {HILL_CLIMBER}: {end - start}")
+        
+        # area.make_csv_output()
 
 def algorithm(area, algorithm_name):
+    """ Runs the specific algorithm """
 
     start = time()
 
@@ -71,8 +92,7 @@ def algorithm(area, algorithm_name):
     #     print(h)
 
 def hill_climber(area, hill_climber_name):
-
-    start = time()
+    """ Runs the specific hill climber """
 
     if hill_climber_name == "hill_climber_steps":
         hill_climber_steps(area)
@@ -87,10 +107,6 @@ def hill_climber(area, hill_climber_name):
         simulated_annealing(area)
     else:
         raise Exception("Invalid hill climber name")
-
-    end = time()
-
-    print(f"Runtime {hill_climber_name}: {end - start}")
 
     # for h in area.structures["House"]:
     #     print(h)

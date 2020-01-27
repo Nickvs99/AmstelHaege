@@ -233,7 +233,7 @@ def evolution(area):
 def evolve(individuals):
     """ Evolve the population one generation further."""    
 
-    # Accumulate fitness
+    # Cumulate fitness
     total_fitness = 0
     for individual in individuals:
         total_fitness += individual.fitness
@@ -244,7 +244,7 @@ def evolve(individuals):
         norm_fitness += individual.fitness / total_fitness
         individual.norm_fitness = norm_fitness
 
-    # Accumulate norm fitness
+    # Cumulate norm fitness
     cum_fitness = 0
     for individual in individuals:
         cum_fitness += individual.norm_fitness

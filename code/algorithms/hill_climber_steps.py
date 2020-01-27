@@ -2,7 +2,7 @@
 This interpretation of hill climbing works on a generated solution.
 Each house object will be moved in specific steps horizontally and vertically.
 All the moves will be checked for validation and the best results stored.
-This process will be iterated and stopped if the best area is found.
+This process will be iterated and stopped(saved) if the best area is found.
 """
 
 from time import time
@@ -24,6 +24,8 @@ def hill_climber_steps(area):
 
         worth = area.calc_worth_area()
 
+        # Store the highest area_worth or else break loop, 
+        # because a maximum is reached
         if compare_area_worth < worth:
             compare_area_worth = worth
         else:
@@ -32,9 +34,6 @@ def hill_climber_steps(area):
 
         counter += 1
     
-    # print(f"Best worth: {worth}")
-    # for h in area.structures["House"]:
-    #     print(h)
 
 def hill_climber_once(area):
     """ 
@@ -53,17 +52,21 @@ def hill_climber_once(area):
         best_bottom_left = house.bottom_left_cor
         best_orientation = house.horizontal
         
-        # move object by the range in steps
+        # Move object by the range in steps
         for move_steps in range(1,11):
 
             for direction in move_directions:
-
+                
+                # Specify movement in the correct direction
                 if direction == "up":
                     move = [house.bottom_left_cor[0], house.bottom_left_cor[1] + move_steps]
+                
                 elif direction == "right":
                     move = [house.bottom_left_cor[0] + move_steps, house.bottom_left_cor[1]]
+                
                 elif direction == "down":
                     move = [house.bottom_left_cor[0], house.bottom_left_cor[1] - move_steps]
+                
                 elif direction == "left":
                     move = [house.bottom_left_cor[0] - move_steps, house.bottom_left_cor[1]]
                 

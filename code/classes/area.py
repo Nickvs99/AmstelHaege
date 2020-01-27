@@ -1,8 +1,8 @@
 import os
 import csv
+import math
 import matplotlib
 import matplotlib.pyplot as plt
-import math
 
 from .structure import Structure, House
 
@@ -90,15 +90,10 @@ class Area():
 
             for y in range(house.bottom_left_cor[1], house.top_right_cor[1]):
                 for x in range(house.bottom_left_cor[0], house.top_right_cor[0]):
-                    try:
-                        area[y][x] = house.state
-                    except:
-                        print(x, y)
+                    area[y][x] = house.state
 
     def plot_area(self, neighbourhood, houses, algorithm):
-        """
-        Plots the area.
-        """
+        """ Plots the area """
         
         area = self.create_area()
         self.fill_area(area)
@@ -143,7 +138,7 @@ class Area():
 
             for test_corner in test_corners:
                 
-                # Get the corners of the non allowed space. This includes the mandatory space.
+                # Get the corners of the non allowed space. This includes the mandatory space
                 corner_bottom_left = [house.corners[0][0] - house.mandatory_free_space, house.corners[0][1] - house.mandatory_free_space]
                 corner_top_right = [house.corners[3][0] + house.mandatory_free_space, house.corners[3][1] + house.mandatory_free_space]
 
@@ -183,7 +178,7 @@ class Area():
         return True
 
     def make_csv_output(self):
-        """ Function which commands to update the output """
+        """ Function which updates the output file """
 
         # Store values csv_output_list
         csv_output_list = self.make_csv_output_list()
@@ -217,11 +212,11 @@ class Area():
 
         path = os.path.join(my_path, "..\..\csv-output\output.csv")
 
-        # Open the current output.csv
+        # Open the output.csv file
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
 
-            # (Over)write each line of house_list into the csv-file
+            # (Over)write each line of the csv-output list into the csv-file
             for structure in csv_output_list:
                 wr.writerow(structure)
     
@@ -251,7 +246,7 @@ class Area():
                     x_dist = abs(corner[0] - new_corner[0])
                     y_dist = abs(corner[1] - new_corner[1])
 
-                    # Use the maximum value, since the minimum value wouldnt reach the object
+                    # Use the maximum value, since the minimum value wouldn't reach the object
                     dist = max(x_dist, y_dist)
 
                     if dist < h.neighbour_distances[house.name]:
@@ -259,5 +254,3 @@ class Area():
                     
                     if dist < house.neighbour_distances[h.name]:
                         house.neighbour_distances[h.name] = dist
-
-

@@ -1,5 +1,5 @@
 """
-hill_climber_steps.py
+hill_climber_steps.py 
 
 This interpretation of hill climbing works on a generated solution.
 Each house object will be moved in specific steps horizontally and vertically.

@@ -14,16 +14,16 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
 from classes.area import Area
-from main import algorithm, hill_climber, set_random_seed
+from main import get_area, set_random_seed, algorithm, hill_climber
 from algorithms.hill_climber_steps import hill_climber_steps
 
 
 HOUSES = 60
-ITERATIONS = 1000
+ITERATIONS = 10
 NEIGHBOURHOOD = "wijk1"
-ALGORITHM = "random"
-# HILL_CLIMBER = "hill_climber_random_random"
-HILL_CLIMBER = None
+ALGORITHM = "greedy_random"
+HILL_CLIMBER = "hill_climber_steps"
+# HILL_CLIMBER = None
 
 def best_result():
     """
@@ -36,27 +36,19 @@ def best_result():
     
     area_worths = []
     runtimes= []
-
-    # Iterate the algorithm by the given amount of times
+    
+    # Iterate the algorithm by the given amount of times.
     for i in range(ITERATIONS):
 
         start = time()
 
         seed = set_random_seed(random.random())
 
-        area = Area(NEIGHBOURHOOD, HOUSES)
-
-        algorithm(area, ALGORITHM)
-        
-        if HILL_CLIMBER:
-
-            hill_climber(area, HILL_CLIMBER)
-
-            hill_climber_steps(area)
+        area = get_area(NEIGHBOURHOOD, HOUSES, ALGORITHM, HILL_CLIMBER)
 
         area_worth = area.calc_worth_area()
         
-        # Store the highest area_worth with its corresponding seed
+        # Store the highest area_worth with its corresponding seed.
         if area_worth > best_worth:
 
             best_worth = area_worth
@@ -77,13 +69,11 @@ def best_result():
     print(f"Avg worth: {avg_worth} +- {std_dev_worth}")
 
     print(f"Avg runtime: {calc_avg(runtimes)}")
-
+    
     # Retrieve area with the highest area_worth
     set_random_seed(best_seed)
 
-    area = Area(NEIGHBOURHOOD, HOUSES)
-
-    algorithm(area, ALGORITHM)
+    area = get_area(NEIGHBOURHOOD, HOUSES, ALGORITHM, HILL_CLIMBER)
 
     area.make_csv_output()
 
@@ -95,9 +85,15 @@ def best_result():
 def show_hist(area_worths, avg_worth, std_dev): 
     """
     Returns a histogram with all the saved area_worths and a box with 
-    """
+    """    
 
-    num_bins = 50
+    # For better visualisation of the histogram.
+    if ITERATIONS < 100:
+        num_bins = 10
+    elif ITERATIONS > 1000:
+        num_bins = 50
+    else:
+        num_bins = 25
 
     fig, ax = plt.subplots()
 
@@ -144,6 +140,7 @@ def calc_avg(array):
         total += i
 
     return total / len(array)
+
 
 if __name__ == "__main__":
     best_result()

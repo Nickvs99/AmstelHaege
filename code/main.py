@@ -2,7 +2,7 @@
 main.py
 """
 
-
+import sys
 import random
 from time import time
 
@@ -10,64 +10,52 @@ from classes.area import Area
 from algorithms.random import random_placement
 from algorithms.greedy import place_housesgreedy
 from algorithms.greedy_random import place_housesgreedyrandom
+from algorithms.hill_climber_steps import hill_climber_steps
 from algorithms.hill_climber_random import hill_climber_random
 from algorithms.hill_climber_random_random import hill_climber_random_random
-from algorithms.hill_climber_steps import hill_climber_steps
 from algorithms.evolution import evolution
 from algorithms.simulated_annealing import simulated_annealing
 
-# The number of houses
-HOUSES = 60
-
-# The neighbourhood which has to be optimised, choises are:
-# "wijk1", "wijk2" or "wijk3"
-NEIGHBOURHOOD = "wijk1"
-
-# Algorithm used for the optimasation, choises are:
-# "random", "greedy", "greedy_random", "evolution"
-ALGORITHM = "greedy_random"
-
-# Hill climber used for further optimasation, choises are:
-# "hill_climber_steps", "hill_climber_random", "hill_climber_random_random", 
-# "simulated_annealing" or None. 
-HILL_CLIMBER = "hill_climber_random_random"
 
 def main():
-
-    set_random_seed(0.4906269926668486)
-
-    area = Area(NEIGHBOURHOOD, HOUSES)
-
-    algorithm(area, ALGORITHM)
-
-    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
-
-    area.make_csv_output()
-
-    if HILL_CLIMBER:
-        
-        start = time()
-
-        hill_climber(area, HILL_CLIMBER)
-
-        hill_climber_steps(area)
-
-        end = time()
-
-        print(f"Runtime Hill Climber: {end - start}")
-
-        area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
-
-        end = time()
-
-        print(f"Runtime {HILL_CLIMBER}: {end - start}")
-        
-        # area.make_csv_output()
-
-def algorithm(area, algorithm_name):
-    """ Runs the specific algorithm """
+    """ Main function """
 
     start = time()
+
+    neighbourhood, houses, algorithm, hill_climber = check_argv()
+
+    seed = set_random_seed(0.1)
+
+    area = get_area(neighbourhood, houses, algorithm, hill_climber)
+    
+    end = time()
+
+    print(f"Seed: {seed} \nRuntime: {end - start}")
+    
+    area.make_csv_output()
+
+    area.plot_area(neighbourhood, houses, algorithm)
+
+
+def get_area(neighbourhood, houses, algorithm_name, hill_climber_name):
+    """ 
+    Runs the specific algorithm with hill_climber, if requested.
+    And returns the generated area. 
+    """
+
+    area = Area(neighbourhood, houses)
+
+    algorithm(area, algorithm_name)
+
+    if hill_climber_name:
+
+        hill_climber(area, hill_climber_name)
+
+    return area
+
+
+def algorithm(area, algorithm_name):
+    """ Runs the specific algorithm with the given area. """
 
     if algorithm_name == "random":
         random_placement(area)
@@ -81,18 +69,9 @@ def algorithm(area, algorithm_name):
     elif algorithm_name == "evolution":
         evolution(area)
 
-    else:
-        raise Exception("Invalid algorithm name")
-
-    end = time()
-
-    print(f"Runtime {algorithm_name}: {end - start}")
-
-    # for h in area.structures["House"]:
-    #     print(h)
 
 def hill_climber(area, hill_climber_name):
-    """ Runs the specific hill climber """
+    """ Runs the specific hill climber with the given area. """
 
     if hill_climber_name == "hill_climber_steps":
         hill_climber_steps(area)
@@ -105,20 +84,65 @@ def hill_climber(area, hill_climber_name):
 
     elif hill_climber_name == "simulated_annealing":
         simulated_annealing(area)
+
+
+def check_argv():
+    """ Checks the command-line arguments for validity. """
+
+    hill_climber_list = ["hill_climber_steps", "hill_climber_random", 
+                            "hill_climber_random_random", "simulated_annealing"]
+
+    neighbourhood, houses, algorithm = check_neighbourhood_houses_algorithm()
+    
+    # Command-line without hill climber
+    if len(sys.argv) == 4:
+        
+        return neighbourhood, houses, algorithm, None
+
+    # Command-line with hill climber
+    elif len(sys.argv) == 5:
+        
+        if sys.argv[4].lower() not in hill_climber_list:
+            print(f"Hill climber must be: {str(hill_climber_list)[1:-1]}")
+            sys.exit (1)
+        
+        else:
+            return neighbourhood, houses, algorithm, sys.argv[4].lower()
+
     else:
-        raise Exception("Invalid hill climber name")
+        print("Usage: python main.py neighbourhood amount_houses algorithm \n or \
+        \nUsage: python main.py neighbourhood amount_houses algorithm hill_climber")
+        sys.exit (1)
 
-    # for h in area.structures["House"]:
-    #     print(h)
 
+def check_neighbourhood_houses_algorithm():
+    """ Checks the arguments for the neighbourhood, amount of houses and the algorithm. """
+
+    neighbourhood_list = ["wijk1", "wijk2", "wijk3"]
+    algorithm_list = ["random", "greedy", "greedy_random", "evolution"]
+
+    if sys.argv[1].lower() not in neighbourhood_list:
+        print(f"Neighbourhood must be: {str(neighbourhood_list)[1:-1]}")
+        sys.exit (1)
+
+    elif not sys.argv[2].isdigit():
+        print("Amount of houses must be a digit")
+        sys.exit (1)
+
+    elif sys.argv[3].lower() not in algorithm_list:
+        print(f"Algorithm must be: {str(algorithm_list)[1:-1]}")
+        sys.exit (1)
+
+    # If valid, return their values
+    else:        
+        return sys.argv[1].lower(), int(sys.argv[2]), sys.argv[3].lower()
+        
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.
     Use the same seed to get the same results. By default it uses a random seed."""
 
     random.seed(r)
-
-    print(f"Seed: {r}")
 
     return r
 

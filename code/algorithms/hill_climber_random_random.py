@@ -21,15 +21,19 @@ def hill_climber_random_random(area):
 
         old_x = house.bottom_left_cor[0]
         old_y = house.bottom_left_cor[1]
+        old_orientation = house.horizontal
 
         # Checks if the move is valid and moves house
-        if area.check_valid(house, x, y):
-            move(area, house, x, y)
-            new_worth = area.calc_worth_area()
+        for orientation in[True, False]:
+            house.set_orientation(orientation)
+            if area.check_valid(house, x, y):
+                move(area, house, x, y)
+                new_worth = area.calc_worth_area()
 
-            # Places house back if the move gets a lower score
-            if worth > new_worth:
-                move(area, house, old_x, old_y)
+                # Places house back if the move gets a lower score
+                if worth > new_worth:
+                    house.set_orientation(old_orientation)
+                    move(area, house, old_x, old_y)
 
 def move(area, house, x, y):
     """

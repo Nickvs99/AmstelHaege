@@ -18,7 +18,7 @@ from algorithms.simulated_annealing import simulated_annealing
 
 
 
-HOUSES = 10
+HOUSES = 20
 NEIGHBOURHOOD = "wijk1"
 ALGORITHM = "random"
 HILL_CLIMBER = "hill_climber_random"
@@ -26,7 +26,7 @@ HILL_CLIMBER = "hill_climber_random"
 
 def main():
 
-    set_random_seed(0.031248807907104492)
+    set_random_seed()
 
     area = Area(NEIGHBOURHOOD, HOUSES)
 

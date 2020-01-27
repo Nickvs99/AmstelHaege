@@ -18,6 +18,7 @@ def hill_climber_random(area):
                 # Starts hillcimbing for a house
                 greedy_hill_climber(area, house)
             worth_global = area.calc_worth_area()
+            print(worth_global)
 
 
 def greedy_hill_climber(area, house):
@@ -33,41 +34,22 @@ def greedy_hill_climber(area, house):
         x = int(random.random() * (area.width - house.width + 1))
         y = int(random.random() * (area.height - house.height + 1))
 
-        # TODO create a function for both blocks of code
-        # Checks score for house horizotally
-        house.set_orientation(True)
-        if area.check_valid(house, x, y):
-            move(area, house, x, y)
-            worth = area.calc_worth_area()
+        # Checks score for house
+        for orientation in [True, False]:
+            house.set_coordinates([x, y], orientation)
+            if area.check_valid(house, x, y):
+                area.update_distances(house)
+                worth = area.calc_worth_area()
 
-            # Selects best place for house
-            if worth > best_worth:
-                best_worth = worth
-                best_x = x
-                best_y = y
-                best_orientation = True
+                # Selects best place for house
+                if worth > best_worth:
+                    best_worth = worth
+                    best_x = x
+                    best_y = y
+                    best_orientation = orientation
 
-        # Checks score for house vertically
-        house.set_orientation(False)
-        if area.check_valid(house, x, y):
-            move(area, house, x, y)
-            worth = area.calc_worth_area()
 
-            # Selects best place for house
-            if worth > best_worth:
-                best_worth = worth
-                best_x = x
-                best_y = y
-                best_orientation = False
 
     # Places house in best place
-    house.set_orientation(best_orientation)
-    move(area, house, best_x, best_y)
-
-def move(area, house, x, y):
-    """
-    Moves a house.
-    """
-
-    house.set_coordinates([x, y], house.horizontal)
+    house.set_coordinates([best_x, best_y], best_orientation)
     area.update_distances(house)

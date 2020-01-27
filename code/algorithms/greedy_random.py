@@ -19,31 +19,19 @@ def greedy(area, house):
         x = int(random.random() * (area.width - min_dist + 1))
         y = int(random.random() * (area.height - min_dist + 1))
 
-        # Checks score for house horizotally
-        house.set_coordinates([x,y], True)
-        if area.check_valid(house, x, y):
-            area.update_distances(house)
-            worth = area.calc_worth_area()
+        # Checks score for house
+        for orientation in [True, False]:
+            house.set_coordinates([x,y], orientation)
+            if area.check_valid(house, x, y):
+                area.update_distances(house)
+                worth = area.calc_worth_area()
 
-            # Selects best place for house
-            if worth > best_worth:
-                best_worth = worth
-                best_x = x
-                best_y = y
-                best_orientation = True
-
-        # Checks score for house vertically
-        house.set_coordinates([x,y], False)
-        if area.check_valid(house, x, y):
-            area.update_distances(house)
-            worth = area.calc_worth_area()
-
-            # Selects best place for house
-            if worth > best_worth:
-                best_worth = worth
-                best_x = x
-                best_y = y
-                best_orientation = False
+                # Selects best place for house
+                if worth > best_worth:
+                    best_worth = worth
+                    best_x = x
+                    best_y = y
+                    best_orientation = orientation
 
     # Places house in best place
     house.set_coordinates([best_x,best_y], best_orientation)

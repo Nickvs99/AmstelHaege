@@ -15,32 +15,25 @@ from algorithms.hill_climber_random_random import hill_climber_random_random
 from algorithms.hill_climber_steps import hill_climber_steps
 from algorithms.evolution import evolution
 from algorithms.simulated_annealing import simulated_annealing
-
-
-
-HOUSES = 20
-NEIGHBOURHOOD = "wijk2"
-ALGORITHM = "random"
-HILL_CLIMBER = "hill_climber_steps"
-# HILL_CLIMBER = None
+from settings import main_settings as settings 
 
 def main():
 
     set_random_seed()
 
-    area = Area(NEIGHBOURHOOD, HOUSES)
+    area = Area(settings["neighbourhood"], settings["houses"])
 
-    algorithm(area, ALGORITHM)
+    algorithm(area, settings["algorithm"])
 
-    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
+    area.plot_area(settings["neighbourhood"], settings["houses"], settings["algorithm"])
 
     area.make_csv_output()
 
-    if HILL_CLIMBER:
+    if settings["hill_climber"]:
 
-        hill_climber(area, HILL_CLIMBER)
+        hill_climber(area, settings["hill_climber"])
 
-        area.plot_area(NEIGHBOURHOOD, HOUSES, HILL_CLIMBER)
+        area.plot_area(settings["neighbourhood"], settings["houses"], settings["hill_climber"])
 
         area.make_csv_output()
 

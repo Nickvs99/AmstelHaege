@@ -4,14 +4,16 @@ from classes.structure import House
 from algorithms.random import random_placement
 import random
 
+from settings import simulated_annealing_settings as settings
+
 def simulated_annealing(area):
     # for i in range(100):
     #     print("iteratie")
     #     print(i)
     #     print(area.calc_worth_area())
 
-    for j in range(1,1000):
-        T = 1000 - j
+    for j in range(settings["iterations"]):
+        T = settings["iterations"] - j
         print(j)
         worth = area.calc_worth_area()
         x = 0
@@ -28,6 +30,6 @@ def simulated_annealing(area):
                 place_housegreedyrandom(area, house, x, y)
                 new_worth = area.calc_worth_area()
                 if worth > new_worth:
-                    chance = random.random() * 1000
+                    chance = random.random() * settings["iterations"]
                     if T < chance:
                         place_housegreedyrandom(area, house, old_x, old_y)

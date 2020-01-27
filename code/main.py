@@ -24,7 +24,7 @@ def main():
 
     neighbourhood, houses, algorithm, hill_climber = check_argv()
 
-    seed = set_random_seed(0.1)
+    seed = set_random_seed()
 
     area = get_area(neighbourhood, houses, algorithm, hill_climber)
     

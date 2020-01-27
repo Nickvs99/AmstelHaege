@@ -42,13 +42,14 @@ def create_houses(area, one_person_house_count, bungalow_count, maison_count):
 
 def place_house(area, house):
     """
-    Place a house.
+    Places a house
     It picks a random x and y coordinate and then checks if there is room for the new house.
     If it does not succeed, try new coordinates.
     """
 
     while_count = 0
-    while True:
+    valid = False
+    while not valid:
 
         # Get random bottom_left coordinates
         x = int(random.random() * (area.width - house.width + 1))
@@ -57,12 +58,13 @@ def place_house(area, house):
         house.set_coordinates([x,y], house.horizontal)
 
         if area.check_valid(house, x, y):
-            break
+            valid = True
 
-        while_count += 1
         if while_count == 1000:
 
             raise Exception("Something went wrong when placing a house. There was probably too little room to fit an extra house.") 
+        
+        while_count += 1
 
 
     area.structures["House"].append(house)

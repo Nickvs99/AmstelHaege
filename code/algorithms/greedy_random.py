@@ -1,18 +1,19 @@
-# TODO
 """
-Short description of the algorithm
+Tries to place the houses one by one an x amount of random.
+It then chooses the best spot.
 """
 
 import random
 from classes.structure import House
 
 def greedy(area, house):
-    
+
+    iterations = 100
     best_worth = 0
     min_dist = min(house.width, house.height)
 
     # Iterates 100 times for each house
-    for i in range(100):
+    for iteration in range(iterations):
 
         # Set location for house
         x = int(random.random() * (area.width - min_dist + 1))

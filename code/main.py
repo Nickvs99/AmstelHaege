@@ -20,8 +20,8 @@ from algorithms.simulated_annealing import simulated_annealing
 
 HOUSES = 10
 NEIGHBOURHOOD = "wijk1"
-ALGORITHM = "greedy"
-HILL_CLIMBER = "simulated_annealing"
+ALGORITHM = "random"
+HILL_CLIMBER = "hill_climber_random"
 # HILL_CLIMBER = None
 
 def main():

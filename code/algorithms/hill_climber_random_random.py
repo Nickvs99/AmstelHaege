@@ -1,20 +1,20 @@
-# TODO
 """
-Short description of algorithm
+Tries to place a random house on a random location and places it when it scores better.
+It does this an x amount of times.
 """
 
 from classes.structure import House
 import random
 
 def hill_climber_random_random(area):
-
+    iterations = 10000
     # Iteration
-    for i in range(10000):
+    for iteration in range(iterations):
         worth = area.calc_worth_area()
 
         # Picks random house and new coordinates
-        j = int(random.random() * area.houses - 1)
-        house = area.structures["House"][j]
+        selected_house_number = int(random.random() * area.houses - 1)
+        house = area.structures["House"][selected_house_number]
 
         x = int(random.random() * (area.width - house.width + 1))
         y = int(random.random() * (area.height - house.height + 1))

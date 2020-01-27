@@ -1,35 +1,33 @@
-# TODO
 """
-Short description of the algorithm
+Tries every house an x amount of times and places it in the best position.
+It does that until a cycle of placing every house gives no improvement.
 """
 from classes.structure import House
 import random
 
 def hill_climber_random(area):
+    iterations = 100
     worth_global = area.calc_worth_area()
     worth = 0
 
     # Iteration until no improvement
-    # TODO 100 should be a variable
-    for i in range(100):
+    for iteration in range(iterations):
         if worth < worth_global:
             worth = worth_global
             for house in area.structures["House"]:
-                # Stops in hillcliber
+                # Starts hillcimbing for a house
                 greedy_hill_climber(area, house)
             worth_global = area.calc_worth_area()
 
 
 def greedy_hill_climber(area, house):
-
+    iteration_house = 1000
     best_worth = area.calc_worth_area()
     best_orientation = house.horizontal
     best_x = house.bottom_left_cor[0]
     best_y = house.bottom_left_cor[1]
-
     # Iterates 1000 times for each house
-    # TODO 1000 should be a variable
-    for i in range(1000):
+    for iteration in range(iteration_house):
 
         # Sets location for house
         x = int(random.random() * (area.width - house.width + 1))
@@ -49,7 +47,7 @@ def greedy_hill_climber(area, house):
                 best_y = y
                 best_orientation = True
 
-        #Checks score for house vertically
+        # Checks score for house vertically
         house.set_orientation(False)
         if area.check_valid(house, x, y):
             move(area, house, x, y)

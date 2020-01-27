@@ -1,6 +1,5 @@
-# TODO
 """
-Short description of the algorithm
+Tries to place the houses one by one on every place and picks the best spot
 """
 
 import random

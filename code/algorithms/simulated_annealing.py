@@ -1,6 +1,7 @@
-# TODOTODO
 """
-Short description of algorithm
+Tries to place a random house on a random location for an x amount of times.
+If better it places the house. If not it places the house by chance.
+The chance decreases over the amount of iterations.
 """
 
 from classes.structure import House
@@ -8,18 +9,17 @@ import random
 
 def simulated_annealing(area):
 
+    iterations = 10000
     # Iteration
-    # TODO 1000 should be a variable
-    # Nick: Why does it start at 1 and not 0?
-    for j in range(1,1000):
+    for iteration in range(iterations):
 
         # Set temperature
-        T = 1000 - j
+        T = 1000 - iteration
         worth = area.calc_worth_area()
 
         # Tries to place house
         while True:
-            
+
             # Pick random house and new coordinates
             k = int(random.random() * area.houses - 1)
             house = area.structures["House"][k]
@@ -37,7 +37,7 @@ def simulated_annealing(area):
 
                 # Places house if worth more
                 if worth > new_worth:
-                    chance = random.random() * 1000
+                    chance = random.random() * iterations
 
                     # Places house if worth less by chance
                     if T < chance:

@@ -1,4 +1,6 @@
 """
+best_result.py
+
 This python file iterates over a specific amount of randomly placed houses on the grid.
 The average area worth with standard deviation and average runtime will be s
 The seed of the grid with the highest calculated worth, will be shown and saved.

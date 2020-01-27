@@ -19,9 +19,9 @@ from algorithms.hill_climber_steps import hill_climber_steps
 
 
 HOUSES = 20
-ITERATIONS = 2000
+ITERATIONS = 1000
 NEIGHBOURHOOD = "wijk3"
-ALGORITHM = "random"
+ALGORITHM = "greedy_random"
 # HILL_CLIMBER = "hill_climber_random_random"
 HILL_CLIMBER = None
 
@@ -37,7 +37,7 @@ def best_result():
     area_worths = []
     runtimes= []
     
-    # Iterate the algorithm by the given amount of times
+    # Iterate the algorithm by the given amount of times.
     for i in range(ITERATIONS):
 
         start = time()
@@ -48,7 +48,7 @@ def best_result():
 
         area_worth = area.calc_worth_area()
         
-        # Store the highest area_worth with its corresponding seed
+        # Store the highest area_worth with its corresponding seed.
         if area_worth > best_worth:
 
             best_worth = area_worth
@@ -87,6 +87,7 @@ def show_hist(area_worths, avg_worth, std_dev):
     Returns a histogram with all the saved area_worths and a box with 
     """    
 
+    # For better visualisation of the histogram.
     if ITERATIONS < 100:
         num_bins = 10
 

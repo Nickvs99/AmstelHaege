@@ -1,0 +1,19 @@
+greedy.py
+best_x, best_y, and best_worth should have a start value
+
+hill_climber_steps.py
+why does counter start at 1, shouldn't it start at 0
+move_steps(1, 11) -> move_steps(1, max_displacement)
+
+main.py
+def get_neighbourhood():
+
+    inp = int(input("Getal: "))
+
+    valid = False
+    # Check validation
+
+    if valid:
+        inp = get_neighbourhood()
+
+    return inp

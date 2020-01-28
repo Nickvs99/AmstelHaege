@@ -19,11 +19,11 @@ import math
 
 import matplotlib.pyplot as plt
 
+from algorithms.random import random_placement
 from algorithms.greedy_random import place_housesgreedyrandom
 from classes.area import Area
 
 from settings import evolution_settings as settings
-
 
 class Individual():
     """ An individual from the population. Stores an area object and the worth and fitness values."""
@@ -204,7 +204,9 @@ def evolution(area):
         if settings["sa"]:
             update_mutate_rates(generation_count)
 
-    # # Plot the progress of population
+
+    # Plot the progress of population
+
     plt.plot(avg_worths)
     plt.plot(best_worths)  
     plt.title("Progress of population")
@@ -215,7 +217,7 @@ def evolution(area):
     # Copy all values to the original area. Now main can do all of its operations on the best area
     area.structures = get_best_individual(individuals).area.structures
     for h in area.structures["House"]:
-        area.update_distances(h)
+        area.update_distances(h)  
 
 def evolve(individuals):
     """ Evolve the population one generation further."""    
@@ -268,6 +270,7 @@ def evolve(individuals):
             new_generation.append(mutations[mutation_count])
             mutation_count += 1
 
+
     return new_generation
 
 def calc_avg_individuals(individuals):
@@ -290,13 +293,14 @@ def get_best_individual(individuals):
 
     return best_individual
 
+
 def update_mutate_rates(generation_count):
     """ Updates the mutation rates, when simulated annealing is enabled. """
 
 
-    MOVE_RATE = cool_function(generation_count)
-    ORIENTATION_RATE = cool_function(generation_count)
-    SWAP_RATE = cool_function(generation_count)
+    settings["move_rate"] = cool_function(generation_count)
+    settings["orientation_rate"] = cool_function(generation_count)
+    settings["swap_rate"] = cool_function(generation_count)
 
 def cool_function(generation_count):
 

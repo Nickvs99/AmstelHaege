@@ -2,24 +2,26 @@
 Short description of the algorithm
 """
 from algorithms.greedy_random import place_housesgreedyrandom
+from algorithms.greedy_random import place_housegreedyrandom
 from classes.structure import House
 import random
 
+from settings import hill_climber_random_settings as settings
+
 def hill_climber_random(area):
-    place_housesgreedyrandom(area)
     worth_global = area.calc_worth_area()
-    area.plot_area()
+
     worth = 0
 
+    for i in range(settings["iterations"]):
 
-    for i in range(100):
         if worth < worth_global:
             worth = worth_global
             place_houseshill_climber(area)
             worth_global = area.calc_worth_area()
-        print("worth_global")
-        print(i)
-        print(worth_global)
+        # print("worth_global")
+        # print(i)
+        # print(worth_global)
 
 def place_houseshill_climber(area):
     """ Places the houses randomly. """
@@ -35,7 +37,7 @@ def greedyhill_climber(area, house):
     best_y = house.bottom_left_cor[1]
 
     # Checks place for house
-    for i in range(1000):
+    for i in range(settings["iterations_house"]):
         x = int(random.random() * (area.width - house.width + 1))
         y = int(random.random() * (area.height - house.height + 1))
         house.set_orientation(True)

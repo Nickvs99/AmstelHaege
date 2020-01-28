@@ -56,7 +56,7 @@ def hill_climber_once(area):
         best_orientation = house.horizontal
         
         # Move object by the range in steps.
-        for move_steps in range(1,settings["max_displacement"]):
+        for move_steps in range(1,settings["max_movement"]):
 
             for direction in move_directions:
                 

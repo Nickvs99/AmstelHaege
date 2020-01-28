@@ -1,13 +1,20 @@
 """
 user_input.py
 
-Asks the user for input for: the neighbourhood, amount of houses, algorithm and hill_
+Asks the user for input for: the neighbourhood, amount of houses, algorithm and hill_climber.
+If a custom setting is possible, the user will be prompted to use the default settings or make
+their own custom settings.
 """
 
 import settings
 
-def user_input():
+CUSTOM_SETTINGS_LIST = ["greedy_random", "evolution", "hill_climber_steps", "hill_climber_random", 
+                        "hill_climber_random_random", "simulated_annealing"]
 
+def user_input():
+    """ Main program prompting user for input """
+
+    print()
     print("|Welcome to AmstelHaege|")
     print()
     
@@ -31,13 +38,15 @@ def user_input():
 
 
 def get_neighbourhood():
+    """ return value of neighbourhood """
     
-    neighbourhoodvariable_list = ["wijk1", "wijk2", "wijk3"]
+    neighbourhood_list = ["wijk1", "wijk2", "wijk3"]
 
-    neighbourhood = input(f"Choose from: {str(neighbourhoodvariable_list)[1:-1]}\n")
+    neighbourhood = input(f"Choose from: {str(neighbourhood_list)[1:-1]}\n")
     print()
 
-    if neighbourhood.lower() not in neighbourhoodvariable_list:
+    # If the input for neighbourhood is invalid, prompt user again.
+    if neighbourhood.lower() not in neighbourhood_list:
         
         print("Invalid neighbourhood")
         neighbourhood = get_neighbourhood()
@@ -45,10 +54,12 @@ def get_neighbourhood():
     return neighbourhood.lower()
 
 def get_houses():
+    """ Return amount of houses """
 
     houses = input()
     print()
 
+    # if amount of houses is not a digit, prompt user again.
     if not houses.isdigit():
         
         print("Amount of houses must be a digit")
@@ -57,13 +68,14 @@ def get_houses():
     return int(houses)
 
 def get_algorithm():
+    """ Returns which algorithm """
     
-    algorithmvariable_list = ["random", "greedy", "greedy_random", "evolution"]
+    algorithm_list = ["random", "greedy", "greedy_random", "evolution"]
 
-    algorithm = input(f"Choose from: {str(algorithmvariable_list)[1:-1]}\n")
+    algorithm = input(f"Choose from: {str(algorithm_list)[1:-1]}\n")
     print()
 
-    if algorithm.lower() not in algorithmvariable_list:
+    if algorithm.lower() not in algorithm_list:
         
         print("Invalid algorithm")
         algorithm = get_algorithm()
@@ -71,34 +83,37 @@ def get_algorithm():
     return algorithm.lower()
 
 def get_hill_climber():
+    """ Returns which hill climber, if prompted. """
 
-    hill_climbervariable_list = ["hill_climber_steps", "hill_climber_random", 
+    hill_climber_list = ["hill_climber_steps", "hill_climber_random", 
                             "hill_climber_random_random", "simulated_annealing", "none"]
 
-    hill_climber = input(f"Choose from: {str(hill_climbervariable_list)[1:-1]}\n")
+    hill_climber = input(f"Choose from: {str(hill_climber_list)[1:-1]}\n")
     print()
 
-    if hill_climber.lower() not in hill_climbervariable_list:
+    if hill_climber.lower() not in hill_climber_list:
 
         print("Invalid hill_climber")
         hill_climber = get_hill_climber()
 
     elif hill_climber.lower() == "none":
-
         return None
 
     return hill_climber.lower()
 
 def check_for_custom_settings(code_name):
+    """ 
+    Checks the code_name (algorithm or hill climber), 
+    if it can have some custom settings. 
+    """
 
-    custom_settingsvariable_list = ["greedy_random", "evolution", "hill_climber_steps", "hill_climber_random", "hill_climber_random_random", "simulated_annealing"]
-
-    if code_name in custom_settingsvariable_list:
+    if code_name in CUSTOM_SETTINGS_LIST:
         
         print("Do you want the default settings or custom settings?")
-        ask_for_settings(code_name)
+        prompt_for_settings(code_name)
 
-def ask_for_settings(code_name):
+def prompt_for_settings(code_name):
+    """ Prompt user for default or custom settings """
 
     answer = int(input("1. Default\n2. Custom\n"))
     print()
@@ -110,109 +125,100 @@ def ask_for_settings(code_name):
         custom_input(code_name)
 
     else:
-        print("Please choose 1 or 2")
-        answer = ask_for_settings(code_name)
+        print("Please type 1 or 2")
+        answer = prompt_for_settings(code_name)
 
 def custom_input(code_name):
+    """ Prompt user for custom input """
 
     if code_name == "greedy_random":
         
         iterations = input(f"How many places on the area do you want to be checked for each house?\n \
-                            (Default value is {settings.greedy_random_settings['iterations']})\n")
+        (Default value is {settings.greedy_random_settings['iterations']})\n")
         print()
         
-        if not iterations.isdigit():
-            
-            iterations = custom_input(code_name)
-        
+        # Checks if the input is a digit
+        check_digit_validity(iterations, code_name)  
+
+        # Overwrites the input to the custom setting variable  
         settings.greedy_random_settings["iterations"] = int(iterations)
 
     elif code_name == "hill_climber_steps":
         
         iterations = input(f"How many times do you want to use a single hill climber, maximally?\n \
-                            (Default value is {settings.hill_climber_steps_settings['iterations']})\n")
+        (Default value is {settings.hill_climber_steps_settings['iterations']})\n")
         print()
 
-        if not iterations.isdigit():
-            
-            iterations = custom_input(code_name)
-        
+        check_digit_validity(iterations, code_name)        
         settings.hill_climber_steps_settings["iterations"] = int(iterations)
         
-        max_displacement = get_max_displacement(code_name)
+        set_max_movement(code_name)
 
     elif code_name == "hill_climber_random":
 
         iterations = input(f"How many times do you want to move each house randomly?\n \
-                            (Default value is {settings.hill_climber_random_settings['iterations']})\n")
+        (Default value is {settings.hill_climber_random_settings['iterations']})\n")
         print()
         
-        if not iterations.isdigit():
-            
-            iterations = custom_input(code_name)
-        
+        check_digit_validity(iterations, code_name)        
         settings.hill_climber_random_settings["iterations"] = int(iterations)
         
     elif code_name == "hill_climber_random_random":
 
         iterations = input(f"How many times do you want to move each house randomly?\n \
-                            (Default value is {settings.hill_climber_random_random_settings['iterations']})\n")
+        (Default value is {settings.hill_climber_random_random_settings['iterations']})\n")
         print()
         
-        if not iterations.isdigit():
-            
-            iterations = custom_input(code_name)
-        
+        check_digit_validity(iterations, code_name)        
         settings.hill_climber_random_random_settings["iterations"] = int(iterations)
 
     elif code_name == "simulated_annealing":
 
         iterations = input(f"How many times do you want to move each house randomly?\n \
-                            (Default value is {settings.simulated_annealing_settings['iterations']})\n")
+        (Default value is {settings.simulated_annealing_settings['iterations']})\n")
         print()
         
-        if not iterations.isdigit():
-            
-            iterations = custom_input(code_name)
-        
+        check_digit_validity(iterations, code_name)        
         settings.simulated_annealing_settings["iterations"] = int(iterations)
 
     elif code_name == "evolution":
-
         custom_evolution()
 
-def get_max_displacement(code_name):
+def check_digit_validity(number, code_name):
+    """ Checks if given number is a digit """
 
-    if code_name == "hill_climber_steps":
+    if not number.isdigit():
+        custom_input(code_name)
+
+def set_max_movement():
+    """ 
+    Sets the max_movement variable for the hill_climber_steps to the input-value, if valid. 
+    """
         
-        max_displacement = input(f"In what range do you want to displace each house-object?\n \
-                            (Default value is {settings.hill_climber_steps_settings['max_displacement']})\n")
-        print()
-        
-        if not max_displacement.isdigit():
-            
-            max_displacement = get_max_displacement(code_name)
-        
-        settings.hill_climber_steps_settings["max_displacement"] = int(max_displacement)
+    max_movement = input(f"In what range do you want to move each house-object?\n \
+    (Default value is {settings.hill_climber_steps_settings['max_movement']})\n")
+    print()
+    
+    check_digit_validity(max_movement, code_name)        
+    settings.hill_climber_steps_settings["max_movement"] = int(max_movement)
 
 def custom_evolution():
+    """ Prompts the user for each evolution setting """
 
-    variable_list = ["population", "stale_counter", "max_displacement", "fitness_power", "move_rate", "orientation_rate", "swap_rate", "sa"]
+    variable_list = ["population", "stale_counter", "max_displacement", "fitness_power", 
+                     "move_rate", "orientation_rate", "swap_rate", "sa"]
 
     for variable in variable_list:
-
-        if variable == "sa":
-            set_variable_sa(variable)
-
-        else:
-            set_variable(variable)
-        
+        set_variable(variable)
 
 def set_variable(variable):
+    """ Sets each input-value in evolution_settings, if valid """
 
-    variable_value = input(f"insert value for {variable}:\n(Default value is {settings.evolution_settings[variable]})\n")
+    variable_value = input(f"insert value for {variable}:\n \
+    (Default value is {settings.evolution_settings[variable]})\n")
     print()
 
+    # If input-value is a float.
     if "." in variable_value:
         if variable != "population":
             store_variable = variable_value
@@ -221,8 +227,19 @@ def set_variable(variable):
             else:
                 settings.evolution_settings[variable] = float(variable_value)
         else:
-            print("This variable needs to be a integer")
+            print("This variable needs to be an integer")
             set_variable(variable)
+
+    elif variable == "sa":
+        if variable_value.lower() not in ["true", "false"]:
+            print("Please type true or false")
+            set_variable(variable)
+        
+        elif variable_value.lower() == "true":
+            settings.evolution_settings['sa'] = True
+
+        elif variable_value.lower() == "false":
+            settings.evolution_settings['sa'] = False
 
     else:
         if not variable_value.isdigit():
@@ -230,17 +247,6 @@ def set_variable(variable):
 
         settings.evolution_settings[variable] = int(variable_value)
 
-def set_variable_sa(variable):
-
-    variable_value = input(f"This form of simulated annealing slowes down the mutation rate if turned True\ninsert value for {variable}:\n(Default value is {settings.evolution_settings[variable]})\n")
-    print()
-
-    if variable_value.lower() not in ["true", "false"]:
-        set_variable_sa(variable)
-
-    variable_value = variable_value.replace('"','').capitalize()
-    settings.evolution_settings[variable] = variable_value
 
 if __name__ == "__main__":
     user_input()
-    # custom_evolution()

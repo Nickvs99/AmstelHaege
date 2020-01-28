@@ -1,15 +1,13 @@
 """
 user_input.py
 
-Asks the user for input for: the neighbourhood, amount of houses, algorithm and hill_climber.
-If a custom setting is possible, the user will be prompted to use the default settings or make
-their own custom settings.
+Asks the user for input for: the neighbourhood, amount of houses, algorithm 
+and hill_climber. If a custom setting is possible, the user will be prompted 
+to use the default settings or make their own custom settings. This file
+stores and returns the stringvalues of the user-input.
 """
 
 import settings
-
-CUSTOM_SETTINGS_LIST = ["greedy_random", "evolution", "hill_climber_steps", "hill_climber_random", 
-                        "hill_climber_random_random", "simulated_annealing"]
 
 def user_input():
     """ Main program prompting user for input """
@@ -38,7 +36,7 @@ def user_input():
 
 
 def get_neighbourhood():
-    """ return value of neighbourhood """
+    """ Returns value of neighbourhood """
     
     neighbourhood_list = ["wijk1", "wijk2", "wijk3"]
 
@@ -54,7 +52,7 @@ def get_neighbourhood():
     return neighbourhood.lower()
 
 def get_houses():
-    """ Return amount of houses """
+    """ Returns amount of houses """
 
     houses = input()
     print()
@@ -68,7 +66,7 @@ def get_houses():
     return int(houses)
 
 def get_algorithm():
-    """ Returns which algorithm """
+    """ Returns which algorithm to apply """
     
     algorithm_list = ["random", "greedy", "greedy_random", "evolution"]
 
@@ -83,7 +81,7 @@ def get_algorithm():
     return algorithm.lower()
 
 def get_hill_climber():
-    """ Returns which hill climber, if prompted. """
+    """ Returns which hill climber to apply """
 
     hill_climber_list = ["hill_climber_steps", "hill_climber_random", 
                             "hill_climber_random_random", "simulated_annealing", "none"]
@@ -97,6 +95,7 @@ def get_hill_climber():
         hill_climber = get_hill_climber()
 
     elif hill_climber.lower() == "none":
+        
         return None
 
     return hill_climber.lower()
@@ -113,11 +112,18 @@ def check_for_custom_settings(code_name):
         prompt_for_settings(code_name)
 
 def prompt_for_settings(code_name):
-    """ Prompt user for default or custom settings """
+    """ Prompts user for default or custom settings. """
 
-    answer = int(input("1. Default\n2. Custom\n"))
+    answer = input("1. Default\n2. Custom\n")
     print()
 
+    try:
+        answer = int(answer)
+    
+    except ValueError:
+        print("Please type 1 or 2")
+        prompt_for_settings(code_name)
+    
     if answer == 1:
         pass
     
@@ -126,10 +132,10 @@ def prompt_for_settings(code_name):
 
     else:
         print("Please type 1 or 2")
-        answer = prompt_for_settings(code_name)
+        prompt_for_settings(code_name)
 
 def custom_input(code_name):
-    """ Prompt user for custom input """
+    """ Prompts user for custom input """
 
     if code_name == "greedy_random":
         
@@ -185,7 +191,7 @@ def custom_input(code_name):
         custom_evolution()
 
 def check_digit_validity(number, code_name):
-    """ Checks if given number is a digit """
+    """ Checks if given number is a digit. """
 
     if not number.isdigit():
         custom_input(code_name)
@@ -217,35 +223,34 @@ def set_variable(variable):
     variable_value = input(f"insert value for {variable}:\n \
     (Default value is {settings.evolution_settings[variable]})\n")
     print()
-
-    # If input-value is a float.
-    if "." in variable_value:
-        if variable != "population":
-            store_variable = variable_value
-            if not variable_value.replace(".", "", 1).isdigit():
-                set_variable(variable)
-            else:
-                settings.evolution_settings[variable] = float(variable_value)
-        else:
-            print("This variable needs to be an integer")
-            set_variable(variable)
-
-    elif variable == "sa":
-        if variable_value.lower() not in ["true", "false"]:
-            print("Please type true or false")
-            set_variable(variable)
+    
+    if variable == "sa":
         
-        elif variable_value.lower() == "true":
+        if variable_value.lower() == "true":
             settings.evolution_settings['sa'] = True
 
         elif variable_value.lower() == "false":
             settings.evolution_settings['sa'] = False
+        
+        else:
+            print("Please type true or false")
+            set_variable(variable)
+
+    # If input-value is a float.
+    if variable != "population":
+        if "." in variable_value:
+            if not variable_value.replace(".", "", 1).isdigit():
+                print("Invalid input")
+                set_variable(variable)
+            else:
+                settings.evolution_settings[variable] = float(variable_value)
 
     else:
         if not variable_value.isdigit():
+            print("Invalid input")
             set_variable(variable)
-
-        settings.evolution_settings[variable] = int(variable_value)
+        else:
+            settings.evolution_settings[variable] = int(variable_value)
 
 
 if __name__ == "__main__":

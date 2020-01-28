@@ -8,9 +8,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-for filename in os.listdir("SA-output"):
+for filename in os.listdir("Results/SA-output"):
 
-    with open(f"SA-output/{filename}") as f:
+    with open(f"Results/SA-output/{filename}") as f:
 
         # Get the data from the csv file
         alphas = []

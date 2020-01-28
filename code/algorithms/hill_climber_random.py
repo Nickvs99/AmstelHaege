@@ -31,7 +31,7 @@ def greedy_hill_climber(area, house):
     best_y = house.bottom_left_cor[1]
 
     # Checks place for house
-    for i in range(settings["iterations_house"]):
+    for i in range(settings["iterations"]):
         x = int(random.random() * (area.width - house.width + 1))
         y = int(random.random() * (area.height - house.height + 1))
 

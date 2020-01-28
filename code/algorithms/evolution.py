@@ -19,8 +19,8 @@ import math
 
 import matplotlib.pyplot as plt
 
+from algorithms.greedy_random import place_houses_greedy_random
 from algorithms.random import random_placement
-from algorithms.greedy_random import place_housesgreedyrandom
 from classes.area import Area
 
 from settings import evolution_settings as settings
@@ -43,7 +43,7 @@ class Individual():
         self.fitness = (self.worth / 1000000) ** settings["fitness_power"]
 
     def mutate(self):
-        """ 
+        """
         Mutates the individual. Mutations are:
         - switch orientation of a house
         - move coordinates of a house
@@ -57,9 +57,9 @@ class Individual():
         self.calc_fitness()
 
     def move_houses(self):
-        """ 
-        Mutates the position of the houses. 
-        Each house has a MOVE_RATE % chance to move a number of coordinates. 
+        """
+        Mutates the position of the houses.
+        Each house has a MOVE_RATE % chance to move a number of coordinates.
         """
 
         for house in self.area.structures["House"]:
@@ -74,7 +74,7 @@ class Individual():
             while_count = 0
             valid = False
             while not valid:
-                
+
                 max_displacement = 5
                 # Random coordinates shift
 
@@ -95,7 +95,7 @@ class Individual():
                     break
 
                 while_count += 1
-                
+
             self.area.update_distances(house)
 
     def change_orientation(self):
@@ -119,7 +119,7 @@ class Individual():
             if not self.area.check_valid(house, initial_x, initial_y):
 
                 house.set_coordinates([initial_x, initial_y], initial_orientation)
-            
+
             self.area.update_distances(house)
 
     def swap_houses(self):
@@ -151,7 +151,7 @@ class Individual():
             # Swap the two houses
             house.set_coordinates([initial_x2, initial_y2], initial_orientation2)
             house2.set_coordinates([initial_x, initial_y], initial_orientation)
-            
+
             # If the swap is not valid, reset all values
             if not (self.area.check_valid(house, initial_x2, initial_y2) and self.area.check_valid(house2, initial_x, initial_y)):
 
@@ -160,7 +160,7 @@ class Individual():
 
             self.area.update_distances(house)
             self.area.update_distances(house2)
-   
+
 def evolution(area):
     """ The main program. """
 
@@ -170,9 +170,9 @@ def evolution(area):
     print(settings["population"])
     for i in range(settings["population"]):
         copy_area = copy.deepcopy(area)
-        place_housesgreedyrandom(copy_area)
+        place_houses_greedy_random(copy_area)
         individuals.append(Individual(copy_area))
-    
+
     # Sort individuals by their worth
     individuals.sort(key=lambda x: x.worth, reverse=True)
 
@@ -180,10 +180,10 @@ def evolution(area):
     best_individual = get_best_individual(individuals)
     avg_worths = [calc_avg_individuals(individuals)]
     best_worths = [best_individual.worth]
-    
+
     stale_counter = 0
     generation_count = 0
-    
+
     while stale_counter < settings["stale_counter"]:
         print("Generaton: ", generation_count, best_worths[-1], avg_worths[-1], settings["move_rate"])
 
@@ -207,21 +207,20 @@ def evolution(area):
 
 
     # Plot the progress of population
-
     plt.plot(avg_worths)
-    plt.plot(best_worths)  
+    plt.plot(best_worths)
     plt.title("Progress of population")
-    plt.xlabel("Generations") 
+    plt.xlabel("Generations")
     plt.ylabel("Worth")
     plt.show()
 
     # Copy all values to the original area. Now main can do all of its operations on the best area
     area.structures = get_best_individual(individuals).area.structures
     for h in area.structures["House"]:
-        area.update_distances(h)  
+        area.update_distances(h)
 
 def evolve(individuals):
-    """ Evolve the population one generation further."""    
+    """ Evolve the population one generation further."""
 
     # Cumulate fitness
     total_fitness = 0
@@ -249,14 +248,14 @@ def evolve(individuals):
         # Pick the random individual
         for individual in individuals:
             if individual.cum_fitness > r:
-                
+
                 mutations.append(copy.deepcopy(individual))
                 break
 
     # Mutate individuals
     for individual in mutations:
         individual.mutate()
-    
+
     mutations.sort(key=lambda x: x.worth, reverse=True)
 
     # Get the n best from both generations

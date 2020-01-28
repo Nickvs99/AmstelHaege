@@ -5,7 +5,7 @@ It does that until a cycle of placing every house gives no improvement.
 from classes.structure import House
 import random
 
-from settings import hill_climber_random_settings as settings
+from settings import iterations
 
 def hill_climber_random(area):
     """
@@ -31,7 +31,7 @@ def greedy_hill_climber(area, house):
     best_y = house.bottom_left_cor[1]
 
     # Checks place for house
-    for i in range(settings["iterations"]):
+    for i in range(iterations["hill_climber_random"]):
         x = int(random.random() * (area.width - house.width + 1))
         y = int(random.random() * (area.height - house.height + 1))
 

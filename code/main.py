@@ -47,6 +47,8 @@ def get_area(neighbourhood, houses, algorithm_name, hill_climber_name):
     And returns the generated area.
     """
 
+    print("Creating area...")
+
     area = Area(neighbourhood, houses)
 
     algorithm(area, algorithm_name)

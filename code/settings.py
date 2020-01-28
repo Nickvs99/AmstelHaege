@@ -32,14 +32,14 @@ hill_climber_steps_settings = dict(
 
 iterations = dict(
 
-    "greedy_random" = 100,
+    greedy_random = 100,
 
-    "hill_climber_random" = 100,
+    hill_climber_random = 100,
 
-    "hill_climber_random_random" = 10000,
+    hill_climber_random_random = 10000,
 
-    "hill_climber_steps" = 1000,
+    hill_climber_steps = 1000,
     
-    "simulated_annealing" = 1000,
+    simulated_annealing = 1000,
 
 )

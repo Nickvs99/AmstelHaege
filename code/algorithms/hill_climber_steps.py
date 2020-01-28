@@ -11,6 +11,7 @@ from time import time
 from classes.structure import House
 
 from settings import hill_climber_steps_settings as settings
+from settings import iterations
 
 
 def hill_climber_steps(area):
@@ -20,7 +21,7 @@ def hill_climber_steps(area):
 
     compare_area_worth = area.calc_worth_area()
 
-    for i in range(settings["iterations"]):
+    for i in range(iterations["hill_climber_steps"]):
 
         hill_climber_once(area)
 

@@ -46,3 +46,4 @@ hill_climber_steps_settings = dict(
 simulated_annealing_settings = dict(
     iterations = 1000,
 )
+

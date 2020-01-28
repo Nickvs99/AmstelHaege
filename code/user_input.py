@@ -236,7 +236,7 @@ def set_variable(variable):
             print("Please type true or false")
             set_variable(variable)
 
-    # If input-value is a float.
+    # If input-value is for population and a float.
     if variable != "population":
         if "." in variable_value:
             if not variable_value.replace(".", "", 1).isdigit():

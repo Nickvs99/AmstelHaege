@@ -1,15 +1,29 @@
 import os
 import csv
+import math
 import matplotlib
 import matplotlib.pyplot as plt
-import math
 
 from .structure import Structure, House
 
 
 class Area():
+    """ 
+    Area object. This object stores information about:
+    - width and height
+    - the number of houses
+    - the number of houses per house type
+    - all Structure objects
+    
+    Furthermore it provides the tools to:
+    - check if a house would be at a valid place
+    - calc worth area
+    - creates the csv output
+    - updates the distances to neighbours for each house
+    """
 
     def __init__(self, neighbourhood, houses):
+        
         self.height = 180
         self.width = 160
 
@@ -26,14 +40,14 @@ class Area():
 
     def create_area(self):
         """ 
-        Creates an listed list with self.height x self.width dimensions. 
-        This list is filled with zeroes.
+        Creates a nested list with self.height * self.width dimensions. 
+        This list is filled with zeros.
         """
 
         return [[ 0 for i in range(self.width)] for j in range(self.height)]
 
     def load_water(self, neighbourhood):
-        """ Gets the water from the csv file and creates objects from them. """
+        """ Gets the water-data from the csv file and creates objects from them. """
 
         # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))
@@ -41,6 +55,7 @@ class Area():
         path = os.path.join(my_path, location)
 
         water_count = 0
+        
         # Open the csv-file as a dictionary
         with open(path) as csv_file:
 
@@ -64,9 +79,8 @@ class Area():
 
                     water_count += 1
         
-
     def fill_area(self, area):
-        """ Fill the area with the objects with the state of the structures"""
+        """ Fill the given area with the objects with the state of the structures"""
 
         for water in self.structures["Water"]:
 
@@ -78,15 +92,10 @@ class Area():
 
             for y in range(house.bottom_left_cor[1], house.top_right_cor[1]):
                 for x in range(house.bottom_left_cor[0], house.top_right_cor[0]):
-                    try:
-                        area[y][x] = house.state
-                    except:
-                        print(x, y)
+                    area[y][x] = house.state
 
     def plot_area(self, neighbourhood, houses, algorithm):
-        """
-        Plots the area.
-        """
+        """ Plots the current area """
         
         area = self.create_area()
         self.fill_area(area)
@@ -131,7 +140,7 @@ class Area():
 
             for test_corner in test_corners:
                 
-                # Get the corners of the non allowed space. This includes the mandatory space.
+                # Get the corners of the non allowed space. This includes the mandatory space
                 corner_bottom_left = [house.corners[0][0] - house.mandatory_free_space, house.corners[0][1] - house.mandatory_free_space]
                 corner_top_right = [house.corners[3][0] + house.mandatory_free_space, house.corners[3][1] + house.mandatory_free_space]
 
@@ -152,26 +161,15 @@ class Area():
         return False
 
     def calc_worth_area(self):
-        """ Calculates the worth of the area. """
+        """ Calculates the worth of the given area. """
 
         total_worth = 0
         
         for house in self.structures["House"]:
-            total_worth += self.calc_worth_house(house)
+            total_worth += house.calc_worth()
 
         return total_worth
 
-    def calc_worth_house(self, house):
-        """ 
-        Calculates the worth of a house. The worth is
-        worth = base_value + base_value * extra_value * (min_dist - mandatory_free_space)
-        """
-
-        base_value = house.value
-        extra_value = house.value * house.extra_value * (house.get_min_dist() - house.mandatory_free_space)
-
-        value = base_value + extra_value
-        return value
 
     def check_in_bound(self, bottom_left_cor, top_right_cor):
         """ Checks if a given x and y coordinates fall within the bounds. """
@@ -182,7 +180,7 @@ class Area():
         return True
 
     def make_csv_output(self):
-        """ Function which commands to update the output """
+        """ Gives command to store/update the output file """
 
         # Store values csv_output_list
         csv_output_list = self.make_csv_output_list()
@@ -208,7 +206,6 @@ class Area():
         return csv_output_list
 
     def csv_output(self, csv_output_list):
-
         """ (Over)writes the houselist into the ouput.csv """
 
         # Specify the path of the csv-file
@@ -216,16 +213,16 @@ class Area():
 
         path = os.path.join(my_path, "..\..\csv-output\output.csv")
 
-        # Open the current output.csv
+        # Open the output.csv file
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
 
-            # (Over)write each line of house_list into the csv-file
+            # (Over)write each line of the csv-output list into the csv-file
             for structure in csv_output_list:
                 wr.writerow(structure)
     
     def update_distances(self, house):
-        """ Update the distances."""
+        """ Update the distances from the specific house-object."""
         
         # Reset all distances for house
         house.init_distances(self.structures["House"])
@@ -250,7 +247,7 @@ class Area():
                     x_dist = abs(corner[0] - new_corner[0])
                     y_dist = abs(corner[1] - new_corner[1])
 
-                    # Use the maximum value, since the minimum value wouldnt reach the object
+                    # Use the maximum value, since the minimum value wouldn't reach the object
                     dist = max(x_dist, y_dist)
 
                     if dist < h.neighbour_distances[house.name]:
@@ -258,5 +255,3 @@ class Area():
                     
                     if dist < house.neighbour_distances[h.name]:
                         house.neighbour_distances[h.name] = dist
-
-

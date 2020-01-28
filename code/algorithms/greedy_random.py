@@ -5,21 +5,18 @@ It then chooses the best spot.
 
 import random
 from classes.structure import House
+from settings import greedy_random_settings as settings
 
 def greedy(area, house):
 
-    iterations = 100
     best_worth = 0
     min_dist = min(house.width, house.height)
+    for i in range(settings["iterations"]):
 
-    # Iterates 100 times for each house
-    for iteration in range(iterations):
-
-        # Set location for house
         x = int(random.random() * (area.width - min_dist + 1))
         y = int(random.random() * (area.height - min_dist + 1))
-
-        # Checks score for house
+        
+        # Check if valid the move is valid for both orientations
         for orientation in [True, False]:
             house.set_coordinates([x,y], orientation)
             if area.check_valid(house, x, y):
@@ -67,3 +64,5 @@ def place_houses_greedy_random(area):
 
         area.structures["House"].append(house)
         greedy(area, house)
+
+

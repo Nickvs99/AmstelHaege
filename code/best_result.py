@@ -1,5 +1,8 @@
 """
+best_result.py
+
 This python file iterates over a specific amount of randomly placed houses on the grid.
+The average area worth with standard deviation and average runtime will be s
 The seed of the grid with the highest calculated worth, will be shown and saved.
 """
 
@@ -10,76 +13,135 @@ from time import time
 import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
-from scipy.stats import norm
 from matplotlib.ticker import PercentFormatter
 
 from classes.area import Area
-from main import algorithm, set_random_seed
+from main import get_area, set_random_seed, algorithm, hill_climber
+from algorithms.hill_climber_steps import hill_climber_steps
 
 
-ALGORITHM = "random"
+HOUSES = 60
+ITERATIONS = 10
 NEIGHBOURHOOD = "wijk1"
-HOUSES = 20
-ITERATIONS = 100
+ALGORITHM = "greedy_random"
+HILL_CLIMBER = "hill_climber_steps"
+# HILL_CLIMBER = None
 
 def best_result():
     """
     Iterates over n amount of random grids and returns
-    the seed with the highest calucalted worth
+    the area with the highest calucalted worth
     """
-    start = time()
 
     best_worth = 0
     best_seed = 0
+    
     area_worths = []
-
+    runtimes= []
+    
+    # Iterate the algorithm by the given amount of times.
     for i in range(ITERATIONS):
+
+        start = time()
 
         seed = set_random_seed(random.random())
 
-        area = Area(NEIGHBOURHOOD, HOUSES)
-
-        algorithm(area, ALGORITHM)
+        area = get_area(NEIGHBOURHOOD, HOUSES, ALGORITHM, HILL_CLIMBER)
 
         area_worth = area.calc_worth_area()
+        
+        # Store the highest area_worth with its corresponding seed.
+        if area_worth > best_worth:
+
+            best_worth = area_worth
+
+            best_seed = seed
+        
+        end = time()
+
+        runtimes.append(end - start)
 
         area_worths.append(area_worth)
 
-        if area_worth > best_worth:
-            best_worth = area_worth
-            best_seed = seed
+    # Calculate average area_worth and its standard deviation
+    avg_worth = calc_avg(area_worths)
 
+    std_dev_worth = calc_std_dev(area_worths)
+
+    print(f"Avg worth: {avg_worth} +- {std_dev_worth}")
+
+    print(f"Avg runtime: {calc_avg(runtimes)}")
+    
+    # Retrieve area with the highest area_worth
     set_random_seed(best_seed)
 
-    area = Area(NEIGHBOURHOOD, HOUSES)
+    area = get_area(NEIGHBOURHOOD, HOUSES, ALGORITHM, HILL_CLIMBER)
 
-    algorithm(area, ALGORITHM)
+    area.make_csv_output()
 
-    print(f"Best worth: {best_worth}")
+    area.plot_area(NEIGHBOURHOOD, HOUSES, ALGORITHM)
 
-    end = time()
+    show_hist(area_worths, avg_worth, std_dev_worth)
 
-    print(f"Runtime: {end - start}")
-
-    # area.plot_area(int(best_worth))
-
-    show_hist(area_worths)
-
-    return area
     
-def show_hist(area_worths): 
+def show_hist(area_worths, avg_worth, std_dev): 
+    """
+    Returns a histogram with all the saved area_worths and a box with 
+    """    
 
-    # TODO fitting through histogram
-    num_bins = 50
+    # For better visualisation of the histogram.
+    if ITERATIONS < 100:
+        num_bins = 10
+    elif ITERATIONS > 1000:
+        num_bins = 50
+    else:
+        num_bins = 25
+
+    fig, ax = plt.subplots()
+
     n, bins, patches = plt.hist(area_worths, num_bins, facecolor='blue', edgecolor='black', alpha=0.5)
 
     plt.ylabel('Amount found')
     plt.xlabel('Area worth')
     plt.title('All found area worths')
 
+    power = 6
+    avg_worth /= 10 ** power
+    std_dev /= 10 ** power
+
+    # Box with avg and stddev values
+    textstr = '$avg = %.2f * 10 ^ %d$\n$stddev= %.2f * 10 ^ %d$' %(avg_worth, power, std_dev, power)
+    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+    plt.text(0.95, 0.95, textstr, transform=ax.transAxes, fontsize=14,
+        va='top', ha='right', bbox = props)
+
     plt.gca().yaxis.set_major_formatter(PercentFormatter(ITERATIONS))
 
     plt.show()
+
+def calc_std_dev(array):
+    """Returns the standard deviation of a list of numbers."""
+
+    avg = calc_avg(array)
+    avg_squared = avg ** 2                           # <x>^2
+
+    # Creates a list whose values are the squared versions of lijst
+    list_squared = []
+    for i in range(len(array)):
+        list_squared.append(array[i] ** 2)
+
+    avg_of_squared = calc_avg(list_squared)    # <x**2>
+
+    return (avg_of_squared - avg_squared) ** 0.5
+
+def calc_avg(array):
+    """Returns the average of a list of numbers """
+
+    total  = 0
+    for i in array:
+        total += i
+
+    return total / len(array)
 
 
 if __name__ == "__main__":

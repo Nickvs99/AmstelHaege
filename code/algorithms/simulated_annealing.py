@@ -7,14 +7,13 @@ The chance decreases over the amount of iterations.
 from classes.structure import House
 import random
 
+from settings import simulated_annealing_settings as settings
+
 def simulated_annealing(area):
 
-    iterations = 10000
-    # Iteration
-    for iteration in range(iterations):
+    for j in range(settings["iterations"]):
+        T = settings["iterations"] - j
 
-        # Set temperature
-        T = 1000 - iteration
         worth = area.calc_worth_area()
 
         # Tries to place house
@@ -37,9 +36,9 @@ def simulated_annealing(area):
 
                 # Places house if worth more
                 if worth > new_worth:
-                    chance = random.random() * iterations
 
-                    # Places house if worth less by chance
+                    chance = random.random() * settings["iterations"]
+
                     if T < chance:
                         move(area, house, old_x, old_y)
                 break

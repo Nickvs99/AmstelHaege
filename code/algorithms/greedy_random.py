@@ -15,7 +15,7 @@ def greedy(area, house):
 
         x = int(random.random() * (area.width - min_dist + 1))
         y = int(random.random() * (area.height - min_dist + 1))
-        
+
         # Check if valid the move is valid for both orientations
         for orientation in [True, False]:
             house.set_coordinates([x,y], orientation)
@@ -64,5 +64,3 @@ def place_houses_greedy_random(area):
 
         area.structures["House"].append(house)
         greedy(area, house)
-
-

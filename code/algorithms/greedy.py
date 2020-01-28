@@ -54,7 +54,7 @@ def create_houses_greedy(area, one_person_house_count, bungalow_count, maison_co
 
         return houses
 
-def place_housesgreedy(area):
+def place_houses_greedy(area):
     """ Places each house-object randomly on the given area. """
 
     # Makes house-objects
@@ -64,4 +64,3 @@ def place_housesgreedy(area):
 
         area.structures["House"].append(house)
         greedy(area, house)
-

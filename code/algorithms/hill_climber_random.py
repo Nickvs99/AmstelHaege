@@ -14,13 +14,14 @@ def hill_climber_random(area):
     worth = 0
 
     for i in range(settings["iterations"]):
+
         if worth < worth_global:
             worth = worth_global
             place_houseshill_climber(area)
             worth_global = area.calc_worth_area()
-        print("worth_global")
-        print(i)
-        print(worth_global)
+        # print("worth_global")
+        # print(i)
+        # print(worth_global)
 
 def place_houseshill_climber(area):
     """ Places the houses randomly. """

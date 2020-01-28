@@ -5,7 +5,7 @@ class Structure():
     Structure object. This object stores:
     - bottom_left_cor
     - top_right_cor
-    - the type ('Water', 'House' etc.)
+    - the type ('Water' or 'House')
     - the name, a unique id ('water1', 'water2', etc.)
     """
 
@@ -25,10 +25,11 @@ class Structure():
         name_split = name.split("_")
         name_split.pop()
         name = "_".join(name_split)
+        
         return name
 
     def set_corners(self):
-        """ Sets the bottom_right_cor and top_left_cor"""
+        """ Sets the bottom right and top left coordinates of the object."""
 
         self.bottom_right_cor = [self.top_right_cor[0], self.bottom_left_cor[1]]
         self.top_left_cor = [self.bottom_left_cor[0], self.top_right_cor[1]]
@@ -59,6 +60,7 @@ class House(Structure):
     """
 
     def __init__(self, name, horizontal):
+        
         super().__init__(name)
         
         self.horizontal = horizontal
@@ -100,8 +102,8 @@ class House(Structure):
 
     def init_distances(self, houses):
         """ 
-        Initialize the distances for all houses.
-        The key is a the name for all houses.
+        Initializes the distances for all houses.
+        The key is the name of all houses.
         Value is math.inf
         """
 
@@ -125,7 +127,7 @@ class House(Structure):
             return min(self.neighbour_distances.values())
 
     def set_orientation(self, horizontal):
-        """ Adjusts the width and height depending on the houses orientation. """
+        """ Adjusts the width and height of the house-object depending its orientation. """
 
         width = self.width
         height = self.height
@@ -141,7 +143,7 @@ class House(Structure):
         self.horizontal = horizontal
         
     def set_coordinates(self, bottom_left_cor, horizontal):
-        """ Sets the coordinates based on its bottom_left_cor and its orientation"""
+        """ Sets the coordinates based on its bottom left coordinates and its orientation"""
 
         self.set_orientation(horizontal)
 
@@ -152,7 +154,7 @@ class House(Structure):
 
     def calc_worth(self):
         """ 
-        Calculates the worth of a house. The worth is
+        Calculates the worth of a house.
         worth = base_value + base_value * extra_value * (min_dist - mandatory_free_space)
         """
 

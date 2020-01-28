@@ -21,7 +21,9 @@ import matplotlib.pyplot as plt
 
 from algorithms.greedy_random import place_housesgreedyrandom
 from classes.area import Area
+
 from settings import evolution_settings as settings
+
 
 class Individual():
     """ An individual from the population. Stores an area object and the worth and fitness values."""
@@ -70,9 +72,12 @@ class Individual():
                 continue
 
             while_count = 0
-            while True:
-
+            valid = False
+            while not valid:
+                
+                max_displacement = 5
                 # Random coordinates shift
+
                 diff_x = int(random.random() * settings["max_displacement"] - settings["max_displacement"])
                 diff_y = int(random.random() * settings["max_displacement"] - settings["max_displacement"])
 
@@ -82,15 +87,15 @@ class Individual():
                 house.set_coordinates([x, y], house.horizontal)
 
                 if self.area.check_valid(house, x, y):
-                    break
-
-                while_count += 1
+                    valid = True
 
                 # Set house to its initial state, if no valid place has been found
                 if while_count == 1000:
                     house.set_coordinates([initial_x, initial_y], initial_orientation)
                     break
-            
+
+                while_count += 1
+                
             self.area.update_distances(house)
 
     def change_orientation(self):
@@ -167,7 +172,7 @@ def evolution(area):
         place_housesgreedyrandom(copy_area)
         individuals.append(Individual(copy_area))
     
-    # Sort individuals
+    # Sort individuals by their worth
     individuals.sort(key=lambda x: x.worth, reverse=True)
 
     # Lists to keep track of the progress op the population
@@ -215,7 +220,7 @@ def evolution(area):
 def evolve(individuals):
     """ Evolve the population one generation further."""    
 
-    # Accumulate fitness
+    # Cumulate fitness
     total_fitness = 0
     for individual in individuals:
         total_fitness += individual.fitness
@@ -226,7 +231,7 @@ def evolve(individuals):
         norm_fitness += individual.fitness / total_fitness
         individual.norm_fitness = norm_fitness
 
-    # Accumulate norm fitness
+    # Cumulate norm fitness
     cum_fitness = 0
     for individual in individuals:
         cum_fitness += individual.norm_fitness
@@ -289,6 +294,10 @@ def update_mutate_rates(generation_count):
     """ Updates the mutation rates, when simulated annealing is enabled. """
 
 
-    settings["move_rate"] = 2 / generation_count + 0.04
-    settings["orientation_rate"] = 2 / generation_count + 0.02
-    settings["swap_rate"] = 2 / generation_count + 0.02
+    MOVE_RATE = cool_function(generation_count)
+    ORIENTATION_RATE = cool_function(generation_count)
+    SWAP_RATE = cool_function(generation_count)
+
+def cool_function(generation_count):
+
+    return 2 / generation_count + 0.04

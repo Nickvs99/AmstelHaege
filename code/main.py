@@ -19,7 +19,6 @@ from algorithms.hill_climber_random_random import hill_climber_random_random
 from algorithms.evolution import evolution
 from algorithms.simulated_annealing import simulated_annealing
 
-# from settings import main_settings as settings
 from user_input import user_input
 
 def main():

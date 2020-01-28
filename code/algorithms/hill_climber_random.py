@@ -22,6 +22,7 @@ def hill_climber_random(area):
         new_worth = area.calc_worth_area()
 
 def greedy_hill_climber(area, house):
+    
     best_worth = area.calc_worth_area()
     best_orientation = house.horizontal
     best_x = house.bottom_left_cor[0]

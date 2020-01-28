@@ -2,7 +2,7 @@
 best_result.py
 
 This python file iterates over a specific amount of randomly placed houses on the grid.
-The average area worth with standard deviation and average runtime will be s
+The average area worth with standard deviation and average runtime will be shown
 The seed of the grid with the highest calculated worth, will be shown and saved.
 """
 
@@ -123,14 +123,14 @@ def calc_std_dev(array):
     """Returns the standard deviation of a list of numbers."""
 
     avg = calc_avg(array)
-    avg_squared = avg ** 2                           # <x>^2
+    avg_squared = avg ** 2                          # <x>^2
 
     # Creates a list whose values are the squared versions of lijst
     list_squared = []
     for i in range(len(array)):
         list_squared.append(array[i] ** 2)
 
-    avg_of_squared = calc_avg(list_squared)    # <x**2>
+    avg_of_squared = calc_avg(list_squared)         # <x**2>
 
     return (avg_of_squared - avg_squared) ** 0.5
 

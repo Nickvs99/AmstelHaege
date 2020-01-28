@@ -14,6 +14,7 @@ def greedy(area, house):
 
     min_dist = min(house.width, house.height)
     for i in range(500):
+        
         x = int(random.random() * (area.width - min_dist + 1))
         y = int(random.random() * (area.height - min_dist + 1))
         

@@ -13,7 +13,17 @@ Amstelhaege is a new residetial area that needs a lay-out. The objective is to g
 | Mansion       | 12 x 10 meter   | 6 meter               | € 610.000,-   | 6%                                     |
 
 #### Area:
+* Wijk 1:
 
+![alt text](https://github.com/Nickvs99/AmstelHaege/blob/master/Images/Wijk1.png "Wijk 1")
+
+* Wijk 2:
+
+![alt text](https://github.com/Nickvs99/AmstelHaege/blob/master/Images/Wijk2.png "Wijk 2")
+
+* Wijk 3:
+
+![alt text](https://github.com/Nickvs99/AmstelHaege/blob/master/Images/Wijk3.png "Wijk 3")
 ### Requirements:
 The code was written in [Python 3.7.3](https://www.python.org/downloads/). The necessary plugin to successfully run this code can be found in requirements.txt. The plugins can be installed by running the following command in the main folder. 
 ```

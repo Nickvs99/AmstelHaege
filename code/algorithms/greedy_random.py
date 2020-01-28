@@ -13,7 +13,7 @@ def greedy(area, house):
     that house.
     """
 
-    best_worth = area.calc_worth_area()
+    best_worth = 0
     min_dist = min(house.width, house.height)
     for i in range(settings["iterations"]):
 
@@ -43,7 +43,7 @@ def place_houses_greedy_random(area):
     """ Creates houses and runs greed on them. """
 
     area.create_houses(False)
-    for house in area.houses:
 
+    for house in area.houses:
         area.structures["House"].append(house)
         greedy(area, house)

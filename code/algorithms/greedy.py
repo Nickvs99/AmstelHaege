@@ -7,7 +7,7 @@ from classes.structure import House
 
 def greedy(area, house):
 
-    best_worth = 0
+    best_worth = area.calc_worth_area()
 
     # Checks place for house
     for y in range(area.height - house.height + 1):

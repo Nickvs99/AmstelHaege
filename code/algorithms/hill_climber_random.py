@@ -9,16 +9,17 @@ from settings import hill_climber_random_settings as settings
 
 def hill_climber_random(area):
 
-    worth_global = area.calc_worth_area()
+    prev_worth = area.calc_worth_area()
+    new_worth = prev_worth + 1
 
-    for i in range(settings["iterations"]):
+    # Keep running until no improvement
+    while prev_worth < new_worth:
 
-        if worth < worth_global:
-            worth = worth_global
-            for house in area.structures["House"]:
-                # Starts hillcimbing for a house
-                greedy_hill_climber(area, house)
-            worth_global = area.calc_worth_area()
+        for house in area.structures["House"]:
+            # Starts hillcimbing for a house
+            greedy_hill_climber(area, house)
+        prev_worth = new_worth
+        new_worth = area.calc_worth_area()
 
 def greedy_hill_climber(area, house):
     

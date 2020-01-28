@@ -1,5 +1,5 @@
 """
-Creates a barchart for the results
+Creates multiple barcharts for the results from all algorithms.
 """
 
 import matplotlib.pyplot as plt
@@ -40,6 +40,8 @@ def plot_barchart():
         first_line = True
 
         for row in f:
+
+            # Skip header from csv file
             if first_line:
                 first_line = False
                 continue
@@ -52,7 +54,6 @@ def plot_barchart():
             worth = int(data_split[4])
             stddev = float(data_split[6])
             
-        
             results[neighbourhood][houses][algorithm] =  [worth, stddev]
 
     # Plot all charts
@@ -67,10 +68,12 @@ def plot_barchart():
                 worths.append(worth)
                 stddevs.append(stddev)
 
+            # Plot single chart
             x_pos = np.arange(len(algorithms))
             plt.subplot(3, 3, plot_counter)
-            plt.tight_layout()
+            plt.subplots_adjust(hspace = 0.35)
             fig, ax = plt.gcf(), plt.gca()
+
             plt.title(f"{neighbourhood}, {house} houses")
             ax.set_xticks(x_pos)
             ax.set_xticklabels(algorithms)

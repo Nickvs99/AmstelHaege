@@ -8,7 +8,9 @@ import random
 from settings import hill_climber_random_settings as settings
 
 def hill_climber_random(area):
-
+    """
+    Iterates x amount of times over each house and tries changes.
+    """
     prev_worth = area.calc_worth_area()
     new_worth = prev_worth + 1
 

@@ -6,7 +6,9 @@ import random
 from classes.structure import House
 
 def greedy(area, house):
-
+    """
+    iterates over every place for a house and gets best value. 
+    """
     best_worth = area.calc_worth_area()
 
     # Checks place for house

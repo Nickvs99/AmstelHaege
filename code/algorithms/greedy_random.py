@@ -8,6 +8,10 @@ from classes.structure import House
 from settings import greedy_random_settings as settings
 
 def greedy(area, house):
+    """
+    Tries x amount of random places and places it on the best position for
+    that house.
+    """
 
     best_worth = area.calc_worth_area()
     min_dist = min(house.width, house.height)
@@ -36,7 +40,7 @@ def greedy(area, house):
 
 
 def place_houses_greedy_random(area):
-    """ Places the houses randomly. """
+    """ Creates houses and runs greed on them. """
 
     area.create_houses(False)
     for house in area.houses:

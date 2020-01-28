@@ -22,22 +22,8 @@ import matplotlib.pyplot as plt
 from algorithms.greedy_random import place_housesgreedyrandom
 from classes.area import Area
 
+from settings import evolution_settings as settings
 
-POPULATION = 50         # Population size
-STALE_COUNTER = 1       # How many iterations a population is allowed to not grow
-
-# The mutation rates
-MOVE_RATE = 0.3      
-ORIENTATION_RATE = 0.1
-SWAP_RATE = 0.1
-
-# The exponent used in the fitness function. The higher the value
-# the more likely a good individual will be picked for mutations. This
-# is at the cost of population diversity.
-FITNESS_POWER = 3
-
-# Set SA to True, if you want to add simulated annealing to the algorithm
-SA = True
 
 class Individual():
     """ An individual from the population. Stores an area object and the worth and fitness values."""
@@ -54,7 +40,7 @@ class Individual():
         """
 
         self.worth = self.area.calc_worth_area()
-        self.fitness = (self.worth / 1000000) ** FITNESS_POWER
+        self.fitness = (self.worth / 1000000) ** settings["fitness_power"]
 
     def mutate(self):
         """ 
@@ -82,7 +68,7 @@ class Individual():
             initial_orientation = house.horizontal
 
             r = random.random()
-            if r > MOVE_RATE:
+            if r > settings["move_rate"]:
                 continue
 
             while_count = 0
@@ -91,8 +77,9 @@ class Individual():
                 
                 max_displacement = 5
                 # Random coordinates shift
-                diff_x = int(random.random() * max_displacement  * 2 - max_displacement)
-                diff_y = int(random.random() * max_displacement  * 2 - max_displacement)
+
+                diff_x = int(random.random() * settings["max_displacement"] - settings["max_displacement"])
+                diff_y = int(random.random() * settings["max_displacement"] - settings["max_displacement"])
 
                 x = initial_x + diff_x
                 y = initial_y + diff_y
@@ -123,7 +110,7 @@ class Individual():
             initial_orientation = house.horizontal
 
             r = random.random()
-            if r > ORIENTATION_RATE:
+            if r > settings["orientation_rate"]:
                 continue
 
             house.set_coordinates([initial_x, initial_y], not initial_orientation)
@@ -144,7 +131,7 @@ class Individual():
         for house in self.area.structures["House"]:
 
             r = random.random()
-            if r > SWAP_RATE:
+            if r > settings["swap_rate"]:
                 continue
 
             # Pick a randomly chosen house
@@ -180,7 +167,7 @@ def evolution(area):
     # Create an initial set of solutions with the random_greedy algorithm
     print("Creating initial set of solutions...")
     individuals = []
-    for i in range(POPULATION):
+    for i in range(settings["population"]):
         copy_area = copy.deepcopy(area)
         place_housesgreedyrandom(copy_area)
         individuals.append(Individual(copy_area))
@@ -196,8 +183,8 @@ def evolution(area):
     stale_counter = 0
     generation_count = 0
     
-    while stale_counter < STALE_COUNTER:
-        print("Generaton: ", generation_count, best_worths[-1], avg_worths[-1], MOVE_RATE)
+    while stale_counter < settings["stale_counter"]:
+        print("Generaton: ", generation_count, best_worths[-1], avg_worths[-1], settings["move_rate"])
 
         individuals = evolve(individuals)
 
@@ -214,7 +201,7 @@ def evolution(area):
 
         generation_count += 1
 
-        if SA:
+        if settings["sa"]:
             update_mutate_rates(generation_count)
 
     # # Plot the progress of population
@@ -253,7 +240,7 @@ def evolve(individuals):
     # Fill the new generation with the best individuals from the
     # old generation and the mutated versions.
     mutations = []
-    for i in range(POPULATION):
+    for i in range(settings["population"]):
         r = random.random()
 
         # Pick the random individual
@@ -273,7 +260,7 @@ def evolve(individuals):
     old_generation_count = 0
     mutation_count = 0
     new_generation = []
-    for i in range(POPULATION):
+    for i in range(settings["population"]):
         if individuals[old_generation_count].worth > mutations[mutation_count].worth:
             new_generation.append(individuals[old_generation_count])
             old_generation_count += 1
@@ -306,9 +293,6 @@ def get_best_individual(individuals):
 def update_mutate_rates(generation_count):
     """ Updates the mutation rates, when simulated annealing is enabled. """
 
-    global MOVE_RATE
-    global SWAP_RATE
-    global ORIENTATION_RATE
 
     MOVE_RATE = cool_function(generation_count)
     ORIENTATION_RATE = cool_function(generation_count)

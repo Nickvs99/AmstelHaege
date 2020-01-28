@@ -27,7 +27,6 @@ def main():
 
     start = time()
 
-
     neighbourhood, houses, algorithm, hill_climber = check_argv()
 
     seed = set_random_seed()

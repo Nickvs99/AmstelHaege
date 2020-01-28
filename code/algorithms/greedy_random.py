@@ -1,5 +1,6 @@
 """
-Short description of the algorithm
+Tries to place the houses one by one an x amount of random.
+It then chooses the best spot.
 """
 
 import random
@@ -7,18 +8,14 @@ from classes.structure import House
 from settings import greedy_random_settings as settings
 
 def greedy(area, house):
+
     best_worth = 0
-    best_x = 0
-    best_y = 0
-
-    # Checks place for house
-
     min_dist = min(house.width, house.height)
     for i in range(settings["iterations"]):
 
         x = int(random.random() * (area.width - min_dist + 1))
         y = int(random.random() * (area.height - min_dist + 1))
-        
+
         # Check if valid the move is valid for both orientations
         for orientation in [True, False]:
             house.set_coordinates([x,y], orientation)
@@ -33,27 +30,24 @@ def greedy(area, house):
                     best_y = y
                     best_orientation = orientation
 
+    # Places house in best place
     house.set_coordinates([best_x,best_y], best_orientation)
     area.update_distances(house)
-
 
 def create_houses_greedy(area, one_person_house_count, bungalow_count, maison_count):
         """ Creates a list with houses. """
 
         houses = []
         for i in range(maison_count):
-            r = random.choice([True])
-            house = House("maison_" + str(i), r)
+            house = House("maison_" + str(i), True)
             houses.append(house)
 
         for i in range(bungalow_count):
-            r = random.choice([True])
-            house = House("bungalow_" + str(i), r)
+            house = House("bungalow_" + str(i), True)
             houses.append(house)
 
         for i in range(one_person_house_count):
-            r = random.choice([True])
-            house = House("one_person_home_" + str(i), r)
+            house = House("one_person_home_" + str(i), True)
             houses.append(house)
 
         for h in houses:
@@ -61,29 +55,12 @@ def create_houses_greedy(area, one_person_house_count, bungalow_count, maison_co
 
         return houses
 
-def place_housesgreedyrandom(area):
+def place_houses_greedy_random(area):
     """ Places the houses randomly. """
 
-    # Makes houses
     houses = create_houses_greedy(area, area.one_person_house_count, area.bungalow_count, area.maison_count)
+
     for house in houses:
 
-        # Places the rest of the houses
-        house.bottom_left_cor = [0, 0]
-        house.top_right_cor = [0 + house.width, 0 + house.height]
-        house.set_corners()
         area.structures["House"].append(house)
         greedy(area, house)
-
-        # print(area.calc_worth_area())
-
-def place_housegreedyrandom(area, house, x, y):
-    """
-    Place a house.
-    """
-
-    house.bottom_left_cor = [x, y]
-    house.top_right_cor = [x + house.width, y + house.height]
-    house.set_corners()
-
-    area.update_distances(house)

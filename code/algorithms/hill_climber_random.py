@@ -1,36 +1,28 @@
 """
-Short description of the algorithm
+Tries every house an x amount of times and places it in the best position.
+It does that until a cycle of placing every house gives no improvement.
 """
-from algorithms.greedy_random import place_housesgreedyrandom
-from algorithms.greedy_random import place_housegreedyrandom
 from classes.structure import House
 import random
 
 from settings import hill_climber_random_settings as settings
 
 def hill_climber_random(area):
+    iterations = 100
     worth_global = area.calc_worth_area()
-
     worth = 0
+
 
     for i in range(settings["iterations"]):
 
         if worth < worth_global:
             worth = worth_global
-            place_houseshill_climber(area)
+            for house in area.structures["House"]:
+                # Starts hillcimbing for a house
+                greedy_hill_climber(area, house)
             worth_global = area.calc_worth_area()
-        # print("worth_global")
-        # print(i)
-        # print(worth_global)
 
-def place_houseshill_climber(area):
-    """ Places the houses randomly. """
-
-    # Makes houses
-    for house in area.structures["House"]:
-        greedyhill_climber(area, house)
-
-def greedyhill_climber(area, house):
+def greedy_hill_climber(area, house):
     best_worth = area.calc_worth_area()
     best_orientation = house.horizontal
     best_x = house.bottom_left_cor[0]
@@ -40,29 +32,23 @@ def greedyhill_climber(area, house):
     for i in range(settings["iterations_house"]):
         x = int(random.random() * (area.width - house.width + 1))
         y = int(random.random() * (area.height - house.height + 1))
-        house.set_orientation(True)
-        if area.check_valid(house, x, y):
-            place_housegreedyrandom(area, house, x, y)
-            worth = area.calc_worth_area()
 
-            # Selects best place for house
-            if worth > best_worth:
-                best_worth = worth
-                best_x = x
-                best_y = y
-                best_orientation = True
+        # Checks score for house
+        for orientation in [True, False]:
+            house.set_coordinates([x, y], orientation)
+            if area.check_valid(house, x, y):
+                area.update_distances(house)
+                worth = area.calc_worth_area()
 
-        house.set_orientation(False)
-        if area.check_valid(house, x, y):
-            place_housegreedyrandom(area, house, x, y)
-            worth = area.calc_worth_area()
-            # Selects best place for house
-            if worth > best_worth:
-                best_worth = worth
-                best_x = x
-                best_y = y
-                best_orientation = False
+                # Selects best place for house
+                if worth > best_worth:
+                    best_worth = worth
+                    best_x = x
+                    best_y = y
+                    best_orientation = orientation
+
+
 
     # Places house in best place
-    house.set_orientation(best_orientation)
-    place_housegreedyrandom(area, house, best_x, best_y)
+    house.set_coordinates([best_x, best_y], best_orientation)
+    area.update_distances(house)

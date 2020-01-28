@@ -1,7 +1,7 @@
 """
 main.py
 
-The main program to retrieve the solutions of the case. The user will be requested 
+The main program to retrieve the solutions of the case. The user will be requested
 to insert the neighbourhood, amount of houses, algorithm and (optional) the hill_climber
 """
 
@@ -11,8 +11,8 @@ from time import time
 
 from classes.area import Area
 from algorithms.random import random_placement
-from algorithms.greedy import place_housesgreedy
-from algorithms.greedy_random import place_housesgreedyrandom
+from algorithms.greedy import place_houses_greedy
+from algorithms.greedy_random import place_houses_greedy_random
 from algorithms.hill_climber_steps import hill_climber_steps
 from algorithms.hill_climber_random import hill_climber_random
 from algorithms.hill_climber_random_random import hill_climber_random_random
@@ -21,7 +21,6 @@ from algorithms.simulated_annealing import simulated_annealing
 
 from settings import main_settings as settings
 from user_input import user_input
-
 
 def main():
     """ Main function """
@@ -33,20 +32,20 @@ def main():
     seed = set_random_seed()
 
     area = get_area(neighbourhood, houses, algorithm, hill_climber)
-    
+
     end = time()
 
     print(f"Seed: {seed} \nRuntime: {end - start}")
-    
+
     area.make_csv_output()
 
     area.plot_area(neighbourhood, houses, algorithm)
 
 
 def get_area(neighbourhood, houses, algorithm_name, hill_climber_name):
-    """ 
+    """
     Runs the specific algorithm with hill_climber, if requested.
-    And returns the generated area. 
+    And returns the generated area.
     """
 
     area = Area(neighbourhood, houses)
@@ -67,10 +66,10 @@ def algorithm(area, algorithm_name):
         random_placement(area)
 
     elif algorithm_name == "greedy":
-        place_housesgreedy(area)
+        place_houses_greedy(area)
 
     elif algorithm_name == "greedy_random":
-        place_housesgreedyrandom(area)
+        place_houses_greedy_random(area)
 
     elif algorithm_name == "evolution":
         evolution(area)
@@ -90,7 +89,6 @@ def hill_climber(area, hill_climber_name):
 
     elif hill_climber_name == "simulated_annealing":
         simulated_annealing(area)
-        
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

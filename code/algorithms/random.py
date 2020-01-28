@@ -21,7 +21,6 @@ def random_placement(area):
 def create_houses(area, one_person_house_count, bungalow_count, maison_count):
     """ Creates a list of house-objects. """
 
-    # TODO repeated code
     houses = []
     for i in range(maison_count):
         r = random.choice([True, False])

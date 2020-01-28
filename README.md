@@ -15,7 +15,10 @@ Amstelhaege is a new residetial area that needs a lay-out. The objective is to g
 #### Area:
 
 ### Requirements:
-The code was written in [Python 3.7.3](https://www.python.org/downloads/). The necessary plugin to successfully run this code can be found in requirements.txt. The plugins can be installed by running pip install -r requirements.txt in the main folder.
+The code was written in [Python 3.7.3](https://www.python.org/downloads/). The necessary plugin to successfully run this code can be found in requirements.txt. The plugins can be installed by running the following command in the main folder. 
+```
+pip install -r requirements.txt
+```
 
 ### Running the algorithm
 The code can be runned by running: 

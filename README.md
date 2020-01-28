@@ -51,7 +51,8 @@ The algorithms to choose from are explained beneath.
 * greedy_random: Tries to place the houses one by one a n times and picks the best spot.
 * evolution: Select the best-fit individuals for reproduction based on their fitness value. Breed new individuals through mutations to give birth to offspring. Evaluate the individual fitness of new individuals. Replace least-fit population with new individuals.
 
-After this the code asks for default or custom settings.
+After this the code prompts the user for default or custom settings, if possible.
+Not all the algorithms and hill climbers have variable settings, this will be checked first.
 * Default setting: can be found in code/settings.
 * Custom settings: The code asks for a parameter. The user then needs to input a value for that parameter.
 
@@ -62,6 +63,6 @@ The algorithms are:
 * hillclimber_steps: Checks for x meters in every direction for each house and places the house in the best location. Ideal for fine-tuning the solution.
 * simulated_annealing: Tries to place a random house on a random location for an x amount of times. If better it places the house. If not it places the house by chance. The chance decreases over the amount of iterations.
 
-After this, the program will once again ask for default or custom settings.
+After this, the program will once again ask for default or custom settings, if possible.
 
 

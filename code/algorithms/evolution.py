@@ -21,7 +21,6 @@ import matplotlib.pyplot as plt
 
 from algorithms.greedy_random import place_houses_greedy_random
 from algorithms.random import random_placement
-from algorithms.greedy_random import place_housesgreedyrandom
 from classes.area import Area
 
 from settings import evolution_settings as settings
@@ -170,7 +169,7 @@ def evolution(area):
     individuals = []
     for i in range(settings["population"]):
         copy_area = copy.deepcopy(area)
-        place_housesgreedyrandom(copy_area)
+        place_houses_greedy_random(copy_area)
         individuals.append(Individual(copy_area))
     
     # Sort individuals by their worth

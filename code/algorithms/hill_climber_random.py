@@ -8,10 +8,8 @@ import random
 from settings import hill_climber_random_settings as settings
 
 def hill_climber_random(area):
-    iterations = 100
-    worth_global = area.calc_worth_area()
-    worth = 0
 
+    worth_global = area.calc_worth_area()
 
     for i in range(settings["iterations"]):
 
@@ -23,6 +21,7 @@ def hill_climber_random(area):
             worth_global = area.calc_worth_area()
 
 def greedy_hill_climber(area, house):
+    
     best_worth = area.calc_worth_area()
     best_orientation = house.horizontal
     best_x = house.bottom_left_cor[0]
@@ -46,8 +45,6 @@ def greedy_hill_climber(area, house):
                     best_x = x
                     best_y = y
                     best_orientation = orientation
-
-
 
     # Places house in best place
     house.set_coordinates([best_x, best_y], best_orientation)

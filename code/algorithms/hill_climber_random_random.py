@@ -14,7 +14,7 @@ def hill_climber_random_random(area):
         worth = area.calc_worth_area()
 
         # Picks random house and new coordinates
-        selected_house_number = int(random.random() * area.houses - 1)
+        selected_house_number = int(random.random() * area.houses_count - 1)
         house = area.structures["House"][selected_house_number]
 
         x = int(random.random() * (area.width - house.width + 1))

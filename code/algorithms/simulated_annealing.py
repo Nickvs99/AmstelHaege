@@ -20,7 +20,7 @@ def simulated_annealing(area):
         while True:
 
             # Pick random house and new coordinates
-            k = int(random.random() * area.houses - 1)
+            k = int(random.random() * area.houses_count - 1)
             house = area.structures["House"][k]
 
             x = int(random.random() * (area.width - house.width + 1))

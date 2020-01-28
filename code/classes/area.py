@@ -3,6 +3,7 @@ import csv
 import math
 import matplotlib
 import matplotlib.pyplot as plt
+import random
 
 from .structure import Structure, House
 
@@ -22,7 +23,7 @@ class Area():
     - updates the distances to neighbours for each house
     """
 
-    def __init__(self, neighbourhood, houses):
+    def __init__(self, neighbourhood, houses_count):
         
         self.height = 180
         self.width = 160
@@ -33,10 +34,40 @@ class Area():
         self.load_water(neighbourhood)
     
         # Calculate the number of houses per type
-        self.houses = houses
-        self.one_person_house_count = int(0.6 * houses)
-        self.bungalow_count = int(0.25 * houses)
-        self.maison_count = int(0.15 * houses)
+        self.houses_count = houses_count
+        self.one_person_house_count = int(0.6 * houses_count)
+        self.bungalow_count = int(0.25 * houses_count)
+        self.maison_count = int(0.15 * houses_count)
+
+    def create_houses(self, random_orientation):
+        """ Creates a list of house-objects. """
+
+        self.houses = []
+        for i in range(self.maison_count):
+            if random_orientation:
+                r = random.choice([True, False])
+            else:
+                r = True
+
+            house = House("maison_" + str(i), r)
+            self.houses.append(house)
+
+        for i in range(self.bungalow_count):
+            if random_orientation:
+                r = random.choice([True, False])
+            else:
+                r = True
+            house = House("bungalow_" + str(i), r)
+            self.houses.append(house)
+            
+        for i in range(self.one_person_house_count):
+            if random_orientation:
+                r = random.choice([True, False])
+            else:
+                r = True
+            
+            house = House("one_person_home_" + str(i), r)
+            self.houses.append(house)
 
     def create_area(self):
         """ 

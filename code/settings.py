@@ -41,6 +41,7 @@ hill_climber_random_settings = dict(
 
 hill_climber_steps_settings = dict(
     iterations = 1000,
+    max_displacement = 11,
 )
 
 simulated_annealing_settings = dict(

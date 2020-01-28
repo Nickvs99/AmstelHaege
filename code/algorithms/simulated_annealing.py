@@ -7,10 +7,6 @@ import random
 from settings import simulated_annealing_settings as settings
 
 def simulated_annealing(area):
-    # for i in range(100):
-    #     print("iteratie")
-    #     print(i)
-    #     print(area.calc_worth_area())
 
     for j in range(settings["iterations"]):
         T = settings["iterations"] - j

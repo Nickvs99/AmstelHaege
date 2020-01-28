@@ -1,7 +1,7 @@
 """
 user_input.py
 
-Asks the user for input
+Asks the user for input for: the neighbourhood, amount of houses, algorithm and hill_
 """
 
 import settings
@@ -38,7 +38,6 @@ def get_neighbourhood():
     if neighbourhood.lower() not in neighbourhood_list:
         
         print("Invalid neighbourhood")
-        
         neighbourhood = get_neighbourhood()
 
     return neighbourhood.lower()
@@ -50,7 +49,6 @@ def get_houses():
     if not houses.isdigit():
         
         print("Amount of houses must be a digit")
-
         houses = get_houses()
 
     return int(houses)
@@ -62,18 +60,18 @@ def get_algorithm():
     algorithm = input(f"Choose from: {str(algorithm_list)[1:-1]}\n")
 
     if algorithm.lower() not in algorithm_list:
-
+        
         print("Invalid algorithm")
-
         algorithm = get_algorithm()
 
     return algorithm.lower()
 
 def check_for_custom_settings(code_name):
 
-    custom_settings_list = ["greedy_random", "hill_climber_steps", "hill_climber_random", "hill_climber_random_random"]
+    custom_settings_list = ["greedy_random", "hill_climber_steps", "hill_climber_random", "hill_climber_random_random", "simulated_annealing"]
 
     if code_name in custom_settings_list:
+        
         print("Do you want the default settings or custom settings?")
         ask_for_settings(code_name)
 
@@ -85,13 +83,13 @@ def ask_for_settings(code_name):
         pass
     
     elif answer == 2:
-        iteration_input(code_name)
+        custom_input(code_name)
 
     else:
         print("Please choose 1 or 2")
         answer = ask_for_settings(code_name)
 
-def iteration_input(code_name):
+def custom_input(code_name):
 
     if code_name == "greedy_random":
         
@@ -100,7 +98,7 @@ def iteration_input(code_name):
         
         if not iterations.isdigit():
             
-            iterations = iteration_input(code_name)
+            iterations = custom_input(code_name)
         
         settings.greedy_random_settings["iterations"] = int(iterations)
 
@@ -111,9 +109,9 @@ def iteration_input(code_name):
 
         if not iterations.isdigit():
             
-            iterations = iteration_input(code_name)
+            iterations = custom_input(code_name)
         
-        settings.greedy_random_settings["iterations"] = int(iterations)
+        settings.hill_climber_steps_settings["iterations"] = int(iterations)
         
         max_displacement = get_max_displacement(code_name)
 
@@ -124,9 +122,9 @@ def iteration_input(code_name):
         
         if not iterations.isdigit():
             
-            iterations = iteration_input(code_name)
+            iterations = custom_input(code_name)
         
-        settings.greedy_random_settings["iterations"] = int(iterations)
+        settings.hill_climber_random_settings["iterations"] = int(iterations)
         
     elif code_name == "hill_climber_random_random":
 
@@ -135,9 +133,20 @@ def iteration_input(code_name):
         
         if not iterations.isdigit():
             
-            iterations = iteration_input(code_name)
+            iterations = custom_input(code_name)
         
-        settings.greedy_random_settings["iterations"] = int(iterations)
+        settings.hill_climber_random_random_settings["iterations"] = int(iterations)
+
+    elif code_name == "simulated_annealing":
+
+        iterations = input(f"How many times do you want to move each house randomly?\n \
+                            (Default value is {settings.simulated_annealing_settings['iterations']})\n")
+        
+        if not iterations.isdigit():
+            
+            iterations = custom_input(code_name)
+        
+        settings.simulated_annealing_settings["iterations"] = int(iterations)
 
 def get_max_displacement(code_name):
 
@@ -162,7 +171,6 @@ def get_hill_climber():
     if hill_climber.lower() not in hill_climber_list:
 
         print("Invalid hill_climber")
-
         hill_climber = get_hill_climber()
 
     elif hill_climber.lower() == "none":

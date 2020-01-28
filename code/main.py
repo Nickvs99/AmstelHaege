@@ -2,7 +2,8 @@
 main.py
 
 The main program to retrieve the solutions of the case. The user will be requested 
-to insert the neighbourhood, amount of houses, algorithm and (optional) the hill_climber
+to insert the neighbourhood, amount of houses, algorithm and (optional) the hill_climber.
+
 """
 
 import sys

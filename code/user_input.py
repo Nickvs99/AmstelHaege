@@ -240,13 +240,12 @@ def set_variable(variable):
             set_variable(variable)
 
     # If input-value is for population and a float.
-    if variable != "population":
-        if "." in variable_value:
-            if not variable_value.replace(".", "", 1).isdigit():
-                print("Invalid input")
-                set_variable(variable)
-            else:
-                settings.evolution_settings[variable] = float(variable_value)
+    elif "." in variable_value and variable != "population":
+        if not variable_value.replace(".", "", 1).isdigit():
+            print("Invalid input")
+            set_variable(variable)
+        else:
+            settings.evolution_settings[variable] = float(variable_value)
 
     else:
         if not variable_value.isdigit():

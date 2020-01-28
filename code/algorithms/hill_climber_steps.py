@@ -37,21 +37,20 @@ def hill_climber_steps(area):
         else:
             break
     
-
 def hill_climber_once(area):
     """ 
     Moves each house-object seperatly and stores the coordinates 
     with the best area worth.
     """
 
-    best_worth = 0
+    best_worth = area.calc_worth_area()
 
     move_directions = ["up", "right", "down", "left"]
 
     for house in area.structures["House"]:
 
-        saved_bottom_left = house.bottom_left_cor
-        saved_orientation = house.horizontal
+        initial_bottom_left = house.bottom_left_cor
+        initial_orientation = house.horizontal
 
         best_bottom_left = house.bottom_left_cor
         best_orientation = house.horizontal
@@ -91,7 +90,7 @@ def hill_climber_once(area):
                             best_orientation = orientation
 
             # Restore the coordinate of the house object.
-            place_house_hillclimbing(area, house, saved_bottom_left, saved_orientation)  
+            place_house_hillclimbing(area, house, initial_bottom_left, initial_orientation)  
 
         # Place house with the best configuration.
         place_house_hillclimbing(area, house, best_bottom_left, best_orientation)

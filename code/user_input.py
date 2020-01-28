@@ -7,8 +7,6 @@ stores and returns the stringvalues of the user-input.
 
 import settings
 
-CUSTOM_SETTINGS_LIST = ["greedy_random", "evolution", "hill_climber_steps", "hill_climber_random", 
-                        "hill_climber_random_random", "simulated_annealing"]
 
 def user_input():
     """ Main program prompting user for input """
@@ -107,7 +105,10 @@ def check_for_custom_settings(code_name):
     if it can have some custom settings. 
     """
 
-    if code_name in CUSTOM_SETTINGS_LIST:
+    custom_settings_list = ["greedy_random", "evolution", "hill_climber_steps", "hill_climber_random", 
+                            "hill_climber_random_random", "simulated_annealing"]
+
+    if code_name in custom_settings_list:
         
         print("Do you want the default settings or custom settings?")
         prompt_for_settings(code_name)

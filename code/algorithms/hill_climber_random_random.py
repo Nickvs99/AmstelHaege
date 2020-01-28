@@ -6,14 +6,15 @@ It does this an x amount of times.
 from classes.structure import House
 import random
 
-from settings import hill_climber_random_random_settings as settings
+from settings import iterations
 
 def hill_climber_random_random(area):
     """
-    Iterates over random houses and makes changes.
+    Iterates over random houses and relocate each 
+    house-object by coordinates.
     """
     
-    for i in range(settings["iterations"]):
+    for i in range(iterations["hill_climber_random_random"]):
         worth = area.calc_worth_area()
 
         # Picks random house and new coordinates

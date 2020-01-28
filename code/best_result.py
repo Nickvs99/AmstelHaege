@@ -25,7 +25,6 @@ ITERATIONS = 10
 NEIGHBOURHOOD = "wijk1"
 ALGORITHM = "greedy_random"
 HILL_CLIMBER = "hill_climber_steps"
-# HILL_CLIMBER = None
 
 def best_result():
     """

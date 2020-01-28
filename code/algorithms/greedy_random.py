@@ -1,21 +1,22 @@
 """
-Tries to place the houses one by one an x amount of random.
-It then chooses the best spot.
+This version of greedy tries to place each house-object an x amount of 
+random places in the current area. When finding the best configuration,
+it returns the area with the highest area worth.
 """
 
 import random
 from classes.structure import House
-from settings import greedy_random_settings as settings
+from settings import iterations
 
-def greedy(area, house):
+def greedy_random(area, house):
     """
     Tries x amount of random places and places it on the best position for
-    that house.
+    that house-object.
     """
 
     best_worth = 0
     min_dist = min(house.width, house.height)
-    for i in range(settings["iterations"]):
+    for i in range(iterations["greedy_random"]):
 
         x = int(random.random() * (area.width - min_dist + 1))
         y = int(random.random() * (area.height - min_dist + 1))
@@ -46,4 +47,4 @@ def place_houses_greedy_random(area):
 
     for house in area.houses:
         area.structures["House"].append(house)
-        greedy(area, house)
+        greedy_random(area, house)

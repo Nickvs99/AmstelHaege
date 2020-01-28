@@ -4,18 +4,20 @@ If better it places the house. If not it places the house by chance.
 The chance decreases over the amount of iterations.
 """
 
-from classes.structure import House
 import random
 
-from settings import simulated_annealing_settings as settings
+from settings import iterations
+from classes.structure import House
+from algorithms.hill_climber_random_random import move
+
 
 def simulated_annealing(area):
     """
     Iterates of random houses changes and makes changes.
     """
 
-    for j in range(settings["iterations"]):
-        T = settings["iterations"] - j
+    for j in range(iterations["simulated_annealing"]):
+        T = iterations["simulated_annealing"] - j
 
         worth = area.calc_worth_area()
 
@@ -40,16 +42,8 @@ def simulated_annealing(area):
                 # Places house if worth more
                 if worth > new_worth:
 
-                    chance = random.random() * settings["iterations"]
+                    chance = random.random() * iterations["simulated_annealing"]
 
                     if T < chance:
                         move(area, house, old_x, old_y)
                 break
-
-def move(area, house, x, y):
-    """
-    Moves a house.
-    """
-
-    house.set_coordinates([x, y], house.horizontal)
-    area.update_distances(house)

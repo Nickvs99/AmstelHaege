@@ -239,21 +239,19 @@ class Area():
     def csv_output(self, csv_output_list):
         """ (Over)writes the houselist into the ouput.csv """
 
-        # Specify the path of the csv-file
         my_path = os.path.abspath(os.path.dirname(__file__))
 
         path = os.path.join(my_path, "..\..\Results\output.csv")
 
-        # Open the output.csv file
+        # Opens and (over)writes each line of the csv-output list into the csv-file
         with open(path, 'w', newline='') as myfile:
             wr = csv.writer(myfile)
-
-            # (Over)write each line of the csv-output list into the csv-file
+            
             for structure in csv_output_list:
                 wr.writerow(structure)
     
     def update_distances(self, house):
-        """ Update the distances from the specific house-object."""
+        """ Updates the distances from the specific house-object."""
         
         # Reset all distances for house
         house.init_distances(self.structures["House"])

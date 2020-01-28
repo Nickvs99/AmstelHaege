@@ -9,6 +9,7 @@ import sys
 import random
 from time import time
 
+from user_input import user_input
 from classes.area import Area
 from algorithms.random import random_placement
 from algorithms.greedy import place_houses_greedy
@@ -19,7 +20,6 @@ from algorithms.hill_climber_random_random import hill_climber_random_random
 from algorithms.evolution import evolution
 from algorithms.simulated_annealing import simulated_annealing
 
-from user_input import user_input
 
 def main():
     """ Main function """
@@ -46,6 +46,8 @@ def get_area(neighbourhood, houses, algorithm_name, hill_climber_name):
     Runs the specific algorithm with hill_climber, if requested.
     And returns the generated area.
     """
+
+    print("Creating area...")
 
     area = Area(neighbourhood, houses)
 

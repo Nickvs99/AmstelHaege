@@ -26,23 +26,20 @@ evolution_settings = dict(
     sa = True,
 )
 
-greedy_random_settings = dict(
-    iterations = 100,
-)
-
-hill_climber_random_random_settings = dict(
-    iterations = 10000,
-)
-
-hill_climber_random_settings = dict(
-    iterations = 100,
-)
-
 hill_climber_steps_settings = dict(
-    iterations = 1000,
     max_movement = 11,
 )
 
-simulated_annealing_settings = dict(
-    iterations = 1000,
+iterations = dict(
+
+    greedy_random = 100,
+
+    hill_climber_random = 100,
+
+    hill_climber_random_random = 10000,
+
+    hill_climber_steps = 1000,
+    
+    simulated_annealing = 1000,
+
 )

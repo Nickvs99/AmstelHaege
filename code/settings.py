@@ -36,7 +36,7 @@ hill_climber_random_random_settings = dict(
 
 hill_climber_random_settings = dict(
     iterations = 100,
-    iterations_house = 1000,
+    iterations_house = 100,
 )
 
 hill_climber_steps_settings = dict(

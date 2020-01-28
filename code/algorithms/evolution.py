@@ -206,7 +206,6 @@ def evolution(area):
 
 
     # Plot the progress of population
-
     plt.plot(avg_worths)
     plt.plot(best_worths)
     plt.title("Progress of population")

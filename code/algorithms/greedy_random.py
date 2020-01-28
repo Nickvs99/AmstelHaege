@@ -9,7 +9,7 @@ from settings import greedy_random_settings as settings
 
 def greedy(area, house):
 
-    best_worth = 0
+    best_worth = area.calc_worth_area()
     min_dist = min(house.width, house.height)
     for i in range(settings["iterations"]):
 

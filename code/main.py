@@ -72,7 +72,7 @@ def algorithm(area, algorithm_name):
         place_housesgreedyrandom(area)
 
     elif algorithm_name == "evolution":
-        get_alpha_and_beta(area)
+        evolution(area)
 
 
 def hill_climber(area, hill_climber_name):

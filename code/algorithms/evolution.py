@@ -161,7 +161,7 @@ class Individual():
             self.area.update_distances(house)
             self.area.update_distances(house2)
    
-def evolution(individuals, alpha, beta):
+def evolution(area):
     """ The main program. """
 
     # Create an initial set of solutions with the random_greedy algorithm
@@ -181,6 +181,7 @@ def evolution(individuals, alpha, beta):
     best_worths = [best_individual.worth]
     
     stale_counter = 0
+    generation_count = 0
     
     while stale_counter < settings["stale_counter"]:
         print("Generaton: ", generation_count, best_worths[-1], avg_worths[-1], settings["move_rate"])
@@ -198,12 +199,11 @@ def evolution(individuals, alpha, beta):
         avg_worths.append(calc_avg_individuals(individuals))
         best_worths.append(get_best_individual(individuals).worth)
 
-        GENERATION_COUNT += 1
-
-        update_mutate_rates(alpha, beta)
+        generation_count += 1
 
         if settings["sa"]:
             update_mutate_rates(generation_count)
+
 
     # Plot the progress of population
 
@@ -215,9 +215,9 @@ def evolution(individuals, alpha, beta):
     plt.show()
 
     # Copy all values to the original area. Now main can do all of its operations on the best area
-    # area.structures = get_best_individual(individuals).area.structures
-    # for h in area.structures["House"]:
-    #     area.update_distances(h)  
+    area.structures = get_best_individual(individuals).area.structures
+    for h in area.structures["House"]:
+        area.update_distances(h)  
 
 def evolve(individuals):
     """ Evolve the population one generation further."""    
@@ -298,9 +298,9 @@ def update_mutate_rates(generation_count):
     """ Updates the mutation rates, when simulated annealing is enabled. """
 
 
-    MOVE_RATE = cool_function(generation_count)
-    ORIENTATION_RATE = cool_function(generation_count)
-    SWAP_RATE = cool_function(generation_count)
+    settings["move_rate"] = cool_function(generation_count)
+    settings["orientation_rate"] = cool_function(generation_count)
+    settings["swap_rate"] = cool_function(generation_count)
 
 def cool_function(generation_count):
 

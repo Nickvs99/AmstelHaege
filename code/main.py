@@ -1,7 +1,7 @@
 """
 main.py
 
-The main program to retrieve the solutions of the case. The user will be requested 
+The main program to retrieve the solutions of the case. The user will be requested
 to insert the neighbourhood, amount of houses, algorithm and (optional) the hill_climber
 """
 
@@ -29,20 +29,20 @@ def main():
     seed = set_random_seed()
 
     area = get_area(neighbourhood, houses, algorithm, hill_climber)
-    
+
     end = time()
 
     print(f"Seed: {seed} \nRuntime: {end - start}")
-    
+
     area.make_csv_output()
 
     area.plot_area(neighbourhood, houses, algorithm)
 
 
 def get_area(neighbourhood, houses, algorithm_name, hill_climber_name):
-    """ 
+    """
     Runs the specific algorithm with hill_climber, if requested.
-    And returns the generated area. 
+    And returns the generated area.
     """
 
     area = Area(neighbourhood, houses)
@@ -91,23 +91,23 @@ def hill_climber(area, hill_climber_name):
 def check_argv():
     """ Checks the command-line arguments for validity. """
 
-    hill_climber_list = ["hill_climber_steps", "hill_climber_random", 
+    hill_climber_list = ["hill_climber_steps", "hill_climber_random",
                             "hill_climber_random_random", "simulated_annealing"]
 
     neighbourhood, houses, algorithm = check_neighbourhood_houses_algorithm()
-    
+
     # Command-line without hill climber
     if len(sys.argv) == 4:
-        
+
         return neighbourhood, houses, algorithm, None
 
     # Command-line with hill climber
     elif len(sys.argv) == 5:
-        
+
         if sys.argv[4].lower() not in hill_climber_list:
             print(f"Hill climber must be: {str(hill_climber_list)[1:-1]}")
             sys.exit (1)
-        
+
         else:
             return neighbourhood, houses, algorithm, sys.argv[4].lower()
 
@@ -136,9 +136,9 @@ def check_neighbourhood_houses_algorithm():
         sys.exit (1)
 
     # If valid, return their values
-    else:        
+    else:
         return sys.argv[1].lower(), int(sys.argv[2]), sys.argv[3].lower()
-        
+
 
 def set_random_seed(r = random.random()):
     """ Sets a random seed. This seed can be used with debugging.

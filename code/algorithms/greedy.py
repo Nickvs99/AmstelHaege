@@ -64,4 +64,3 @@ def place_houses_greedy(area):
 
         area.structures["House"].append(house)
         greedy(area, house)
-

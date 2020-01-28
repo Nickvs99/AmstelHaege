@@ -1,15 +1,15 @@
 """
 A settings file which will store settings specific
-to an algorithms. For example the number of iterations for an algorithm.
+to an algorithms. These are the default values.
 """
 
 evolution_settings = dict(
-    population = 5,             # Population size
-    stale_counter = 1,          # How many iterations a population is allowed to not grow
+    population = 50,             # Population size
+    stale_counter = 15,          # How many iterations a population is allowed to not grow
     
     # Mutation rates without simulated annealing
     move_rate = 0.3,
-    orientation_rate = 0.3,
+    orientation_rate = 0.1,
     swap_rate = 0.1,
 
     # The maximum a house is allowed to move when its being mutated
@@ -36,7 +36,6 @@ hill_climber_random_random_settings = dict(
 
 hill_climber_random_settings = dict(
     iterations = 100,
-    iterations_house = 100,
 )
 
 hill_climber_steps_settings = dict(

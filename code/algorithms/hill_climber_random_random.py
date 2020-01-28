@@ -9,7 +9,10 @@ import random
 from settings import hill_climber_random_random_settings as settings
 
 def hill_climber_random_random(area):
-
+    """
+    Iterates over random houses and makes changes.
+    """
+    
     for i in range(settings["iterations"]):
         worth = area.calc_worth_area()
 

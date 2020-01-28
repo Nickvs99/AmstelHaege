@@ -10,6 +10,9 @@ import random
 from settings import simulated_annealing_settings as settings
 
 def simulated_annealing(area):
+    """
+    Iterates of random houses changes and makes changes.
+    """
 
     for j in range(settings["iterations"]):
         T = settings["iterations"] - j

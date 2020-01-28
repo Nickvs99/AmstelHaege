@@ -63,13 +63,9 @@ def place_housesgreedy(area):
 
     # Makes house-objects
     houses = create_houses_greedy(area, area.one_person_house_count, area.bungalow_count, area.maison_count)
-    counter = 0
+    
     for house in houses:
-        print(counter)
 
         house.set_coordinates([0,0], house.horizontal)
         area.structures["House"].append(house)
         greedy(area, house)
-        print(area.calc_worth_area())
-
-        counter += 1

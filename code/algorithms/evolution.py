@@ -167,6 +167,7 @@ def evolution(area):
     # Create an initial set of solutions with the random_greedy algorithm
     print("Creating initial set of solutions...")
     individuals = []
+    print(settings["population"])
     for i in range(settings["population"]):
         copy_area = copy.deepcopy(area)
         place_housesgreedyrandom(copy_area)

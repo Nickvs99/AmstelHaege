@@ -2,7 +2,9 @@
 main.py
 
 The main program to retrieve the solutions of the case. The user will be requested 
-to insert the neighbourhood, amount of houses, algorithm and (optional) the hill_climber.
+to give input for: the neighbourhood, amount of houses, algorithm and (optionally) 
+the hill_climber. The result of the area will be shown and the data saved in the 
+csv-ouput file.
 
 """
 

@@ -4,6 +4,7 @@ Short description of the algorithm
 
 import random
 from classes.structure import House
+from settings import greedy_random_settings as settings
 
 def greedy(area, house):
     best_worth = 0
@@ -13,7 +14,8 @@ def greedy(area, house):
     # Checks place for house
 
     min_dist = min(house.width, house.height)
-    for i in range(500):
+    for i in range(settings["iterations"]):
+
         x = int(random.random() * (area.width - min_dist + 1))
         y = int(random.random() * (area.height - min_dist + 1))
         

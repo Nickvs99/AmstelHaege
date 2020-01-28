@@ -10,6 +10,8 @@ This process will be iterated and stopped(saved) if the best area is found.
 from time import time
 from classes.structure import House
 
+from settings import hill_climber_steps_settings as settings
+
 
 def hill_climber_steps(area):
     """ 
@@ -18,7 +20,7 @@ def hill_climber_steps(area):
 
     compare_area_worth = area.calc_worth_area()
 
-    for i in range(1000):
+    for i in range(settings["iterations"]):
 
         hill_climber_once(area)
 

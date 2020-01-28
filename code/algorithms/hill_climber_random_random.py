@@ -4,8 +4,10 @@ from classes.structure import House
 from algorithms.random import random_placement
 import random
 
+from settings import hill_climber_random_random_settings as settings
+
 def hill_climber_random_random(area):
-    for i in range(10000):
+    for i in range(settings["iterations"]):
         worth = area.calc_worth_area()
         j = int(random.random() * area.houses)
         house = area.structures["House"][j]

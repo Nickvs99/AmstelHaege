@@ -1,5 +1,7 @@
 """
-Tries to place the houses one by one on every place and picks the best spot
+This version of greedy places each house-object on any valid space 
+in the current area. When finding the best configuration, it returns 
+the area with the highest area worth.
 """
 
 import random

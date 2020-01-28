@@ -9,7 +9,8 @@ from settings import iterations
 
 def hill_climber_random(area):
     """
-    Iterates x amount of times over each house and tries changes.
+    Iterates x amount of times over each house-object and relocate 
+    each house-object by coordinates.
     """
     prev_worth = area.calc_worth_area()
     new_worth = prev_worth + 1

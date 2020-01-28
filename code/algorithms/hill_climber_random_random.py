@@ -10,7 +10,8 @@ from settings import iterations
 
 def hill_climber_random_random(area):
     """
-    Iterates over random houses and makes changes.
+    Iterates over random houses and relocate each 
+    house-object by coordinates.
     """
     
     for i in range(iterations["hill_climber_random_random"]):

@@ -6,24 +6,28 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def plot_barchart():
+    """
+    Plots the barchart for data-analysis.
+    
+    Initialize dictionary, with the following structure:
+    dict = {
+      Wijk 1: {
+          20: {}
+          40: {}
+          ...
+      },
+      Wijk 2: {
+          20: {}
+          40: {}
+          ...
+      }
+      ...
+    }
+    """
     
     neighbourhoods = ["Wijk 1", "Wijk 2", "Wijk 3"]
     houses = [20,40,60]
 
-    # Initialize dictionary, with the following structure
-    # dict = {
-    #   Wijk 1: {
-    #       20: {}
-    #       40: {}
-    #       ...
-    #   },
-    #   Wijk 2: {
-    #       20: {}
-    #       40: {}
-    #       ...
-    #   }
-    #   ...
-    # }
     results = {}
     for neighbourhood in neighbourhoods:
         for house in houses:
@@ -93,6 +97,7 @@ def get_max_y(worths):
     """ Returns the maximum y value for the plot. """
 
     return max(worths) + 1000000
+
 
 if __name__ == "__main__":
     plot_barchart()

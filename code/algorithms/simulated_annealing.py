@@ -4,10 +4,12 @@ If better it places the house. If not it places the house by chance.
 The chance decreases over the amount of iterations.
 """
 
-from classes.structure import House
 import random
 
 from settings import iterations
+from classes.structure import House
+from algorithms.hill_climber_random_random import move
+
 
 def simulated_annealing(area):
     """
@@ -45,11 +47,3 @@ def simulated_annealing(area):
                     if T < chance:
                         move(area, house, old_x, old_y)
                 break
-
-def move(area, house, x, y):
-    """
-    Moves a house.
-    """
-
-    house.set_coordinates([x, y], house.horizontal)
-    area.update_distances(house)

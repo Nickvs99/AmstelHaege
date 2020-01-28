@@ -16,7 +16,8 @@ from settings import iterations
 
 def hill_climber_steps(area):
     """ 
-    Iterates over single hill climbers and returns the area with the highest worth.
+    Iterates over single hill climbers and returns the area 
+    with the highest area worth.
     """
 
     compare_area_worth = area.calc_worth_area()
@@ -31,10 +32,10 @@ def hill_climber_steps(area):
         if compare_area_worth < worth:
             compare_area_worth = worth
         
-        elif i == 1000:
+        elif i == 10000:
             print(f"Too many iterations needed")
 
-        # Break iterationloop, because a value maximum is reached.
+        # Break iteration-loop, because a value maximum is reached.
         else:
             break
     

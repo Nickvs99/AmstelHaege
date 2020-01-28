@@ -1,6 +1,4 @@
 """
-user_input.py
-
 Asks the user for input for: the neighbourhood, amount of houses, algorithm 
 and hill_climber. If a custom setting is possible, the user will be prompted 
 to use the default settings or make their own custom settings. This file

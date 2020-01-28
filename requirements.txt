@@ -1,8 +1,2 @@
-random
-time
-os
-sys
-queue
-math
-matplotlib
-numpy
+matplotlib==3.0.1
+numpy==1.15.3
